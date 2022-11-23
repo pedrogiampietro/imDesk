@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./styles";
 
 export function Login() {
-  const { setTheme, theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   function handleLogin() {
