@@ -1,8 +1,11 @@
+import { useContext } from "react";
+import { ThemeContext } from "./../../App";
 import { useNavigate } from "react-router-dom";
 
 import * as S from "./styles";
 
 export function Login() {
+  const { setTheme, theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   function handleLogin() {
@@ -28,7 +31,9 @@ export function Login() {
           <S.Input type="password" placeholder="Password" />
         </S.FormGroup>
 
-        <S.SubmitButton onClick={handleLogin}>Entrar</S.SubmitButton>
+        <S.SubmitButton isActive={theme === "dark"} onClick={handleLogin}>
+          Entrar
+        </S.SubmitButton>
       </S.Form>
     </S.Container>
   );

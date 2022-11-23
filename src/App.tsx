@@ -1,18 +1,29 @@
-import { Routes, Route } from "react-router-dom";
+import { useState, createContext } from "react";
+import { Helmet } from "react-helmet";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyle } from "./assets/styles/globalStyles";
+import { darkTheme, lightTheme } from "./assets/styles/theme";
 
-import { Login } from "./screens/Login";
-import { Dashboard } from "./screens/Dashboard";
+import { AuthRoutes } from "./authRoutes";
+
+interface IContextData {
+  theme: string;
+  setTheme: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const ThemeContext = createContext({} as IContextData);
 
 export function App() {
+  const [theme, setTheme] = useState("light");
+  const themeStyle = theme === "light" ? lightTheme : darkTheme;
+
   return (
-    <Routes>
-      {/* Componente da tela inicial */}
-      <Route index element={<Login />} />
-      {/* Componente de uma rota específica */}
-      <Route path="login" element={<Login />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      {/* Componente para quando não encontrar uma rota */}
-      {/* <Route path="*" element={<NotFound />} /> */}
-    </Routes>
+    <ThemeContext.Provider value={{ setTheme, theme } as any}>
+      <ThemeProvider theme={themeStyle}>
+        <GlobalStyle />
+
+        <AuthRoutes />
+      </ThemeProvider>
+    </ThemeContext.Provider>
   );
 }

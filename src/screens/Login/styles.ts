@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { darkTheme } from "../../assets/styles/theme";
 
 export const Container = styled.div`
   display: flex;
@@ -53,14 +54,14 @@ export const Label = styled.label`
   font-family: Poppins, sans-serif;
 `;
 
-export const SubmitButton = styled.button`
-  background: #e90d63;
-  color: #fff;
+export const SubmitButton = styled.button<{ isActive: boolean }>`
+  background: ${({ theme, isActive }) =>
+    !isActive ? theme.bg3 : theme.primary};
+  color: ${({ isActive }) => (!isActive ? "#000" : "#fff")};
 
   font-size: 1em;
   margin: 1em;
   padding: 1rem 5em;
-  border: 2px solid palevioletred;
   border-radius: 3px;
 
   &:hover {
