@@ -1,5 +1,4 @@
 import { useState, createContext } from "react";
-import { Helmet } from "react-helmet";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "./assets/styles/globalStyles";
 import { darkTheme, lightTheme } from "./assets/styles/theme";

@@ -115,27 +115,21 @@ export function Sidebar() {
 
 const linksArray = [
   {
-    label: "Home",
+    label: "Inicio",
     icon: <AiOutlineHome />,
-    to: "/",
+    to: "/dashboard",
     notification: 0,
   },
   {
-    label: "Statistics",
+    label: "Estatisticas",
     icon: <MdOutlineAnalytics />,
     to: "/statistics",
     notification: 3,
   },
   {
-    label: "Customers",
+    label: "Tickets",
     icon: <BsPeople />,
-    to: "/customers",
+    to: "/tickets",
     notification: 0,
-  },
-  {
-    label: "Diagrams",
-    icon: <AiOutlineApartment />,
-    to: "/diagrams",
-    notification: 1,
   },
 ];
