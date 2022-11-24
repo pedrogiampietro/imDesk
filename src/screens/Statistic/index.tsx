@@ -1,9 +1,9 @@
 import { Layout } from '../../components/Layout'
 
-export function Ticket() {
+export function Statistic() {
 	return (
 		<Layout>
-			<h1>Ticket</h1>
+			<h1>Statistic</h1>
 		</Layout>
 	)
 }
