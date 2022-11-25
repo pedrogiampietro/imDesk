@@ -3,8 +3,13 @@ import { ThemeProvider } from 'styled-components'
 import { GlobalStyle } from './assets/styles/globalStyles'
 import { darkTheme, lightTheme } from './assets/styles/theme'
 
+import { AuthContextProvider } from './contexts/AuthContext'
+
 import { AuthRoutes } from './authRoutes'
 import { useLocalStorage } from './hooks/useLocalStorage'
+
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface IContextData {
 	theme: string
@@ -18,12 +23,15 @@ export function App() {
 	const themeStyle = theme === 'light' ? lightTheme : darkTheme
 
 	return (
-		<ThemeContext.Provider value={{ setTheme, theme } as any}>
-			<ThemeProvider theme={themeStyle}>
-				<GlobalStyle />
+		<AuthContextProvider>
+			<ThemeContext.Provider value={{ setTheme, theme } as any}>
+				<ThemeProvider theme={themeStyle}>
+					<GlobalStyle />
 
-				<AuthRoutes />
-			</ThemeProvider>
-		</ThemeContext.Provider>
+					<AuthRoutes />
+					<ToastContainer />
+				</ThemeProvider>
+			</ThemeContext.Provider>
+		</AuthContextProvider>
 	)
 }

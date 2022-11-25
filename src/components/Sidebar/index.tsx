@@ -53,6 +53,7 @@ export function Sidebar() {
 				<S.SidebarButton
 					isOpen={sidebarOpen}
 					onClick={() => setSidebarOpen((p) => !p)}
+					isActive={theme === 'dark'}
 				>
 					<AiOutlineLeft />
 				</S.SidebarButton>
@@ -78,10 +79,10 @@ export function Sidebar() {
 						to={to}
 						style={!sidebarOpen ? { width: `fit-content` } : {}}
 					>
-						<S.LinkIcon>{icon}</S.LinkIcon>
+						<S.LinkIcon isActive={theme === 'dark'}>{icon}</S.LinkIcon>
 						{sidebarOpen && (
 							<>
-								<S.LinkLabel>{label}</S.LinkLabel>
+								<S.LinkLabel isActive={theme === 'dark'}>{label}</S.LinkLabel>
 								{/* if notifications are at 0 or null, do not display */}
 								{!!notification && (
 									<S.LinkNotification>{notification}</S.LinkNotification>
@@ -95,11 +96,13 @@ export function Sidebar() {
 			{secondaryLinksArray.map(({ icon, label }) => (
 				<S.LinkContainer key={label}>
 					<S.LinkStyle
-						to='/'
+						to='#'
 						style={!sidebarOpen ? { width: `fit-content` } : {}}
 					>
-						<S.LinkIcon>{icon}</S.LinkIcon>
-						{sidebarOpen && <S.LinkLabel>{label}</S.LinkLabel>}
+						<S.LinkIcon isActive={theme === 'dark'}>{icon}</S.LinkIcon>
+						{sidebarOpen && (
+							<S.LinkLabel isActive={theme === 'dark'}>{label}</S.LinkLabel>
+						)}
 					</S.LinkStyle>
 				</S.LinkContainer>
 			))}
@@ -125,7 +128,7 @@ const linksArray = [
 		label: 'Estatisticas',
 		icon: <MdOutlineAnalytics />,
 		to: '/statistics',
-		notification: 3,
+		notification: 0,
 	},
 	{
 		label: 'Tickets',
