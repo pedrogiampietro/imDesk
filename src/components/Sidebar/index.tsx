@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from 'react'
+import { useAuth } from '../../hooks/useAuth'
 import * as S from './styles'
-
 // import { logoSVG } from "../../assets";
 
 import {
@@ -18,6 +18,8 @@ import { useLocation } from 'react-router-dom'
 
 export function Sidebar() {
 	const searchRef = useRef(null)
+	const { signOut } = useAuth()
+
 	const { setTheme, theme } = useContext(ThemeContext)
 
 	const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -44,6 +46,7 @@ export function Sidebar() {
 		{
 			label: 'Logout',
 			icon: <MdLogout />,
+			func: signOut,
 		},
 	]
 
@@ -93,11 +96,12 @@ export function Sidebar() {
 				</S.LinkContainer>
 			))}
 			<S.Divider />
-			{secondaryLinksArray.map(({ icon, label }) => (
+			{secondaryLinksArray.map(({ icon, label, func }) => (
 				<S.LinkContainer key={label}>
 					<S.LinkStyle
 						to='#'
 						style={!sidebarOpen ? { width: `fit-content` } : {}}
+						onClick={func}
 					>
 						<S.LinkIcon isActive={theme === 'dark'}>{icon}</S.LinkIcon>
 						{sidebarOpen && (

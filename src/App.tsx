@@ -1,11 +1,12 @@
-import { useState, useEffect, createContext } from 'react'
+import { createContext } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { GlobalStyle } from './assets/styles/globalStyles'
 import { darkTheme, lightTheme } from './assets/styles/theme'
 
 import { AuthContextProvider } from './contexts/AuthContext'
 
-import { AuthRoutes } from './authRoutes'
+import RoutesWrapper from './routes/RoutesWrapper'
+
 import { useLocalStorage } from './hooks/useLocalStorage'
 
 import { ToastContainer } from 'react-toastify'
@@ -27,8 +28,7 @@ export function App() {
 			<ThemeContext.Provider value={{ setTheme, theme } as any}>
 				<ThemeProvider theme={themeStyle}>
 					<GlobalStyle />
-
-					<AuthRoutes />
+					<RoutesWrapper />
 					<ToastContainer />
 				</ThemeProvider>
 			</ThemeContext.Provider>

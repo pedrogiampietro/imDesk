@@ -1,11 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 
 import './styles.css'
 export function Login() {
-	const { signIn } = useAuth()
+	const { signIn, isAuthenticated } = useAuth()
 	const navigate = useNavigate()
 
 	const [email, setEmail] = useState('')
@@ -23,6 +22,12 @@ export function Login() {
 			return
 		}
 	}
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/dashboard')
+		}
+	})
 
 	return (
 		<div className='login-root'>

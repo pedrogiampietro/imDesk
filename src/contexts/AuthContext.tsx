@@ -48,9 +48,6 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 		try {
 			const response = await apiClient().post('/authenticate/sign-in', login)
 
-			console.log('login', login)
-			console.log('login response', response)
-
 			const objToStrig = JSON.stringify({
 				email: response.data.email,
 				name: response.data.name,
@@ -79,7 +76,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 			)
 
 			const timeOutRedirect = setTimeout(() => {
-				window.location.href = '/admin'
+				window.location.href = '/dashboard'
 			}, 1000)
 
 			return () => clearTimeout(timeOutRedirect)

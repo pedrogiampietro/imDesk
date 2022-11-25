@@ -1,7 +1,13 @@
+import { ReactNode } from 'react'
 import { Sidebar } from '../Sidebar/'
+
 import * as S from './styles'
 
-export function Layout({ children }: any) {
+interface LayoutProps {
+	children: ReactNode
+}
+
+export function Layout({ children }: LayoutProps) {
 	return (
 		<S.Layout>
 			<Sidebar />
