@@ -1,19 +1,8 @@
 import axios from 'axios'
 import { auth } from '../constants/auth'
-import {
-	getStorageModel,
-	setStorageModel,
-	removeStorage,
-} from '../utils/storage'
+import { getStorageModel, removeStorage } from '../utils/storage'
 
 // import Swal from 'sweetalert2';
-
-function onSignOut() {
-	removeStorage(auth.TOKEN)
-	removeStorage(auth.REFRESH_TOKEN)
-
-	window.location.replace('/login')
-}
 
 let isRefreshing = false
 let failedRequestQueue = []

@@ -18,11 +18,18 @@ type User = {
 	password: string
 }
 
+type UserAuth = {
+	userId: string
+	name: string
+	email: string
+}
+
 interface AuthContextData {
 	loading: boolean
 	isAuthenticated: boolean
 	signIn: any
 	signOut: () => void
+	user: UserAuth | undefined
 }
 
 export const AuthContext = createContext({} as AuthContextData)
@@ -30,12 +37,15 @@ export const AuthContext = createContext({} as AuthContextData)
 export function AuthContextProvider({ children }: AuthProviderProps) {
 	const [loading, setLoading] = useState(true)
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
+	const [user, setUser] = useState<UserAuth>()
 
 	useEffect(() => {
 		const token = getStorageModel(auth.TOKEN)
+		const checkUser = getStorageModel(auth.USER)
 
 		if (token) {
 			setIsAuthenticated(true)
+			setUser(JSON.parse(checkUser))
 		} else {
 			setIsAuthenticated(false)
 			setLoading(false)
@@ -49,6 +59,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 			const response = await apiClient().post('/authenticate/sign-in', login)
 
 			const objToStrig = JSON.stringify({
+				userId: response.data.id,
 				email: response.data.email,
 				name: response.data.name,
 			})
@@ -123,6 +134,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 				loading,
 				signIn,
 				signOut,
+				user,
 			}}
 		>
 			{children}
