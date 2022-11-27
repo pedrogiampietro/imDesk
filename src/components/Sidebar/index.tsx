@@ -1,10 +1,10 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import * as S from './styles'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 // import { logoSVG } from "../../assets";
 
 import {
-	AiOutlineApartment,
 	AiOutlineHome,
 	AiOutlineLeft,
 	AiOutlineSearch,
@@ -14,28 +14,35 @@ import { MdLogout, MdOutlineAnalytics } from 'react-icons/md'
 import { BsPeople } from 'react-icons/bs'
 
 import { ThemeContext } from './../../App'
-import { useLocation } from 'react-router-dom'
+
+import * as S from './styles'
 
 export function Sidebar() {
 	const searchRef = useRef(null)
 	const { signOut } = useAuth()
 
 	const { setTheme, theme } = useContext(ThemeContext)
-
-	const [sidebarOpen, setSidebarOpen] = useState(false)
+	const [sidebarOpen, setSidebarOpen] = useLocalStorage(
+		'imDesk@Sidebar',
+		'open'
+	)
 	const { pathname } = useLocation()
 
 	const searchClickHandler = () => {
-		if (!sidebarOpen) {
-			setSidebarOpen(true)
-			// searchRef.current.focus();
-		} else {
-			// search functionality
-		}
+		// if (!sidebarOpen) {
+		// 	setSidebarOpen(true)
+		// 	// searchRef.current.focus();
+		// } else {
+		// 	// search functionality
+		// }
 	}
 
 	const toggleTheme = () => {
 		setTheme((p) => (p === 'light' ? 'dark' : 'light'))
+	}
+
+	const handleToggleSidebar = () => {
+		setSidebarOpen((p: any) => !p)
 	}
 
 	const secondaryLinksArray = [
@@ -55,7 +62,7 @@ export function Sidebar() {
 			<>
 				<S.SidebarButton
 					isOpen={sidebarOpen}
-					onClick={() => setSidebarOpen((p) => !p)}
+					onClick={handleToggleSidebar}
 					isActive={theme === 'dark'}
 				>
 					<AiOutlineLeft />
