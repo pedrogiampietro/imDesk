@@ -11,6 +11,7 @@ export function Maintenance() {
 	const [maintenance, setMaintenance] = useState<any>({})
 	const [showMaintenanceModal, setShowMaintenanceModal] =
 		useState<boolean>(false)
+	const [addMaintenanceModal, setAddMaintenanceModal] = useState<boolean>(false)
 
 	const fetchMaintenances = async () => {
 		try {
@@ -29,7 +30,14 @@ export function Maintenance() {
 				<S.Title>Manutenção Preventiva/Corretiva</S.Title>
 
 				<S.CreateWrapper>
-					<S.CreateButton>Adicionar Manutenção</S.CreateButton>
+					<S.CreateButton
+						onClick={() => {
+							setShowMaintenanceModal(true)
+							setAddMaintenanceModal(true)
+						}}
+					>
+						Adicionar Manutenção
+					</S.CreateButton>
 				</S.CreateWrapper>
 
 				<S.TicketsWrapper>
@@ -44,6 +52,8 @@ export function Maintenance() {
 					<MaintenanceModal
 						onClose={setShowMaintenanceModal}
 						maintenance={maintenance}
+						addMaintenanceModal={addMaintenanceModal}
+						setAddMaintenanceModal={setAddMaintenanceModal}
 					/>
 				)}
 			</S.Container>
