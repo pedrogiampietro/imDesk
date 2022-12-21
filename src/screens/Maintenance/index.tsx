@@ -28,6 +28,10 @@ export function Maintenance() {
 			<S.Container>
 				<S.Title>Manutenção Preventiva/Corretiva</S.Title>
 
+				<S.CreateWrapper>
+					<S.CreateButton>Adicionar Manutenção</S.CreateButton>
+				</S.CreateWrapper>
+
 				<S.TicketsWrapper>
 					<MaintenanceTable
 						data={listMaintenance}
