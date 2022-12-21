@@ -12,7 +12,7 @@ import { apiClient } from '../../services/api'
 export function Ticket() {
 	const { theme } = useContext(ThemeContext)
 	const [tickets, setTickets] = useState([])
-	const [showTicketModal, setShowTicketModal] = useState<boolean>(true)
+	const [showTicketModal, setShowTicketModal] = useState<boolean>(false)
 
 	const fetchTickets = async () => {
 		try {

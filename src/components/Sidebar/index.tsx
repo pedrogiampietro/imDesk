@@ -10,7 +10,7 @@ import {
 	AiOutlineSearch,
 	AiOutlineSetting,
 } from 'react-icons/ai'
-import { MdLogout, MdOutlineAnalytics } from 'react-icons/md'
+import { MdLogout, MdOutlineAnalytics, MdOutlineComputer } from 'react-icons/md'
 import { BsPeople } from 'react-icons/bs'
 
 import { ThemeContext } from './../../App'
@@ -139,6 +139,12 @@ const linksArray = [
 		label: 'Estatisticas',
 		icon: <MdOutlineAnalytics />,
 		to: '/statistics',
+		notification: 0,
+	},
+	{
+		label: 'Manutenção',
+		icon: <MdOutlineComputer />,
+		to: '/maintenance',
 		notification: 0,
 	},
 	{

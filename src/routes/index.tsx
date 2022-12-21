@@ -4,6 +4,7 @@ import { Login } from '../screens/Login'
 import { Dashboard } from '../screens/Dashboard'
 import { Ticket } from '../screens/Ticket'
 import { Statistic } from '../screens/Statistic'
+import { Maintenance } from '../screens/Maintenance'
 
 import RouteProtector from './RouteProtector'
 
@@ -42,6 +43,15 @@ export function AppRoutes() {
 				</RouteProtector>
 			),
 		},
+		{
+			path: '/maintenance',
+			element: (
+				<RouteProtector>
+					<Maintenance />
+				</RouteProtector>
+			),
+		},
+
 		{
 			path: '/statistics',
 			element: (

@@ -13,8 +13,8 @@ export function apiClient() {
 	const token = getStorageModel(auth.TOKEN)
 
 	const api = axios.create({
-		// baseURL: 'http://localhost:3333/',
-		baseURL: 'https://imdeskapi.herokuapp.com/',
+		baseURL: 'http://localhost:3333/',
+		// baseURL: 'https://imdeskapi.herokuapp.com/',
 		headers: {
 			Authorization: `Bearer ${token}`,
 			ContentType: 'application/json',

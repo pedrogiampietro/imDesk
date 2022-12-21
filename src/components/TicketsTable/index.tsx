@@ -26,7 +26,7 @@ export function Table({ data }: any) {
 						{data.map((ticket: any, index: any) => (
 							<S.TBodyTR key={index}>
 								<S.TD>{index + 1}</S.TD>
-								<S.TD key={index}>{ticket.description.substr(0, 30)}</S.TD>
+								<S.TD key={index}>{ticket.description?.substr(0, 30)}</S.TD>
 								<S.TD key={index}>{ticket.ticketCategoryId.name}</S.TD>
 								<S.TD key={index}>{ticket.status}</S.TD>
 								<S.TD key={index}>{ticket.ticketPriorityId.name}</S.TD>
