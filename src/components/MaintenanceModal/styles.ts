@@ -151,10 +151,13 @@ export const CloseButtonModal = styled.button`
 	cursor: pointer;
 `
 
+export const FormGroup = styled.div``
+
 export const Input = styled.input`
 	font-size: 16px;
 	line-height: 28px;
 	padding: 8px 16px;
+	margin-bottom: 1rem;
 	width: 100%;
 	min-height: 44px;
 	border: unset;

@@ -54,6 +54,7 @@ export function Maintenance() {
 						maintenance={maintenance}
 						addMaintenanceModal={addMaintenanceModal}
 						setAddMaintenanceModal={setAddMaintenanceModal}
+						onRefresh={fetchMaintenances}
 					/>
 				)}
 			</S.Container>
