@@ -11,6 +11,7 @@ export const ModalWrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	z-index: 100;
+	overflow-y: auto;
 
 	@media screen and (max-width: 698px) {
 		display: block;
@@ -81,13 +82,10 @@ export const StartPreventiveButton = styled.button<{ isActive: boolean }>`
 
 export const ModalBody = styled.div`
 	margin-top: 3rem;
+	overflow-y: auto;
 
 	& div {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 10px;
-		margin-top: 0.6rem;
+		margin-top: 1rem;
 
 		& span {
 			font-size: 13px;
@@ -108,6 +106,15 @@ export const ModalBody = styled.div`
 		padding: 0 0 0.2rem 0;
 		background-color: rgb(230, 230, 230);
 		margin: 0 0 1.2rem 0;
+	}
+`
+
+export const InformationsWrapper = styled.div`
+	.row {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		justify-content: space-between;
 	}
 `
 
@@ -174,4 +181,30 @@ export const Label = styled.label`
 	font-size: 14px;
 	font-weight: 600;
 	display: block;
+`
+
+export const HistoryPreventive = styled.div`
+	background-color: navajowhite;
+	padding: 10px;
+	border-radius: 5px;
+`
+
+export const TodooList = styled.fieldset`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+	flex-wrap: wrap;
+
+	& div {
+		display: flex;
+		width: 35%;
+		gap: 5px;
+		align-items: center;
+		margin-right: 1rem;
+
+		& label {
+			margin: 0;
+		}
+	}
 `

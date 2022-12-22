@@ -141,38 +141,49 @@ export function MaintenanceModal({
 						</S.ModalHeader>
 
 						<S.ModalBody>
-							<div>
-								<h1>Name:</h1>
-								<span>{maintenance.name}</span>
-							</div>
-							<div>
-								<h1>Localização:</h1>
-								<span>{maintenance.location}</span>
-							</div>
-							<div>
-								<h1>Modelo:</h1>
-								<span>{maintenance.model}</span>
-							</div>
-							<div>
-								<h1>Patrimônio:</h1>
-								<span>{maintenance.patrimony}</span>
-							</div>
-							<div>
-								<h1>Número de série:</h1>
-								<span>{maintenance.serialNumber}</span>
-							</div>
-							<div>
-								<h1>Próxima preventiva:</h1>
-								<span>{formatDate(maintenance.nextDatePreventive)}</span>
-							</div>
-							<div>
-								<h1>Quantidade de Preventivas realizadas:</h1>
-								<span>{maintenance.preventiveCount}</span>
-							</div>
-							<div>
-								<h1>Quantidade de Corretivas realizadas:</h1>
-								<span>{maintenance.correctiveCount}</span>
-							</div>
+							<S.InformationsWrapper>
+								<div className='row'>
+									<div>
+										<h1>Name:</h1>
+										<span>{maintenance.name}</span>
+									</div>
+
+									<div>
+										<h1>Modelo:</h1>
+										<span>{maintenance.model}</span>
+									</div>
+									<div>
+										<h1>Patrimônio:</h1>
+										<span>{maintenance.patrimony}</span>
+									</div>
+								</div>
+
+								<div className='row'>
+									<div>
+										<h1>Número de série:</h1>
+										<span>{maintenance.serialNumber}</span>
+									</div>
+									<div>
+										<h1>Próxima preventiva:</h1>
+										<span>{formatDate(maintenance.nextDatePreventive)}</span>
+									</div>
+								</div>
+
+								<div className='row'>
+									<div>
+										<h1>Quantidade de Preventivas realizadas:</h1>
+										<span>{maintenance.preventiveCount}</span>
+									</div>
+									<div>
+										<h1>Quantidade de Corretivas realizadas:</h1>
+										<span>{maintenance.correctiveCount}</span>
+									</div>
+								</div>
+							</S.InformationsWrapper>
+
+							<S.HistoryPreventive>
+								<h1>Historico de Preventivas</h1>
+							</S.HistoryPreventive>
 
 							{startPreventive ? (
 								<>
@@ -180,6 +191,23 @@ export function MaintenanceModal({
 										value={text}
 										onChange={(e) => setText(e.target.value)}
 									/>
+
+									<S.TodooList>
+										<legend>Lista de Manutenção:</legend>
+										{maintenance.maintenanceListTodoo.map((listTodoo: any) => {
+											return (
+												<div key={listTodoo.id}>
+													<input
+														type='checkbox'
+														id={listTodoo.id}
+														name={listTodoo.id}
+													/>
+													<label htmlFor={listTodoo.id}>{listTodoo.name}</label>
+												</div>
+											)
+										})}
+									</S.TodooList>
+
 									<S.SaveButton
 										disabled={loading}
 										onClick={() => handleNewPreventive()}

@@ -10,7 +10,7 @@ export const Title = styled.h1``
 export const TicketsWrapper = styled.div`
 	display: flex;
 	margin: 0 auto;
-	margin-top: 200px;
+	margin-top: 100px;
 	border-radius: 10px;
 `
 
@@ -22,14 +22,13 @@ export const CreateWrapper = styled.div`
 	min-height: 10rem;
 `
 
-export const Btn = styled.button<{ buynow?: string }>`
-	background-color: ${({ buynow }) =>
-		buynow ? 'hsla(40, 72%, 50%, 1)' : 'hsla(347, 49%, 46%, 1)'};
+export const Btn = styled.button<{ isActive?: boolean }>`
+	background-color: ${({ isActive }) =>
+		isActive ? 'hsla(40, 72%, 50%, 1)' : 'hsla(347, 49%, 46%, 1)'};
 	border: 1px solid
-		${({ buynow }) =>
-			buynow ? 'hsla(40, 72%, 60%, 1)' : 'hsla(0, 0%, 0%, 0.4)'};
+		${({ isActive }) => (isActive ? '#FFF' : 'hsla(0, 0%, 0%, 0.4)')};
 	white-space: nowrap;
-	color: hsla(150, 14%, 97%, 1);
+	color: ${({ isActive }) => (isActive ? '#FFF' : '#000')};
 	cursor: pointer;
 	outline: none;
 	font-size: 1rem;
@@ -46,14 +45,11 @@ export const Btn = styled.button<{ buynow?: string }>`
 	}
 
 	&:hover {
-		background-color: ${({ buynow }) =>
-			buynow ? 'hsla(40, 72%, 60%, 1)' : 'hsla(347, 49%, 51%, 1)'};
-		${({ buynow }) => buynow && `transform: translateY(-3px)`}
+		filter: opacity(0.6);
 	}
 
 	&:active {
-		background-color: ${({ buynow }) =>
-			buynow ? 'hsla(40, 72%, 35%, 1)' : 'hsla(347, 49%, 26%, 1)'};
+		filter: opacity(0.6);
 	}
 
 	@media screen and (max-width: 45em) {
@@ -65,13 +61,15 @@ export const Btn = styled.button<{ buynow?: string }>`
 
 export const CreateButton = styled(Btn)`
 	text-decoration: none;
-	background-color: hsla(189, 85%, 28%, 1);
+	background-color: ${({ isActive }) =>
+		isActive ? '#5469d4' : 'hsla(0, 0%, 90%, 1)'};
+
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.0125),
 		0 1px 1px rgba(0, 0, 0, 0.05);
 	border-bottom-width: 0.5rem;
 
 	&:hover {
-		background-color: hsla(189, 85%, 32%, 1);
+		filter: opacity(0.6);
 	}
 
 	&:active {

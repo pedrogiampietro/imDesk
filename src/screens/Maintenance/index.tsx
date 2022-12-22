@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { ThemeContext } from './../../App'
 import { Layout } from '../../components/Layout'
 import { MaintenanceTable } from '../../components/MaintenanceTable'
 import { MaintenanceModal } from '../../components/MaintenanceModal'
@@ -7,6 +8,7 @@ import * as S from './styles'
 import { apiClient } from '../../services/api'
 
 export function Maintenance() {
+	const { theme } = useContext(ThemeContext)
 	const [listMaintenance, setListMaintenance] = useState<any>([])
 	const [maintenance, setMaintenance] = useState<any>({})
 	const [showMaintenanceModal, setShowMaintenanceModal] =
@@ -31,6 +33,7 @@ export function Maintenance() {
 
 				<S.CreateWrapper>
 					<S.CreateButton
+						isActive={theme === 'dark'}
 						onClick={() => {
 							setShowMaintenanceModal(true)
 							setAddMaintenanceModal(true)
