@@ -1,8 +1,11 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
+const { REACT_APP_API } = process.env
+
 import axios from 'axios'
 import { auth } from '../constants/auth'
-import { getStorageModel, removeStorage } from '../utils/storage'
-
-// import Swal from 'sweetalert2';
+import { getStorageModel } from '../utils/storage'
 
 let isRefreshing = false
 let failedRequestQueue = []
@@ -13,8 +16,8 @@ export function apiClient() {
 	const token = getStorageModel(auth.TOKEN)
 
 	const api = axios.create({
-		baseURL: process.env.REACT_APP_API,
-		// baseURL: 'https://imdeskapi.herokuapp.com/',
+		baseURL: 'http://www.imdesk.tk/',
+		// baseURL: REACT_APP_API ?? '',
 		headers: {
 			Authorization: `Bearer ${token}`,
 			ContentType: 'application/json',

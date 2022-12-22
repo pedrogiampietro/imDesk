@@ -55,6 +55,8 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 	}, [])
 
 	async function signIn(login: User) {
+		console.log('login', login)
+
 		try {
 			const response = await apiClient().post('/authenticate/sign-in', login)
 
