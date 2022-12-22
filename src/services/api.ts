@@ -1,8 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
-
-const { REACT_APP_API } = process.env
-
 import axios from 'axios'
 import { auth } from '../constants/auth'
 import { getStorageModel } from '../utils/storage'
