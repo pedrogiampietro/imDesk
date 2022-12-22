@@ -11,8 +11,6 @@
 	"dependencies": {
 		"@hookform/resolvers": "^2.9.10",
 		"@tinymce/tinymce-react": "^4.2.0",
-		"@types/react-datepicker": "^4.8.0",
-		"@types/react-input-mask": "^3.0.2",
 		"axios": "^1.2.0",
 		"date-fns": "^2.29.3",
 		"react": "^18.2.0",
@@ -36,6 +34,9 @@
 		"@types/react-select": "^5.0.1",
 		"@types/react-toastify": "^4.1.0",
 		"@types/styled-components": "^5.1.26",
+		"@types/node": "^18.11.17",
+		"@types/react-datepicker": "^4.8.0",
+		"@types/react-input-mask": "^3.0.2",
 		"@vitejs/plugin-react": "^2.2.0",
 		"typescript": "^4.6.4",
 		"vite": "^3.2.3"
