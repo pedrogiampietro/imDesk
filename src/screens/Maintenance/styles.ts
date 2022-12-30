@@ -14,59 +14,19 @@ export const TicketsWrapper = styled.div`
 	border-radius: 10px;
 `
 
-export const CreateWrapper = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-	min-height: 10rem;
-`
+export const CreateWrapper = styled.div``
 
-export const Btn = styled.button<{ isActive?: boolean }>`
-	background-color: ${({ isActive }) =>
-		isActive ? 'hsla(40, 72%, 50%, 1)' : 'hsla(347, 49%, 46%, 1)'};
-	border: 1px solid
-		${({ isActive }) => (isActive ? '#FFF' : 'hsla(0, 0%, 0%, 0.4)')};
-	white-space: nowrap;
-	color: ${({ isActive }) => (isActive ? '#FFF' : '#000')};
-	cursor: pointer;
-	outline: none;
-	font-size: 1rem;
-	text-shadow: 0.1rem 0.1rem 0.5rem hsla(0, 0%, 0%, 0.5);
-	letter-spacing: 0.1rem;
-	border-radius: 0.5rem;
-	user-select: none;
-	padding: 0.5rem 4rem;
-	margin: 1rem;
-	transition: all 0.1s ease-in;
-
-	::-moz-focus-inner {
-		border: 0;
-	}
-
-	&:hover {
-		filter: opacity(0.6);
-	}
-
-	&:active {
-		filter: opacity(0.6);
-	}
-
-	@media screen and (max-width: 45em) {
-		padding: 1rem 1rem;
-		font-size: 1.5rem;
-		margin: 0.5rem;
-	}
-`
-
-export const CreateButton = styled(Btn)`
-	text-decoration: none;
+export const CreateButton = styled.button<{ isActive: boolean }>`
+	width: 55px;
+	height: 55px;
+	border-radius: 50%;
 	background-color: ${({ isActive }) =>
 		isActive ? '#5469d4' : 'hsla(0, 0%, 90%, 1)'};
-
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.0125),
-		0 1px 1px rgba(0, 0, 0, 0.05);
-	border-bottom-width: 0.5rem;
+	position: fixed;
+	bottom: 30px;
+	right: 30px;
+	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
 
 	&:hover {
 		filter: opacity(0.6);

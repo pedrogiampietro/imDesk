@@ -3,6 +3,7 @@ import InputMask from 'react-input-mask'
 import ptBR from 'date-fns/locale/pt-BR'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import './styles.css'
 
 registerLocale('ptBR', ptBR)
 

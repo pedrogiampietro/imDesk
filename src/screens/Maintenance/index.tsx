@@ -3,6 +3,7 @@ import { ThemeContext } from './../../App'
 import { Layout } from '../../components/Layout'
 import { MaintenanceTable } from '../../components/MaintenanceTable'
 import { MaintenanceModal } from '../../components/MaintenanceModal'
+import { MdOutlineAdd } from 'react-icons/md'
 
 import * as S from './styles'
 import { apiClient } from '../../services/api'
@@ -39,7 +40,7 @@ export function Maintenance() {
 							setAddMaintenanceModal(true)
 						}}
 					>
-						Adicionar Manutenção
+						<MdOutlineAdd size={22} />
 					</S.CreateButton>
 				</S.CreateWrapper>
 
