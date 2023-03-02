@@ -1,51 +1,51 @@
-import axios from 'axios'
-import { auth } from '../constants/auth'
-import { getStorageModel } from '../utils/storage'
+import axios from "axios";
+import { auth } from "../constants/auth";
+import { getStorageModel } from "../utils/storage";
 
-let isRefreshing = false
-let failedRequestQueue = []
+let isRefreshing = false;
+let failedRequestQueue = [];
 
-const limit = 20
+const limit = 20;
 
 export function apiClient() {
-	const token = getStorageModel(auth.TOKEN)
+  const token = getStorageModel(auth.TOKEN);
 
-	const api = axios.create({
-		baseURL: 'http://www.imdesk.tk/',
-		// baseURL: REACT_APP_API ?? '',
-		headers: {
-			Authorization: `Bearer ${token}`,
-			ContentType: 'application/json',
-			Accept: 'application/json',
-			'Access-Control-Allow-Origin': '*',
-			'Access-Control-Allow-Credentials': 'true',
-		},
-	})
+  const api = axios.create({
+    // baseURL: "http://www.imdesk.tk/",
+    baseURL: "http://localhost:3333/",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "application/json",
+      Accept: "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+    },
+  });
 
-	api.interceptors.request.use(
-		(request: any) => {
-			if (request.method?.toLowerCase() === 'get') {
-				request.headers.limit = request.headers.limit ?? String(limit)
-			}
+  api.interceptors.request.use(
+    (request: any) => {
+      if (request.method?.toLowerCase() === "get") {
+        request.headers.limit = request.headers.limit ?? String(limit);
+      }
 
-			return request
-		},
-		(error) => Promise.reject(error)
-	)
+      return request;
+    },
+    (error) => Promise.reject(error)
+  );
 
-	api.interceptors.response.use(
-		(response) => {
-			return response
-		},
+  api.interceptors.response.use(
+    (response) => {
+      return response;
+    },
 
-		(error) => {
-			// console.log('error:', error.response);
+    (error) => {
+      // console.log('error:', error.response);
 
-			//TODO
+      //TODO
 
-			return Promise.reject(error)
-		}
-	)
+      return Promise.reject(error);
+    }
+  );
 
-	return api
+  return api;
 }

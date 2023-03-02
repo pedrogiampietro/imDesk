@@ -1,10 +1,10 @@
-import { BrowserRouter as Router } from 'react-router-dom'
-import { AppRoutes } from './index'
+import { BrowserRouter as Router } from "react-router-dom";
+import { AppRoutes } from "./index";
 
 export default function RoutesWrapper() {
-	return (
-		<Router>
-			<AppRoutes />
-		</Router>
-	)
+  return (
+    <Router>
+      <AppRoutes />
+    </Router>
+  );
 }

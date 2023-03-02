@@ -1,16 +1,16 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
-import { v } from '../../assets/styles/variables'
+import { v } from "../../assets/styles/variables";
 
 export const Layout = styled.div`
-	display: flex;
-`
+  display: flex;
+`;
 
 export const Main = styled.main`
-	width: 100%;
-	padding: calc(${v.smSpacing} * 2);
+  width: 100%;
+  padding: calc(${v.smSpacing} * 2);
 
-	h1 {
-		font-size: 14px;
-	}
-`
+  h1 {
+    font-size: 14px;
+  }
+`;

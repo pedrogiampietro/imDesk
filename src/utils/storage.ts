@@ -1,23 +1,23 @@
 export function setStorageModel(prop: string, model: string) {
-	localStorage.setItem(prop, JSON.stringify(model))
+  localStorage.setItem(prop, JSON.stringify(model));
 }
 
 export function getStorageModel(prop: string) {
-	const value = localStorage.getItem(prop)
-	if (value) {
-		return JSON.parse(value)
-	}
-	return null
+  const value = localStorage.getItem(prop);
+  if (value) {
+    return JSON.parse(value);
+  }
+  return null;
 }
 
 export function removeStorage(item: string) {
-	localStorage.removeItem(item)
+  localStorage.removeItem(item);
 }
 
 export function removeAllStorage(props: []) {
-	props.forEach((item: string) => removeStorage(item))
+  props.forEach((item: string) => removeStorage(item));
 }
 
 export function clearStorage() {
-	localStorage.clear()
+  localStorage.clear();
 }
