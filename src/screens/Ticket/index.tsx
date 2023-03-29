@@ -5,12 +5,11 @@ import { Layout } from "../../components/Layout";
 import { ThemeContext } from "./../../App";
 import { Table } from "../../components/TicketsTable/";
 import { TicketsModal } from "../../components/TicketsModal";
+import { TicketKanban } from "../../components/TicketKanban";
 
 import * as S from "./styles";
 import { apiClient } from "../../services/api";
 import { CreateTicket } from "./CreateTicket";
-
-import { toast } from "react-toastify";
 
 export function Ticket() {
   const { theme } = useContext(ThemeContext);
@@ -38,7 +37,8 @@ export function Ticket() {
         <CreateTicket tickets={tickets} setTickets={setTickets} />
 
         <S.TicketsWrapper>
-          <Table data={tickets} />
+          <TicketKanban data={tickets} />
+          {/* <Table data={tickets} /> */}
         </S.TicketsWrapper>
 
         {showTicketModal && <TicketsModal onClose={setShowTicketModal} />}
