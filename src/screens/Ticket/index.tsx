@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { Layout } from "../../components/Layout";
 import { ThemeContext } from "./../../App";
-import { Table } from "../../components/TicketsTable/";
-import { TicketsModal } from "../../components/TicketsModal";
+
 import { TicketKanban } from "../../components/TicketKanban";
 
 import * as S from "./styles";
@@ -27,8 +26,6 @@ export function Ticket() {
     fetchTickets();
   }, []);
 
-  console.log("tickets", tickets);
-
   return (
     <Layout>
       <S.Container>
@@ -37,11 +34,12 @@ export function Ticket() {
         <CreateTicket tickets={tickets} setTickets={setTickets} />
 
         <S.TicketsWrapper>
-          <TicketKanban data={tickets} />
-          {/* <Table data={tickets} /> */}
+          <TicketKanban
+            data={tickets}
+            setShowTicketModal={setShowTicketModal}
+            showTicketModal={showTicketModal}
+          />
         </S.TicketsWrapper>
-
-        {showTicketModal && <TicketsModal onClose={setShowTicketModal} />}
       </S.Container>
     </Layout>
   );

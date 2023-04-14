@@ -40,32 +40,26 @@ export const Info = styled.div`
 `;
 
 interface UrgencyProps {
-  urgency: "Baixa" | "Média" | "Alta" | "Urgente";
+  urgency: "Baixa" | "Média" | "Alta";
 }
 
 export const Urgency = styled.span<UrgencyProps>`
   background-color: ${(props) =>
-    props.urgency === "Urgente"
-      ? "#ff818e"
-      : props.urgency === "Alta"
-      ? "orange"
+    props.urgency === "Alta"
+      ? "#df663d"
       : props.urgency === "Média"
       ? "#f7efa2"
       : "#eefdec"};
   color: ${(props) =>
-    props.urgency === "Urgente"
-      ? "#ff6347"
-      : props.urgency === "Alta"
-      ? "orange"
+    props.urgency === "Alta"
+      ? "#ffa07a"
       : props.urgency === "Média"
       ? "#d6cf8f"
       : "#74c86b"};
   padding: 0 2rem;
   border-color: ${(props) =>
-    props.urgency === "Urgente"
-      ? "red"
-      : props.urgency === "Alta"
-      ? "orange"
+    props.urgency === "Alta"
+      ? "#ffa07a"
       : props.urgency === "Média"
       ? "yellow"
       : "#74c86b"};

@@ -49,103 +49,64 @@ export const ModalHeader = styled.header`
   }
 `;
 
-// export const InputBox = styled.div`
-//   display: flex;
-//   width: 100%;
-//   flex-direction: column;
-//   align-items: flex-start;
-//   justify-content: center;
-//   margin-bottom: 1.2rem;
-//   & label {
-//     text-align: left;
-//     margin-bottom: 0.3rem;
-//     font-size: 0.85rem;
-//     font-weight: 500;
-//     color: #6c647b;
-//     white-space: nowrap;
-//   }
-//   & input,
-//   select {
-//     outline: none;
-//     width: 100%;
-//     border: 1px solid #e7e7e7;
-//     color: #001334;
-//     font-weight: bold;
-//     padding: 0.8rem 0.7rem;
-//     font-family: Poppins;
-//     border-radius: 8px;
-//   }
-//   & small {
-//     text-align: left;
-//     font-size: 0.9rem;
-//     font-weight: 700;
-//     color: #6c647b;
-//   }
-//   .error-message {
-//     color: #f95656;
-//     font-size: 12px;
-//     white-space: nowrap;
-//     margin-top: 0.4rem;
-//   }
-//   .css-b62m3t-container {
-//     width: 100%;
-//   }
-// `;
+export const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
 
-// export const AccountInformation = styled.div`
-//   display: flex;
-//   gap: 0.9rem;
-//   flex: 1;
-//   justify-content: space-between;
-//   align-items: center;
-//   @media screen and (max-width: 968px) {
-//     flex-wrap: wrap;
-//   }
-//   div:first-child {
-//     flex: 1;
-//     @media screen and (max-width: 698px) {
-//       display: flex;
-//       flex-direction: column;
-//       margin-bottom: 0;
-//     }
-//   }
-//   div:nth-child(2) {
-//     flex: 2;
-//   }
-// `;
+  h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
 
-// export const AccountInformationGroup = styled.div`
-//   display: flex;
-//   align-items: center;
-//   max-width: 340px;
-//   gap: 14px;
-// `;
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+  }
 
-// export const AddAccountButton = styled.button`
-//   width: 100%;
-//   max-width: 240px;
-//   /* margin: 2rem 0 1.5rem 0; */
-//   height: 50px;
-//   text-transform: uppercase;
-//   /* padding: 0.7rem 2rem; */
-//   background: ${({ buttonColor }) => buttonColor};
-//   color: ${({ backgroundDarkOrLight }) =>
-//     backgroundDarkOrLight === 'dark' ? '#FFF' : '#000'};
-//   border-radius: 8px;
-//   outline: none;
-//   border: 0px;
-//   font-family: Poppins;
-//   font-weight: bold;
-//   font-size: 1.1rem;
-//   &:hover {
-//     opacity: 0.8;
-//     cursor: pointer;
-//     transition: 0.4s ease;
-//   }
-//   @media screen and (max-width: 698px) {
-//     max-width: 100%;
-//   }
-// `;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+  }
+
+  span {
+    font-weight: bold;
+  }
+`;
+
+export const FieldWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+export const FieldLabel = styled.label`
+  margin-right: 0.4rem;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+`;
+
+export const FieldValue = styled.span`
+  font-size: 0.6rem;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  svg {
+    margin-right: 0.4rem;
+  }
+`;
 
 export const CloseButtonModal = styled.button`
   position: absolute;

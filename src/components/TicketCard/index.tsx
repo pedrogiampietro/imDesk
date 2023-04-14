@@ -1,22 +1,27 @@
 import * as S from "./styles";
 
-import { Ticket } from "../TicketKanban";
+import { formatarData } from "../../utils/dateTime";
+import { TicketsModal } from "../TicketsModal";
 
-export function TicketCard(props: Ticket) {
+export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
   return (
-    <S.CardContainer>
+    <S.CardContainer onClick={() => setShowTicketModal(!showTicketModal)}>
       <S.TitleOpenedWrapper>
-        <S.Title>{props.ticketCategoryId.childrenName}</S.Title>
-        <S.OpenedAt>{props.createdAt as any}</S.OpenedAt>
+        <S.Title>{data.ticketCategoryId.childrenName}</S.Title>
+        <S.OpenedAt>{formatarData(data.createdAt as any)}</S.OpenedAt>
       </S.TitleOpenedWrapper>
 
-      <S.Description>{props.description}</S.Description>
+      <S.Description>{data.description}</S.Description>
       <S.Info>
-        <S.Urgency urgency={props.ticketPriorityId.name as any}>
-          {props.ticketPriorityId.name}
+        <S.Urgency urgency={data.ticketPriorityId.name as any}>
+          {data.ticketPriorityId.name}
         </S.Urgency>
-        <S.OpenedBy>Aberto por {props.User.name}</S.OpenedBy>
+        <S.OpenedBy>Aberto por {data.User.name}</S.OpenedBy>
       </S.Info>
+
+      {showTicketModal && (
+        <TicketsModal data={data} onClose={setShowTicketModal} />
+      )}
     </S.CardContainer>
   );
 }

@@ -3,7 +3,7 @@ import * as S from "./styles";
 
 import { TicketCard } from "../TicketCard";
 
-export interface Ticket {
+export interface ITicket {
   id: string;
   description: string;
   ticketType: string;
@@ -55,10 +55,16 @@ export interface Ticket {
 }
 
 type TicketProps = {
-  data: Ticket[];
+  data: ITicket[];
+  setShowTicketModal: any;
+  showTicketModal: any;
 };
 
-export function TicketKanban({ data }: TicketProps) {
+export function TicketKanban({
+  data,
+  setShowTicketModal,
+  showTicketModal,
+}: TicketProps) {
   const [activeTab, setActiveTab] = useState("não-atribuído");
 
   return (
@@ -85,7 +91,13 @@ export function TicketKanban({ data }: TicketProps) {
 
       {/* TicketCard */}
       {data.map((ticket) => {
-        return <TicketCard {...ticket} />;
+        return (
+          <TicketCard
+            data={ticket}
+            setShowTicketModal={setShowTicketModal}
+            showTicketModal={showTicketModal}
+          />
+        );
       })}
     </S.KanbanContainer>
   );
