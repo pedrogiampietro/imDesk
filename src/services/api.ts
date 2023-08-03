@@ -11,7 +11,6 @@ export function apiClient() {
   const token = getStorageModel(auth.TOKEN);
 
   const api = axios.create({
-    // baseURL: "http://www.imdesk.tk/",
     baseURL: "http://localhost:3333/",
     headers: {
       Authorization: `Bearer ${token}`,

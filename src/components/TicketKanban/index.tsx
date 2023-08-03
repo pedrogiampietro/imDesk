@@ -93,6 +93,7 @@ export function TicketKanban({
       {data.map((ticket) => {
         return (
           <TicketCard
+            key={ticket.id}
             data={ticket}
             setShowTicketModal={setShowTicketModal}
             showTicketModal={showTicketModal}

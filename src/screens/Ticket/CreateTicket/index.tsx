@@ -95,6 +95,11 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [ticketPriority, setTicketPriority] = useState([]);
   const [ticketLocation, setTicketLocation] = useState([]);
 
+  const [selectedType, setSelectedType] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedPriority, setSelectedPriority] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
   const getTicketType = async () => {
     try {
       const { data } = await apiClient().get("/ticket-type");
@@ -155,6 +160,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
   };
 
   const handleSubmitTicket = async (values: any) => {
+    console.log("values", values);
     try {
       const { data } = await apiClient().post(
         "/ticket",
@@ -168,8 +174,6 @@ export function CreateTicket({ tickets, setTickets }: any) {
         }
       );
 
-      console.log("data", data);
-
       setTickets([...tickets, data.body]);
 
       toast.success("Sucesso! Seu ticket foi aberto! 🚀", {
@@ -181,6 +185,12 @@ export function CreateTicket({ tickets, setTickets }: any) {
         draggable: true,
         progress: undefined,
       });
+
+      // Limpa os campos após a submissão bem-sucedida
+      setSelectedType(null);
+      setSelectedCategory(null);
+      setSelectedPriority(null);
+      setSelectedLocation(null);
     } catch (err) {
       console.warn("err", err);
     }
@@ -196,15 +206,17 @@ export function CreateTicket({ tickets, setTickets }: any) {
           <Controller
             control={control}
             name="ticket_type"
-            render={({ field: { onChange } }: any) => {
+            render={({ field: { onChange } }) => {
               return (
                 <Select
                   placeholder={"<Selecione>"}
                   options={ticketType}
+                  value={selectedType}
                   getOptionLabel={(option: ISelect) => option.name}
                   getOptionValue={(option: ISelect) => option.id}
                   onChange={(v: any) => {
                     onChange(v.id);
+                    setSelectedType(v);
                   }}
                 />
               );
@@ -243,11 +255,13 @@ export function CreateTicket({ tickets, setTickets }: any) {
                 <Select
                   placeholder={"<Selecione>"}
                   options={ticketCategory}
+                  value={selectedCategory}
                   getOptionLabel={(option: ISelect) => option.value}
                   getOptionValue={(option: ISelect) => option.id}
                   components={{ Group }}
                   onChange={(v: any) => {
                     onChange(v.id);
+                    setSelectedCategory(v);
                   }}
                   styles={{
                     groupHeading: (base) => ({
@@ -293,10 +307,12 @@ export function CreateTicket({ tickets, setTickets }: any) {
                 <Select
                   placeholder={"<Selecione>"}
                   options={ticketPriority}
+                  value={selectedPriority}
                   getOptionLabel={(option: ISelect) => option.name}
                   getOptionValue={(option: ISelect) => option.id}
                   onChange={(v: any) => {
                     onChange(v.id);
+                    setSelectedPriority(v);
                   }}
                 />
               );
@@ -332,10 +348,12 @@ export function CreateTicket({ tickets, setTickets }: any) {
                 <Select
                   placeholder={"<Selecione>"}
                   options={ticketLocation}
+                  value={selectedLocation}
                   getOptionLabel={(option: ISelect) => option.name}
                   getOptionValue={(option: ISelect) => option.id}
                   onChange={(v: any) => {
                     onChange(v.id);
+                    setSelectedLocation(v);
                   }}
                 />
               );

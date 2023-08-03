@@ -1,9 +1,25 @@
+import { useState, useEffect } from "react";
+import { apiClient } from "../../services/api";
 import * as S from "./styles";
 
 import { formatarData } from "../../utils/dateTime";
 import { TicketsModal } from "../TicketsModal";
 
 export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
+  const [technicians, setTechnicians] = useState([]);
+
+  const getTechnicians = async () => {
+    try {
+      const { data } = await apiClient().get("/account/technicians");
+
+      setTechnicians(data);
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    getTechnicians();
+  }, []);
+
   return (
     <S.CardContainer onClick={() => setShowTicketModal(!showTicketModal)}>
       <S.TitleOpenedWrapper>
@@ -20,7 +36,11 @@ export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
       </S.Info>
 
       {showTicketModal && (
-        <TicketsModal data={data} onClose={setShowTicketModal} />
+        <TicketsModal
+          data={data}
+          onClose={setShowTicketModal}
+          technicians={technicians}
+        />
       )}
     </S.CardContainer>
   );
