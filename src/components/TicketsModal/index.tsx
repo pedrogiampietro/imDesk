@@ -48,6 +48,7 @@ export function TicketsModal({
   const [userResponse, setUserResponse] = useState<string>("");
   const [technicianResponse, setTechnicianResponse] = useState<string>("");
   const [conversations, setConversations] = useState<string[]>([]);
+  const [ticketStatus, setTicketStatus] = useState(ticketData.status || "new");
 
   useEffect(() => {
     (async () => {
@@ -92,7 +93,7 @@ export function TicketsModal({
 
     try {
       await apiClient()
-        .put(`/ticket/${data.id}`, payload)
+        .put(`/ticket/${data.id}?userId=${loggedUser.userId}`, payload)
         .catch((error) => {
           console.error(
             `An error occurred while updating the ${field}:`,
@@ -204,6 +205,23 @@ export function TicketsModal({
     }
   };
 
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+    setTicketStatus(newStatus);
+    handleDataChange("status", newStatus);
+  };
+
+  function formatDate(dateString: Date): string {
+    const date = new Date(dateString);
+    return date.toLocaleString("pt-BR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
@@ -214,7 +232,36 @@ export function TicketsModal({
         <S.InfoGroup>
           <S.InfoItem>
             <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Description</S.InfoTitle>
+              <FiAlertCircle /> <S.InfoTitle>Status</S.InfoTitle>
+            </S.IconContainer>
+            <S.InfoContent>
+              <S.StyledSelect
+                value={ticketStatus}
+                onChange={handleStatusChange}
+              >
+                <option value="new">Novo</option>
+                <option value="assigned">Atribuido</option>
+                <option value="closed">Fechado</option>
+              </S.StyledSelect>
+            </S.InfoContent>
+          </S.InfoItem>
+          {ticketStatus === "closed" && (
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiClock /> <S.InfoTitle>Fechado em</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                {formatDate(ticketData.closedAt)} por{" "}
+                <strong>{ticketData.closedBy}</strong>
+              </S.InfoContent>
+            </S.InfoItem>
+          )}
+        </S.InfoGroup>
+
+        <S.InfoGroup>
+          <S.InfoItem>
+            <S.IconContainer>
+              <FiAlertCircle /> <S.InfoTitle>Descrição</S.InfoTitle>
             </S.IconContainer>
             <S.InfoContent>
               <S.StyledInput value={description} onChange={handleChange} />
@@ -222,7 +269,7 @@ export function TicketsModal({
           </S.InfoItem>
           <S.InfoItem>
             <S.IconContainer>
-              <FiUser size="15" /> <S.InfoTitle>Name</S.InfoTitle>
+              <FiUser size="15" /> <S.InfoTitle>Técnico Atribuído</S.InfoTitle>
             </S.IconContainer>
             <S.InfoContent
               onClick={(e) => {
@@ -251,7 +298,7 @@ export function TicketsModal({
         <S.InfoGroup>
           <S.InfoItem>
             <S.IconContainer>
-              <FiClock /> <S.InfoTitle>Created At</S.InfoTitle>
+              <FiClock /> <S.InfoTitle>Criado em</S.InfoTitle>
             </S.IconContainer>
             <S.InfoContent>
               {new Date(ticketData.createdAt).toLocaleString()}
@@ -259,7 +306,7 @@ export function TicketsModal({
           </S.InfoItem>
           <S.InfoItem>
             <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Priority</S.InfoTitle>
+              <FiAlertCircle /> <S.InfoTitle>Prioridade</S.InfoTitle>
             </S.IconContainer>
             <S.InfoContent>
               <S.StyledSelect
@@ -280,7 +327,7 @@ export function TicketsModal({
         <S.InfoGroup>
           <S.InfoItem>
             <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Category</S.InfoTitle>
+              <FiAlertCircle /> <S.InfoTitle>Categoria</S.InfoTitle>
             </S.IconContainer>
             <S.InfoContent>
               <S.StyledSelect
@@ -303,7 +350,7 @@ export function TicketsModal({
           </S.InfoItem>
           <S.InfoItem>
             <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Location</S.InfoTitle>
+              <FiAlertCircle /> <S.InfoTitle>Localização</S.InfoTitle>
             </S.IconContainer>
             <S.InfoContent>
               <S.StyledSelect
@@ -325,7 +372,7 @@ export function TicketsModal({
         <S.InfoGroup>
           <S.InfoItem>
             <S.IconContainer>
-              <FiMessageCircle /> <S.InfoTitle>Technician Response</S.InfoTitle>
+              <FiMessageCircle /> <S.InfoTitle>Responder mensagem</S.InfoTitle>
             </S.IconContainer>
             <S.InfoContent>
               <S.StyledTextarea
@@ -354,7 +401,7 @@ export function TicketsModal({
           </S.InfoItem>
           <S.InfoItem>
             <S.IconContainer>
-              <FiMessageCircle /> <S.InfoTitle>Conversation</S.InfoTitle>
+              <FiMessageCircle /> <S.InfoTitle>Mensagens</S.InfoTitle>
             </S.IconContainer>
             <S.ConversationContainer>
               {conversations.map((msg, index) => (

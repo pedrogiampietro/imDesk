@@ -15,7 +15,7 @@ export interface ITicket {
   images: string[];
   assignedToAt: Date | null;
   closedBy: string | null;
-  closedAt: Date | null;
+  closedAt: Date;
   status: string;
   timeEstimate: number | null;
   isDelay: boolean;
@@ -106,7 +106,7 @@ export function TicketKanban({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <S.FilterButton>Filtrar</S.FilterButton>
+        {/* <S.FilterButton>Filtrar</S.FilterButton> */}
       </S.TabsContainer>
 
       {/* TicketCard */}

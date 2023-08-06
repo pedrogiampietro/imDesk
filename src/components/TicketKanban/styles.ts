@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { darkTheme, lightTheme } from "../../assets/styles/theme";
 
 interface TabProps {
   active: boolean;
@@ -38,11 +39,34 @@ export const SearchInput = styled.input`
   border-radius: 4px;
 `;
 
-export const FilterButton = styled.button`
+export const FilterButton = styled.button<{
+  theme: typeof lightTheme | typeof darkTheme;
+}>`
   padding: 8px 16px;
-  background-color: blue;
-  color: white;
-  border: none;
+  background-color: ${({ theme }) =>
+    theme.bg3}; // Usando a cor de background secundária do tema
+  color: ${({ theme }) => theme.text}; // Cor do texto do tema
+  border: 1px solid #000;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: ${({ theme }) =>
+      theme.primary}; // Usando a cor primária do tema no hover
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+  }
 `;

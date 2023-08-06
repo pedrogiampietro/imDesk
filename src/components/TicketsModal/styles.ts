@@ -16,7 +16,7 @@ export const ModalWrapper = styled.div`
 export const Modal = styled.div`
   position: relative;
   width: 90%;
-  max-width: 600px;
+  max-width: 900px;
   background: white;
   border-radius: 15px;
   padding: 20px;
@@ -48,6 +48,7 @@ export const InfoItem = styled.div`
   background: #f4f4f4;
   padding: 10px;
   border-radius: 10px;
+  margin-right: 1rem;
 `;
 
 export const IconContainer = styled.div`
