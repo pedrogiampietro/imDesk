@@ -27,7 +27,7 @@ export const Tab = styled.div<TabProps>`
   margin-right: 8px;
   cursor: pointer;
   font-weight: ${(props) => (props.active ? "bold" : "normal")};
-  border-bottom: ${(props) => (props.active ? "2px solid blue" : "none")};
+  border-bottom: ${(props) => (props.active ? "2px solid #000000" : "none")};
 `;
 
 export const SearchInput = styled.input`
