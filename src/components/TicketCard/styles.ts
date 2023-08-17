@@ -1,47 +1,67 @@
 import styled from "styled-components";
 
-export const CardContainer = styled.div`
-  max-width: 90vw;
+interface UrgencyProps {
+  urgency: "Baixa" | "Média" | "Alta";
+}
 
-  padding: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  margin: 2rem 0 16px 0;
-
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-  background-color: #fff;
+export const CardContainer = styled.div<UrgencyProps>`
+  margin-top: 3.5rem;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: all 0.2s;
+  border-top: 4px solid
+    ${(props) =>
+      props.urgency === "Alta"
+        ? "#df663d"
+        : props.urgency === "Média"
+        ? "#f7efa2"
+        : "#eefdec"};
+  color: ${(props) =>
+    props.urgency === "Alta"
+      ? "#ffa07a"
+      : props.urgency === "Média"
+      ? "#d6cf8f"
+      : "#74c86b"};
+  padding: 1rem 2rem;
+  border-color: ${(props) =>
+    props.urgency === "Alta"
+      ? "#ffa07a"
+      : props.urgency === "Média"
+      ? "yellow"
+      : "#74c86b"};
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const TitleOpenedWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 12px;
 `;
 
-export const Title = styled.h3`
-  margin-top: 0;
+export const Title = styled.h4`
+  margin: 0;
+  color: #333;
+  font-weight: bold;
 `;
 
 export const OpenedAt = styled.span`
-  margin-left: auto;
+  color: #999;
+  font-size: 13px;
 `;
 
 export const Description = styled.p`
-  margin: 8px 0 2rem 0;
+  margin-bottom: 16px;
+  color: #666;
 `;
 
 export const Info = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
 `;
-
-interface UrgencyProps {
-  urgency: "Baixa" | "Média" | "Alta";
-}
 
 export const Urgency = styled.span<UrgencyProps>`
   background-color: ${(props) =>
@@ -68,4 +88,7 @@ export const Urgency = styled.span<UrgencyProps>`
   font-weight: bold;
 `;
 
-export const OpenedBy = styled.span``;
+export const OpenedBy = styled.span`
+  color: #999;
+  font-size: 13px;
+`;

@@ -49,24 +49,40 @@ export const CreateTicketButton = styled.button<{ isActive: boolean }>`
   background: ${({ theme, isActive }) =>
     !isActive ? theme.bg3 : theme.primary};
   border: 1px solid #000;
-  border-radius: 10px;
+  border-radius: 12px; // bordas ligeiramente mais arredondadas
   outline: none;
-  font-family: Poppins;
+  font-family: "Poppins", sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   color: ${({ isActive }) => (isActive ? "#FFF" : "#000")};
   padding: 1rem 3rem;
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.8rem; // um pouco maior para melhor legibilidade
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.3s ease-in-out; // transição para todos os estados
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // adicionando uma sombra suave
 
   &:hover {
-    opacity: 0.8;
-    transition: 0.4s ease;
+    background-color: ${({ theme }) =>
+      theme.primaryDark}; // tom mais escuro no hover
+    color: #fff;
+    transform: translateY(-2px); // elevando ligeiramente o botão
+    opacity: 0.9;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); // sombra mais pronunciada no hover
   }
+
+  &:active {
+    transform: translateY(1px); // efeito de pressionar o botão
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); // sombra menos intensa ao pressionar
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(58, 123, 255, 0.6); // glow azul ao focar para acessibilidade
+  }
+
   & svg {
-    margin-left: 0.4rem;
+    margin-left: 0.5rem; // ligeiro ajuste no espaço do ícone
   }
 `;

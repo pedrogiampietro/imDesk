@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
 import { apiClient } from "../../services/api";
-import * as S from "./styles";
+import * as S from "./styles"; // Consider renaming your styled components for more clarity.
 
 import { formatarData } from "../../utils/dateTime";
 import { TicketsModal } from "../TicketsModal";
 
+import { useAuth } from "../../hooks/useAuth";
+
 export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
   const [technicians, setTechnicians] = useState([]);
+  const { user } = useAuth();
 
   const getTechnicians = async () => {
     try {
       const { data } = await apiClient().get("/account/technicians");
-
       setTechnicians(data);
     } catch (err) {}
   };
@@ -20,14 +22,20 @@ export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
     getTechnicians();
   }, []);
 
+  const loggedUser = user;
+
   return (
-    <S.CardContainer onClick={() => setShowTicketModal(!showTicketModal)}>
+    <S.CardContainer
+      urgency={data.ticketPriorityId.name}
+      onClick={() => setShowTicketModal(!showTicketModal)}
+    >
       <S.TitleOpenedWrapper>
         <S.Title>{data.ticketCategoryId.childrenName}</S.Title>
-        <S.OpenedAt>{formatarData(data.createdAt as any)}</S.OpenedAt>
+        <S.OpenedAt>Criado em {formatarData(data.createdAt as any)}</S.OpenedAt>
       </S.TitleOpenedWrapper>
 
       <S.Description>{data.description}</S.Description>
+
       <S.Info>
         <S.Urgency urgency={data.ticketPriorityId.name as any}>
           {data.ticketPriorityId.name}
@@ -40,6 +48,7 @@ export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
           data={data}
           onClose={setShowTicketModal}
           technicians={technicians}
+          loggedUser={loggedUser}
         />
       )}
     </S.CardContainer>

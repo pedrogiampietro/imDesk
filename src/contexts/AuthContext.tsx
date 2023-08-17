@@ -22,6 +22,7 @@ type UserAuth = {
   userId: string;
   name: string;
   email: string;
+  isTechnician: boolean;
 };
 
 interface AuthContextData {
@@ -55,15 +56,16 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   }, []);
 
   async function signIn(login: User) {
-    console.log("login", login);
-
     try {
       const response = await apiClient().post("/authenticate/sign-in", login);
+
+      console.log("response", response);
 
       const objToStrig = JSON.stringify({
         userId: response.data.id,
         email: response.data.email,
         name: response.data.name,
+        isTechnician: response.data.isTechnician,
       });
 
       setStorageModel(auth.TOKEN, response.data.tokens.token);

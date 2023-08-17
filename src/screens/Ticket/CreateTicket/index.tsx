@@ -99,6 +99,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedPriority, setSelectedPriority] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedDescription, setSelectedDescription] = useState("");
 
   const getTicketType = async () => {
     try {
@@ -191,6 +192,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
       setSelectedCategory(null);
       setSelectedPriority(null);
       setSelectedLocation(null);
+      setSelectedDescription("");
     } catch (err) {
       console.warn("err", err);
     }
@@ -382,17 +384,19 @@ export function CreateTicket({ tickets, setTickets }: any) {
             Descrição:
           </S.Label>
           <S.TextArea
+            value={selectedDescription}
             className="basic-single"
             {...register("ticket_description")}
+            onChange={(e) => setSelectedDescription(e.target.value)}
           />
         </S.FormGroup>
 
-        <S.FormGroup>
+        {/* <S.FormGroup>
           <S.Label htmlFor="ticket_type" isActive={theme === "dark"}>
             Equipamentos:
           </S.Label>
           <S.Input type="text" id="ticket_type" />
-        </S.FormGroup>
+        </S.FormGroup> */}
 
         <S.CreateTicketButton type="submit" isActive={theme === "dark"}>
           Criar Ticket
