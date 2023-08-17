@@ -5,6 +5,7 @@ import { Dashboard } from "../screens/Dashboard";
 import { Ticket } from "../screens/Ticket";
 import { Statistic } from "../screens/Statistic";
 import { Maintenance } from "../screens/Maintenance";
+import { Settings } from "../screens/Settings";
 
 import RouteProtector from "./RouteProtector";
 
@@ -51,12 +52,19 @@ export function AppRoutes() {
         </RouteProtector>
       ),
     },
-
     {
       path: "/statistics",
       element: (
         <RouteProtector>
           <Statistic />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings",
+      element: (
+        <RouteProtector>
+          <Settings />
         </RouteProtector>
       ),
     },

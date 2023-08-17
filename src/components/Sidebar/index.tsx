@@ -9,6 +9,7 @@ import {
   AiOutlineLeft,
   AiOutlineSearch,
   AiOutlineSetting,
+  AiFillSetting,
 } from "react-icons/ai";
 import {
   MdLogout,
@@ -155,6 +156,12 @@ const linksArray = [
     label: "Tickets",
     icon: <BsPeople />,
     to: "/tickets",
+    notification: 0,
+  },
+  {
+    label: "Settings",
+    icon: <AiFillSetting />,
+    to: "/settings",
     notification: 0,
   },
 ];
