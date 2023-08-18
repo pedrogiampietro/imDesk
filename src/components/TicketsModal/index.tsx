@@ -5,6 +5,7 @@ import {
   FiClock,
   FiAlertCircle,
   FiMessageCircle,
+  FiStar,
 } from "react-icons/fi";
 import { ITicket } from "../TicketKanban";
 
@@ -50,6 +51,8 @@ export function TicketsModal({
   const [conversations, setConversations] = useState<string[]>([]);
   const [ticketStatus, setTicketStatus] = useState(ticketData.status || "new");
 
+  const [selectedRating, setSelectedRating] = useState(0);
+
   useEffect(() => {
     (async () => {
       try {
@@ -87,6 +90,12 @@ export function TicketsModal({
 
     fetchTicketResponses();
   }, [ticketData.id]);
+
+  useEffect(() => {
+    if (data.TicketEvaluation.length > 0) {
+      setSelectedRating(data.TicketEvaluation[0].rating);
+    }
+  }, [selectedRating]);
 
   const handleDataChange = async (field: string, newValue: any) => {
     const payload = { [field]: newValue };
@@ -221,6 +230,38 @@ export function TicketsModal({
       minute: "2-digit",
     });
   }
+
+  const submitRating = async () => {
+    if (selectedRating === null) return;
+
+    try {
+      await apiClient().post(`/ticket/evaluate`, {
+        ticketId: ticketData.id,
+        userId: loggedUser.userId,
+        rating: selectedRating,
+      });
+    } catch (error) {
+      console.error("Erro ao enviar avaliação:", error);
+    }
+  };
+
+  const Star = ({ index, selectedRating, onClick }: any) => (
+    <span
+      className="star"
+      onClick={() => onClick(index)}
+      style={{
+        display: "inline-block",
+        cursor: "pointer",
+        color: index <= selectedRating ? "#ffca00" : "gray",
+      }}
+    >
+      ★
+    </span>
+  );
+
+  const handleStarClick = (index: number) => {
+    setSelectedRating(index);
+  };
 
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
@@ -410,6 +451,35 @@ export function TicketsModal({
             </S.ConversationContainer>
           </S.InfoItem>
         </S.InfoGroup>
+
+        {ticketStatus === "closed" ? (
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiStar /> <S.InfoTitle>Avaliação</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <div>
+                  {[1, 2, 3, 4, 5].map((_, index) => (
+                    <Star
+                      key={index}
+                      index={index + 1}
+                      selectedRating={selectedRating}
+                      onClick={handleStarClick}
+                      value={data.TicketEvaluation[0].rating}
+                    />
+                  ))}
+                </div>
+
+                {data.TicketEvaluation.length > 0 ? null : (
+                  <S.StyledButton onClick={submitRating}>
+                    Enviar Avaliação
+                  </S.StyledButton>
+                )}
+              </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+        ) : null}
       </S.Modal>
     </S.ModalWrapper>
   );

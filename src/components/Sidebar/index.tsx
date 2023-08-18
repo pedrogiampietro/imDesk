@@ -54,6 +54,7 @@ export function Sidebar() {
     {
       label: "Settings",
       icon: <AiOutlineSetting />,
+      to: "/settings",
     },
     {
       label: "Logout",
@@ -108,10 +109,10 @@ export function Sidebar() {
         </S.LinkContainer>
       ))}
       <S.Divider />
-      {secondaryLinksArray.map(({ icon, label, func }) => (
+      {secondaryLinksArray.map(({ icon, label, func, to }) => (
         <S.LinkContainer key={label}>
           <S.LinkStyle
-            to="#"
+            to={`${to}`}
             style={!sidebarOpen ? { width: `fit-content` } : {}}
             onClick={func}
           >
@@ -156,12 +157,6 @@ const linksArray = [
     label: "Tickets",
     icon: <BsPeople />,
     to: "/tickets",
-    notification: 0,
-  },
-  {
-    label: "Settings",
-    icon: <AiFillSetting />,
-    to: "/settings",
     notification: 0,
   },
 ];

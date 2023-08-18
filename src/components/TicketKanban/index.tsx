@@ -52,7 +52,13 @@ export interface ITicket {
     createdAt: Date;
     updatedAt: Date;
   };
+  TicketEvaluation: TicketEvaluation[];
 }
+
+type TicketEvaluation = {
+  id: string;
+  rating: number;
+};
 
 type TicketProps = {
   data: ITicket[];
