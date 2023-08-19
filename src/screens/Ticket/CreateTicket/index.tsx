@@ -102,19 +102,35 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [selectedDescription, setSelectedDescription] = useState("");
 
   const getTicketType = async () => {
+    if (!user || !user.companies || !user.companies.companyId) {
+      return;
+    }
+
     try {
-      const { data } = await apiClient().get("/ticket-type");
+      const { data } = await apiClient().get("/ticket-type", {
+        params: {
+          companyId: user?.companies.companyId,
+        },
+      });
       setTicketType(data.body);
     } catch (err) {}
   };
 
   useEffect(() => {
     getTicketType();
-  }, []);
+  }, [user]);
 
   const getTicketCategory = async () => {
+    if (!user || !user.companies || !user.companies.companyId) {
+      return;
+    }
+
     try {
-      const { data } = await apiClient().get("/ticket-category");
+      const { data } = await apiClient().get("/ticket-category", {
+        params: {
+          companyId: user?.companies.companyId,
+        },
+      });
 
       setTicketCategory(data.body);
     } catch (err) {}
@@ -122,11 +138,19 @@ export function CreateTicket({ tickets, setTickets }: any) {
 
   useEffect(() => {
     getTicketCategory();
-  }, []);
+  }, [user]);
 
   const getTicketPriority = async () => {
+    if (!user || !user.companies || !user.companies.companyId) {
+      return;
+    }
+
     try {
-      const { data } = await apiClient().get("/ticket-priority");
+      const { data } = await apiClient().get("/ticket-priority", {
+        params: {
+          companyId: user?.companies.companyId,
+        },
+      });
 
       setTicketPriority(data.body);
     } catch (err) {}
@@ -134,11 +158,19 @@ export function CreateTicket({ tickets, setTickets }: any) {
 
   useEffect(() => {
     getTicketPriority();
-  }, []);
+  }, [user]);
 
   const getTicketLocation = async () => {
+    if (!user || !user.companies || !user.companies.companyId) {
+      return;
+    }
+
     try {
-      const { data } = await apiClient().get("/location");
+      const { data } = await apiClient().get("/location", {
+        params: {
+          companyId: user?.companies.companyId,
+        },
+      });
 
       setTicketLocation(data.body);
     } catch (err) {}
@@ -146,7 +178,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
 
   useEffect(() => {
     getTicketLocation();
-  }, []);
+  }, [user]);
 
   const Group = (props: any) => (
     <div style={groupStyles}>
@@ -166,6 +198,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
       const { data } = await apiClient().post(
         "/ticket",
         {
+          companyId: user?.companies.companyId,
           ...values,
         },
         {

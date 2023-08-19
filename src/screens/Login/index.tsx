@@ -3,17 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 import "./styles.css";
+import { apiClient } from "../../services/api";
+
 export function Login() {
   const { signIn, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [companies, setCompanies] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState("");
 
   const handleSignIn = async () => {
     const data = {
       email,
       password,
+      companyId: selectedCompany,
     };
 
     try {
@@ -28,6 +33,20 @@ export function Login() {
       navigate("/dashboard");
     }
   });
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await apiClient().get("/companies/");
+
+        setCompanies(response.data.companies);
+      } catch (error) {
+        console.error("Error fetching companies", error);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
 
   return (
     <div className="login-root">
@@ -138,6 +157,22 @@ export function Login() {
               <div className="formbg-inner padding-horizontal--48">
                 <span className="padding-bottom--15">Faça login :)</span>
                 <form>
+                  <div className="field padding-bottom--24">
+                    <label htmlFor="company">Company</label>
+                    <select
+                      id="company"
+                      value={selectedCompany}
+                      onChange={(e) => setSelectedCompany(e.target.value)}
+                    >
+                      <option value="">Select a company</option>
+                      {companies.map((company: any) => (
+                        <option key={company.id} value={company.id}>
+                          {company.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                   <div className="field padding-bottom--24">
                     <label htmlFor="email">Email</label>
                     <input

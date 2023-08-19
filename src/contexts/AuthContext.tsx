@@ -23,6 +23,10 @@ type UserAuth = {
   name: string;
   email: string;
   isTechnician: boolean;
+  companies: {
+    companyId: string;
+    companyName: string;
+  };
 };
 
 interface AuthContextData {
@@ -66,6 +70,10 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         email: response.data.email,
         name: response.data.name,
         isTechnician: response.data.isTechnician,
+        companies: {
+          companyId: response.data.companies.companyId,
+          companyName: response.data.companies.companyName,
+        },
       });
 
       setStorageModel(auth.TOKEN, response.data.tokens.token);

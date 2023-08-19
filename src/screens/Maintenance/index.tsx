@@ -21,9 +21,9 @@ export function Maintenance() {
     } catch (err) {}
   };
 
-  useEffect(() => {
-    fetchMaintenances();
-  }, []);
+  // useEffect(() => {
+  //   fetchMaintenances();
+  // }, []);
 
   return (
     <Layout>

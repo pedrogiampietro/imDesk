@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-export function CategoryForm() {
+type IProps = {
+  user: any;
+};
+
+export function CategoryForm({ user }: IProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -26,7 +30,11 @@ export function CategoryForm() {
     setLoading(true);
 
     try {
-      await apiClient().post("/ticket-category", formData);
+      await apiClient().post("/ticket-category", {
+        companyId: user.companies.companyId,
+        name: formData.name,
+        childrenName: formData.childrenName,
+      });
 
       toast.success("Sucesso! Sua categoria foi adicionada com sucesso!", {
         position: "top-right",

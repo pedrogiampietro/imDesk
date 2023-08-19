@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-export function PriorityForm() {
+type IProps = {
+  user: any;
+};
+
+export function PriorityForm({ user }: any) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
 
@@ -14,12 +18,11 @@ export function PriorityForm() {
 
     setLoading(true);
 
-    const data = {
-      name,
-    };
-
     try {
-      await apiClient().post("/ticket-priority", data);
+      await apiClient().post("/ticket-priority", {
+        companyId: user.companies.companyId,
+        name,
+      });
 
       toast.success("Sucesso! Sua categoria foi adicionada com sucesso!", {
         position: "top-right",

@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-export function UserForm() {
+type IProps = {
+  user: any;
+};
+
+export function UserForm({ user }: IProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",

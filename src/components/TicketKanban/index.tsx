@@ -64,12 +64,14 @@ type TicketProps = {
   data: ITicket[];
   setShowTicketModal: any;
   showTicketModal: any;
+  updateTicketsCallback: any;
 };
 
 export function TicketKanban({
   data,
   setShowTicketModal,
   showTicketModal,
+  updateTicketsCallback,
 }: TicketProps) {
   const [activeTab, setActiveTab] = useState("não-atribuído");
   const [searchTerm, setSearchTerm] = useState("");
@@ -83,10 +85,14 @@ export function TicketKanban({
   });
 
   const filteredData = searchedData.filter((ticket) => {
-    if (activeTab === "não-atribuído") {
-      return ticket.assignedTo.length === 0;
+    if (activeTab === "new") {
+      return ticket.status === "new";
+    } else if (activeTab === "assigned") {
+      return ticket.status === "assigned";
+    } else if (activeTab === "closed") {
+      return ticket.status === "closed";
     }
-    return ticket.assignedTo.length > 0;
+    return true;
   });
 
   return (
@@ -94,16 +100,22 @@ export function TicketKanban({
       <S.TabsContainer>
         <S.TabWrapper>
           <S.Tab
-            active={activeTab === "não-atribuído"}
-            onClick={() => setActiveTab("não-atribuído")}
+            active={activeTab === "new"}
+            onClick={() => setActiveTab("new")}
           >
-            Não Atribuído
+            Novo
           </S.Tab>
           <S.Tab
-            active={activeTab === "atribuído"}
-            onClick={() => setActiveTab("atribuído")}
+            active={activeTab === "assigned"}
+            onClick={() => setActiveTab("assigned")}
           >
             Atribuído
+          </S.Tab>
+          <S.Tab
+            active={activeTab === "closed"}
+            onClick={() => setActiveTab("closed")}
+          >
+            Fechado
           </S.Tab>
         </S.TabWrapper>
 
@@ -123,6 +135,7 @@ export function TicketKanban({
             data={ticket}
             setShowTicketModal={setShowTicketModal}
             showTicketModal={showTicketModal}
+            updateTicketsCallback={updateTicketsCallback}
           />
         );
       })}

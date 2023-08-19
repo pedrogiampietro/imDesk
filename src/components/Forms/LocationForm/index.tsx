@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-export function LocationForm() {
+type IProps = {
+  user: any;
+};
+
+export function LocationForm({ user }: IProps) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
 
@@ -14,12 +18,11 @@ export function LocationForm() {
 
     setLoading(true);
 
-    const data = {
-      name,
-    };
-
     try {
-      await apiClient().post("/location", data);
+      await apiClient().post("/location", {
+        companyId: user.companies.companyId,
+        name,
+      });
 
       toast.success("Sucesso! Sua localização foi criada com sucesso!", {
         position: "top-right",

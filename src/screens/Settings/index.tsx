@@ -8,6 +8,7 @@ import { LocationForm } from "../../components/Forms/LocationForm";
 import { PriorityForm } from "../../components/Forms/PriorityForm";
 import { CategoryForm } from "../../components/Forms/CategoryForm";
 import { TypeForm } from "../../components/Forms/TypeForm";
+import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
 
@@ -15,6 +16,7 @@ export function Settings() {
   const [name, setName] = useState("");
   const [childrenName, setChildrenName] = useState("");
   const [formType, setFormType] = useState<string>("");
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,15 +36,15 @@ export function Settings() {
   const renderForm = () => {
     switch (formType) {
       case "user":
-        return <UserForm />;
+        return <UserForm user={user} />;
       case "location":
-        return <LocationForm />;
+        return <LocationForm user={user} />;
       case "priority":
-        return <PriorityForm />;
+        return <PriorityForm user={user} />;
       case "type":
-        return <TypeForm />;
+        return <TypeForm user={user} />;
       case "category":
-        return <CategoryForm />;
+        return <CategoryForm user={user} />;
       default:
         return null;
     }

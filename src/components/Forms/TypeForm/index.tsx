@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-export function TypeForm() {
+type IProps = {
+  user: any;
+};
+
+export function TypeForm({ user }: IProps) {
   const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState("");
@@ -15,12 +19,11 @@ export function TypeForm() {
 
     setLoading(true);
 
-    const data = {
-      name,
-    };
-
     try {
-      await apiClient().post("/ticket-type", data);
+      await apiClient().post("/ticket-type", {
+        companyId: user.companies.companyId,
+        name,
+      });
 
       toast.success("Sucesso! Seu tipo foi adicionada com sucesso!", {
         position: "top-right",

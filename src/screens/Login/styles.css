@@ -140,7 +140,8 @@ label {
   align-items: center;
 }
 
-.field input {
+.field input,
+select {
   font-size: 16px;
   line-height: 28px;
   padding: 8px 16px;

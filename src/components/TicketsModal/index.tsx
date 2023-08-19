@@ -18,6 +18,7 @@ type TicketsModalProps = {
   data: ITicket;
   technicians: any;
   loggedUser: any;
+  updateTicketsCallback: any;
 };
 
 export function TicketsModal({
@@ -25,6 +26,7 @@ export function TicketsModal({
   data,
   technicians,
   loggedUser,
+  updateTicketsCallback,
 }: TicketsModalProps) {
   const currentAssignedTechnicians = data.assignedTo.map(
     (techString: string) => {
@@ -56,17 +58,29 @@ export function TicketsModal({
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await apiClient().get("/ticket-category");
+        const { data } = await apiClient().get("/ticket-category", {
+          params: {
+            companyId: loggedUser?.companies.companyId,
+          },
+        });
         setTicketCategory(data.body);
       } catch (err) {}
 
       try {
-        const { data } = await apiClient().get("/ticket-priority");
+        const { data } = await apiClient().get("/ticket-priority", {
+          params: {
+            companyId: loggedUser?.companies.companyId,
+          },
+        });
         setTicketPriority(data.body);
       } catch (err) {}
 
       try {
-        const { data } = await apiClient().get("/location");
+        const { data } = await apiClient().get("/location", {
+          params: {
+            companyId: loggedUser?.companies.companyId,
+          },
+        });
         setTicketLocation(data.body);
       } catch (err) {}
     })();
@@ -76,7 +90,12 @@ export function TicketsModal({
     const fetchTicketResponses = async () => {
       try {
         const { data } = await apiClient().get(
-          `/ticket/${ticketData.id}/responses`
+          `/ticket/${ticketData.id}/responses`,
+          {
+            params: {
+              companyId: loggedUser?.companies.companyId,
+            },
+          }
         );
         setConversations(
           data.body.map(
@@ -92,8 +111,8 @@ export function TicketsModal({
   }, [ticketData.id]);
 
   useEffect(() => {
-    if (data.TicketEvaluation.length > 0) {
-      setSelectedRating(data.TicketEvaluation[0].rating);
+    if (data.TicketEvaluation?.length > 0) {
+      setSelectedRating(data.TicketEvaluation[0]?.rating);
     }
   }, [selectedRating]);
 
@@ -132,6 +151,7 @@ export function TicketsModal({
   const handleClickOutsideModal = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose(false);
+      updateTicketsCallback();
     }
   };
 
@@ -266,7 +286,12 @@ export function TicketsModal({
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
-        <S.CloseButton onClick={() => onClose(false)}>
+        <S.CloseButton
+          onClick={() => {
+            onClose(false);
+            updateTicketsCallback();
+          }}
+        >
           <FiX size="24" />
         </S.CloseButton>
         <S.Title>Ticket #{ticketData.id}</S.Title>
@@ -466,12 +491,12 @@ export function TicketsModal({
                       index={index + 1}
                       selectedRating={selectedRating}
                       onClick={handleStarClick}
-                      value={data.TicketEvaluation[0].rating}
+                      // value={data?.TicketEvaluation[0]?.rating}
                     />
                   ))}
                 </div>
 
-                {data.TicketEvaluation.length > 0 ? null : (
+                {data?.TicketEvaluation?.length > 0 ? null : (
                   <S.StyledButton onClick={submitRating}>
                     Enviar Avaliação
                   </S.StyledButton>

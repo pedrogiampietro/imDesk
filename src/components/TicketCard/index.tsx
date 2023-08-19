@@ -7,20 +7,33 @@ import { TicketsModal } from "../TicketsModal";
 
 import { useAuth } from "../../hooks/useAuth";
 
-export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
+export function TicketCard({
+  data,
+  showTicketModal,
+  setShowTicketModal,
+  updateTicketsCallback,
+}: any) {
   const [technicians, setTechnicians] = useState([]);
   const { user } = useAuth();
 
   const getTechnicians = async () => {
+    if (!user || !user.companies || !user.companies.companyId) {
+      return;
+    }
+
     try {
-      const { data } = await apiClient().get("/account/technicians");
+      const { data } = await apiClient().get("/account/technicians", {
+        params: {
+          companyId: user?.companies.companyId,
+        },
+      });
       setTechnicians(data);
     } catch (err) {}
   };
 
   useEffect(() => {
     getTechnicians();
-  }, []);
+  }, [user]);
 
   const loggedUser = user;
 
@@ -49,6 +62,7 @@ export function TicketCard({ data, showTicketModal, setShowTicketModal }: any) {
           onClose={setShowTicketModal}
           technicians={technicians}
           loggedUser={loggedUser}
+          updateTicketsCallback={updateTicketsCallback}
         />
       )}
     </S.CardContainer>
