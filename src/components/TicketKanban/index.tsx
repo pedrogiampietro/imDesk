@@ -73,7 +73,7 @@ export function TicketKanban({
   showTicketModal,
   updateTicketsCallback,
 }: TicketProps) {
-  const [activeTab, setActiveTab] = useState("não-atribuído");
+  const [activeTab, setActiveTab] = useState("new");
   const [searchTerm, setSearchTerm] = useState("");
 
   const searchedData = data.filter((ticket) => {
