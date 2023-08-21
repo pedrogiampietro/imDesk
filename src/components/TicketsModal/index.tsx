@@ -52,6 +52,12 @@ export function TicketsModal({
   const [technicianResponse, setTechnicianResponse] = useState<string>("");
   const [conversations, setConversations] = useState<string[]>([]);
   const [ticketStatus, setTicketStatus] = useState(ticketData.status || "new");
+  const [selectedLocation, setSelectedLocation] = useState<string>(
+    ticketData.ticketLocationId.id
+  );
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    ticketData.ticketCategoryId.id
+  );
 
   const [selectedRating, setSelectedRating] = useState(0);
 
@@ -140,11 +146,57 @@ export function TicketsModal({
   };
 
   const handleAssignTo = (techId: string) => {
-    const newTechnician = technicians.find((tech: any) => tech.id === techId);
-    setChangeAssignedTo([newTechnician]);
+    // Verifique se o técnico já foi atribuído
+    if (changeAssignedTo.some((tech: any) => tech.id === techId)) return;
 
-    // Call handleDataChange to update the server
-    handleDataChange("assignedTo", { id: techId, name: newTechnician.name });
+    // Encontre o técnico pelo id
+    const tech = technicians.find((tech: any) => tech.id === techId);
+    if (!tech) return;
+
+    // Adicione o técnico à lista de técnicos atribuídos
+    setChangeAssignedTo([...changeAssignedTo, tech]);
+
+    handleDataChange("assignedTo", { id: techId, name: tech.name });
+
+    if (ticketStatus === "new") {
+      setTicketStatus("assigned");
+    }
+  };
+
+  const handleRemoveAssignedTo = async (techId: string) => {
+    const updatedAssignedTo = changeAssignedTo.filter(
+      (tech: any) => tech.id !== techId
+    );
+
+    setChangeAssignedTo(updatedAssignedTo);
+
+    const payload = {
+      assignedTo: updatedAssignedTo.map((tech: any) => ({
+        id: tech.id,
+        name: tech.name,
+      })),
+    };
+
+    try {
+      await apiClient()
+        .put(`/ticket/${data.id}?userId=${loggedUser.userId}`, payload)
+        .catch((error) => {
+          console.error(
+            `An error occurred while removing the assigned technician:`,
+            error
+          );
+        });
+
+      setTicketData((prevData) => ({
+        ...prevData,
+        assignedTo: updatedAssignedTo,
+      }));
+    } catch (error) {
+      console.error(
+        `An error occurred while removing the assigned technician:`,
+        error
+      );
+    }
   };
 
   // Function to handle click outside the modal
@@ -222,15 +274,12 @@ export function TicketsModal({
     };
 
     try {
-      // Faça a chamada à API
       await apiClient().post(`/${ticketData.id}/response`, payload);
 
-      // Atualize o estado local após a chamada bem-sucedida à API
       setConversations((prev) => [...prev, `User: ${userResponse}`]);
       setUserResponse("");
     } catch (error) {
       console.error("Erro ao enviar a resposta do usuário:", error);
-      // Aqui, você pode adicionar algum feedback para o usuário em caso de falha
     }
   };
 
@@ -240,8 +289,21 @@ export function TicketsModal({
     handleDataChange("status", newStatus);
   };
 
+  const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLocation = e.target.value;
+    setSelectedLocation(newLocation);
+    handleDataChange("ticketLocationId", newLocation);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newCategory = e.target.value;
+    setSelectedCategory(newCategory);
+    handleDataChange("ticketCategoryId", newCategory);
+  };
+
   function formatDate(dateString: Date): string {
     const date = new Date(dateString);
+
     return date.toLocaleString("pt-BR", {
       year: "numeric",
       month: "long",
@@ -343,8 +405,20 @@ export function TicketsModal({
                 setShowDropdown(!showDropdown);
               }}
             >
-              {changeAssignedTo.length > 0
-                ? changeAssignedTo.map((tech: any) => tech.name).join(", ")
+              {changeAssignedTo.length > 2
+                ? changeAssignedTo.map((tech: any) => (
+                    <span key={tech.id}>
+                      {tech.name}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveAssignedTo(tech.id);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </span>
+                  ))
                 : "None"}
               {showDropdown && (
                 <S.Dropdown>
@@ -397,10 +471,8 @@ export function TicketsModal({
             </S.IconContainer>
             <S.InfoContent>
               <S.StyledSelect
-                value={ticketData.ticketCategoryId.id}
-                onChange={(e) =>
-                  handleDataChange("ticketCategoryId", e.target.value)
-                }
+                value={selectedCategory}
+                onChange={handleCategoryChange}
               >
                 {ticketCategory.map((group: any) => (
                   <optgroup label={group.label} key={group.label}>
@@ -420,10 +492,8 @@ export function TicketsModal({
             </S.IconContainer>
             <S.InfoContent>
               <S.StyledSelect
-                value={ticketData.ticketLocationId.id}
-                onChange={(e) =>
-                  handleDataChange("ticketLocationId", e.target.value)
-                }
+                value={selectedLocation}
+                onChange={handleLocationChange}
               >
                 {ticketLocation.map((location: any) => (
                   <option key={location.id} value={location.id}>

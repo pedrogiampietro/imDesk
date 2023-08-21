@@ -5,15 +5,20 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-type IProps = {
-  user: any;
-};
-
-export function CategoryForm({ user }: IProps) {
+export function CategoryForm({
+  companies,
+}: {
+  companies: { id: string; name: string }[];
+}) {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    childrenName: string;
+    companyIds: string[];
+  }>({
     name: "",
     childrenName: "",
+    companyIds: [],
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +29,16 @@ export function CategoryForm({ user }: IProps) {
     }));
   };
 
+  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedIds = Array.from(event.target.selectedOptions).map(
+      (option) => option.value
+    );
+    setFormData((prevData) => ({
+      ...prevData,
+      companyIds: selectedIds,
+    }));
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -31,7 +46,7 @@ export function CategoryForm({ user }: IProps) {
 
     try {
       await apiClient().post("/ticket-category", {
-        companyId: user.companies.companyId,
+        companyIds: formData.companyIds,
         name: formData.name,
         childrenName: formData.childrenName,
       });
@@ -49,6 +64,7 @@ export function CategoryForm({ user }: IProps) {
       setFormData({
         name: "",
         childrenName: "",
+        companyIds: [],
       });
 
       setLoading(false);
@@ -82,6 +98,17 @@ export function CategoryForm({ user }: IProps) {
           placeholder="Exemplo: Recuperação de Imagem"
           onChange={handleChange}
         />
+      </S.InputGroup>
+
+      <S.InputGroup>
+        <S.InputLabel>Empresa</S.InputLabel>
+        <S.Select multiple onChange={handleCompanyChange}>
+          {companies.map((company) => (
+            <option key={company.id} value={company.id}>
+              {company.name}
+            </option>
+          ))}
+        </S.Select>
       </S.InputGroup>
 
       <S.Button type="submit" disabled={loading}>

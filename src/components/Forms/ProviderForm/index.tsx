@@ -5,17 +5,20 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-type IProps = {
-  user: any;
-};
-
-export function ProviderForm({ user }: IProps) {
+export function ProviderForm({ companies }: any) {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    phone: string;
+    email: string;
+    address: string;
+    companyIds: string[];
+  }>({
     name: "",
     phone: "",
     email: "",
     address: "",
+    companyIds: [],
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,13 +29,26 @@ export function ProviderForm({ user }: IProps) {
     }));
   };
 
+  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedIds = Array.from(event.target.selectedOptions).map(
+      (option) => option.value
+    );
+    setFormData((prevData) => ({
+      ...prevData,
+      companyIds: selectedIds,
+    }));
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setLoading(true);
 
     try {
-      await apiClient().post("/providers/provider", formData);
+      await apiClient().post("/providers/provider", {
+        ...formData,
+        companyIds: formData.companyIds,
+      });
 
       toast.success("Sucesso! Sua localização foi criada com sucesso!", {
         position: "top-right",
@@ -49,6 +65,7 @@ export function ProviderForm({ user }: IProps) {
         email: "",
         phone: "",
         address: "",
+        companyIds: [],
       });
 
       setLoading(false);
@@ -100,6 +117,17 @@ export function ProviderForm({ user }: IProps) {
           value={formData.address}
           onChange={handleChange}
         />
+      </S.InputGroup>
+
+      <S.InputGroup>
+        <S.InputLabel>Empresas</S.InputLabel>
+        <S.Select multiple onChange={handleCompanyChange}>
+          {companies.map((company: any) => (
+            <option key={company.companyId} value={company.companyId}>
+              {company.name}
+            </option>
+          ))}
+        </S.Select>
       </S.InputGroup>
 
       <S.Button type="submit" disabled={loading}>

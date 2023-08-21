@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { apiClient } from "../../../services/api";
 
 import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-type IProps = {
-  user: any;
+type FormData = {
+  username: string;
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  ramal: string;
+  sector: string;
+  isTechnician: boolean;
+  companyIds: string[];
 };
 
-export function UserForm({ user }: IProps) {
+export function UserForm({ companies }: any) {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: "",
     name: "",
     email: "",
@@ -20,13 +28,26 @@ export function UserForm({ user }: IProps) {
     ramal: "",
     sector: "",
     isTechnician: false,
+    companyIds: [],
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type, checked } = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCompanyIds = Array.from(event.target.selectedOptions).map(
+      (option) => option.value
+    );
+    setFormData((prevData) => ({
+      ...prevData,
+      companyIds: selectedCompanyIds,
     }));
   };
 
@@ -57,6 +78,7 @@ export function UserForm({ user }: IProps) {
         ramal: "",
         sector: "",
         isTechnician: false,
+        companyIds: [],
       });
 
       setLoading(false);
@@ -150,6 +172,21 @@ export function UserForm({ user }: IProps) {
         <S.InputLabel>É Técnico?</S.InputLabel>
       </S.CheckboxGroup>
 
+      <S.InputGroup>
+        <S.InputLabel>Empresas</S.InputLabel>
+        <S.Select
+          multiple={true}
+          name="companies"
+          value={formData.companyIds}
+          onChange={handleCompanyChange}
+        >
+          {companies.map((company: any) => (
+            <option key={company.id} value={company.id}>
+              {company.name}
+            </option>
+          ))}
+        </S.Select>
+      </S.InputGroup>
       <S.Button type="submit" disabled={loading}>
         {loading ? "Carregando..." : "Criar Usuário"}
       </S.Button>

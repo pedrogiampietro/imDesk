@@ -5,13 +5,14 @@ import { toast } from "react-toastify";
 
 import * as S from "./styles";
 
-type IProps = {
-  user: any;
-};
-
-export function LocationForm({ user }: IProps) {
+export function LocationForm({
+  companies,
+}: {
+  companies: { id: string; name: string }[];
+}) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
+  const [selectedCompanyIds, setSelectedCompanyIds] = useState<string[]>([]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,7 +21,7 @@ export function LocationForm({ user }: IProps) {
 
     try {
       await apiClient().post("/location", {
-        companyId: user.companies.companyId,
+        companyIds: selectedCompanyIds,
         name,
       });
 
@@ -35,12 +36,20 @@ export function LocationForm({ user }: IProps) {
       });
 
       setName("");
+      setSelectedCompanyIds([]);
 
       setLoading(false);
     } catch (err) {
       setLoading(false);
       console.warn("err", err);
     }
+  };
+
+  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedIds = Array.from(event.target.selectedOptions).map(
+      (option) => option.value
+    );
+    setSelectedCompanyIds(selectedIds);
   };
 
   return (
@@ -56,6 +65,18 @@ export function LocationForm({ user }: IProps) {
           onChange={(e) => setName(e.target.value)}
         />
       </S.InputGroup>
+
+      <S.InputGroup>
+        <S.InputLabel>Empresa</S.InputLabel>
+        <S.Select multiple onChange={handleCompanyChange}>
+          {companies.map((company) => (
+            <option key={company.id} value={company.id}>
+              {company.name}
+            </option>
+          ))}
+        </S.Select>
+      </S.InputGroup>
+
       <S.Button type="submit" disabled={loading}>
         {loading ? "Carregando..." : "Criar Localização"}
       </S.Button>

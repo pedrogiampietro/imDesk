@@ -68,10 +68,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         email: response.data.email,
         name: response.data.name,
         isTechnician: response.data.isTechnician,
-        companies: {
-          companyId: response.data.companies.companyId,
-          companyName: response.data.companies.companyName,
-        },
+        companies: response.data.companies,
       });
 
       setStorageModel(auth.TOKEN, response.data.tokens.token);

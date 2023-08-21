@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "../../components/Layout";
 import { apiClient } from "../../services/api";
 import { CardButton } from "../../components/CardButton";
@@ -9,45 +9,41 @@ import { PriorityForm } from "../../components/Forms/PriorityForm";
 import { CategoryForm } from "../../components/Forms/CategoryForm";
 import { TypeForm } from "../../components/Forms/TypeForm";
 import { ProviderForm } from "../../components/Forms/ProviderForm";
-import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
 
 export function Settings() {
   const [name, setName] = useState("");
+  const [companies, setCompanies] = useState([]);
   const [childrenName, setChildrenName] = useState("");
   const [formType, setFormType] = useState<string>("");
-  const { user } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await apiClient().get("/companies");
 
-    // Exemplo de requisição para a rota de criação de categorias de chamados
-    try {
-      const response = await apiClient().post(`/ticket-category`, {
-        name,
-        childrenName,
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error("Erro ao criar categoria de chamado:", error);
-    }
-  };
+        setCompanies(response.data.companies);
+      } catch (err) {
+        console.warn("err", err);
+      }
+    })();
+  }, []);
 
   const renderForm = () => {
     switch (formType) {
       case "user":
-        return <UserForm user={user} />;
+        return <UserForm companies={companies} />;
       case "location":
-        return <LocationForm user={user} />;
+        return <LocationForm companies={companies} />;
       case "priority":
-        return <PriorityForm user={user} />;
+        return <PriorityForm companies={companies} />;
       case "type":
-        return <TypeForm user={user} />;
+        return <TypeForm companies={companies} />;
       case "category":
-        return <CategoryForm user={user} />;
+        return <CategoryForm companies={companies} />;
       case "provider":
-        return <ProviderForm user={user} />;
+        return <ProviderForm companies={companies} />;
       default:
         return null;
     }
