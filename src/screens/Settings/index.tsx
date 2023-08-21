@@ -8,6 +8,7 @@ import { LocationForm } from "../../components/Forms/LocationForm";
 import { PriorityForm } from "../../components/Forms/PriorityForm";
 import { CategoryForm } from "../../components/Forms/CategoryForm";
 import { TypeForm } from "../../components/Forms/TypeForm";
+import { ProviderForm } from "../../components/Forms/ProviderForm";
 import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
@@ -45,6 +46,8 @@ export function Settings() {
         return <TypeForm user={user} />;
       case "category":
         return <CategoryForm user={user} />;
+      case "provider":
+        return <ProviderForm user={user} />;
       default:
         return null;
     }
@@ -68,6 +71,10 @@ export function Settings() {
         <CardButton
           label="Criar Categoria"
           onClick={() => setFormType("category")}
+        />
+        <CardButton
+          label="Criar Fornecedor"
+          onClick={() => setFormType("provider")}
         />
       </S.CardContainer>
       {renderForm()}

@@ -6,6 +6,7 @@ import { Ticket } from "../screens/Ticket";
 import { Statistic } from "../screens/Statistic";
 import { Maintenance } from "../screens/Maintenance";
 import { Settings } from "../screens/Settings";
+import { Provider } from "../screens/Provider";
 
 import RouteProtector from "./RouteProtector";
 
@@ -19,15 +20,6 @@ export function AppRoutes() {
       path: "/login",
       element: <Login />,
     },
-
-    // {
-    // 	path: '/recuperar-senha',
-    // 	element: <RecoverPassword />,
-    // },
-    // {
-    // 	path: '/redefinir-senha/*',
-    // 	element: <ResetPassword />,
-    // },
     {
       path: "/dashboard",
       element: (
@@ -65,6 +57,14 @@ export function AppRoutes() {
       element: (
         <RouteProtector>
           <Settings />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/providers",
+      element: (
+        <RouteProtector>
+          <Provider />
         </RouteProtector>
       ),
     },

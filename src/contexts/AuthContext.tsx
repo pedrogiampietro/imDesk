@@ -63,8 +63,6 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     try {
       const response = await apiClient().post("/authenticate/sign-in", login);
 
-      console.log("response", response);
-
       const objToStrig = JSON.stringify({
         userId: response.data.id,
         email: response.data.email,

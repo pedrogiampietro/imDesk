@@ -91,7 +91,7 @@ export const LinkContainer = styled.div<{ isActive?: boolean }>`
   background: ${({ theme, isActive }) =>
     !isActive ? `transparent` : theme.bg3};
   border-radius: ${v.borderRadius};
-  margin: 8px 0;
+  margin: 8px -5px;
 
   :hover {
     box-shadow: inset 0 0 0 1px ${({ theme }) => theme.bg3};
@@ -121,7 +121,7 @@ export const LinkLabel = styled.span<{ isActive: boolean }>`
   color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
   display: block;
   flex: 1;
-  margin-left: ${v.smSpacing};
+  /* margin-left: ${v.smSpacing}; */
 `;
 
 export const LinkNotification = styled.div`

@@ -9,13 +9,13 @@ import {
   AiOutlineLeft,
   AiOutlineSearch,
   AiOutlineSetting,
-  AiFillSetting,
 } from "react-icons/ai";
 import {
   MdLogout,
   MdOutlineAnalytics,
   MdOutlineComputer,
 } from "react-icons/md";
+import { FaFileContract } from "react-icons/fa";
 import { BsPeople } from "react-icons/bs";
 
 import { ThemeContext } from "./../../App";
@@ -157,6 +157,12 @@ const linksArray = [
     label: "Tickets",
     icon: <BsPeople />,
     to: "/tickets",
+    notification: 0,
+  },
+  {
+    label: "Fornecedores",
+    icon: <FaFileContract />,
+    to: "/providers",
     notification: 0,
   },
 ];
