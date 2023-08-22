@@ -1,12 +1,22 @@
 import styled from "styled-components";
 
+const colors = {
+  primary: "#007bff",
+  primaryDark: "#0056b3",
+  lightGrey: "#f4f4f4",
+  darkGrey: "#333",
+  borderGrey: "#ccc",
+  white: "#fff",
+  red: "#ff6347",
+};
+
 export const ModalWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,40 +25,91 @@ export const ModalWrapper = styled.div`
 
 export const Modal = styled.div`
   position: relative;
-  width: 90%;
-  max-width: 900px;
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-  animation: fadeIn 0.5s;
+  width: 80%;
+  height: 80%;
+  background: ${colors.white};
+  border-radius: 20px;
+  padding: 30px 40px;
+  box-shadow: 0px 10px 50px -10px rgba(0, 0, 0, 0.3);
+  display: flex;
+`;
+
+export const LeftSide = styled.div`
+  flex: 60%; // Ajuste de acordo com sua preferência
+  padding-right: 20px; // espaço entre a parte esquerda e direita
+  border-right: 1px solid ${colors.borderGrey}; // borda entre as duas partes
+
+  > h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: ${colors.darkGrey};
+  }
+
+  > span {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: ${colors.primaryDark};
+  }
+
+  // Seção do chat
+  > div.chat {
+    background: ${colors.lightGrey};
+    padding: 15px;
+    border-radius: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+`;
+
+export const RightSide = styled.div`
+  flex: 40%;
+  padding-left: 20px;
+
+  // Agora, você pode definir os estilos para os elementos desta seção.
+  // Por exemplo:
+
+  > p.info {
+    font-size: 16px;
+    color: ${colors.darkGrey};
+    margin-bottom: 20px;
+  }
 `;
 
 export const CloseButton = styled.button`
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 20px;
+  top: 20px;
   background: none;
   border: none;
+  &:hover {
+    color: ${colors.red}; // Adicionando um feedback no hover
+  }
 `;
 
 export const Title = styled.h2`
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 25px; // Um pouco mais de espaço
+  color: ${colors.darkGrey};
+  font-size: 24px; // Tamanho da fonte um pouco maior
 `;
 
 export const InfoGroup = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 `;
 
 export const InfoItem = styled.div`
-  width: 48%;
-  background: #f4f4f4;
-  padding: 10px;
-  border-radius: 10px;
+  flex: 1;
+  background: ${colors.lightGrey};
+  padding: 15px;
+  border-radius: 15px;
   margin-right: 1rem;
+
+  &:last-child {
+    margin-right: 0; // Retirar margin-right do último item
+  }
 `;
 
 export const IconContainer = styled.div`
@@ -96,6 +157,7 @@ export const StyledInput = styled.textarea`
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   background-color: #fff;
+  border-radius: 8px; // Bordas mais arredondadas
 
   &:hover {
     border-color: #a0aec0;
@@ -120,6 +182,7 @@ export const StyledSelect = styled.select`
   background-color: #fff;
   cursor: pointer;
   transition: border-color 0.2s;
+  border-radius: 8px; // Bordas mais arredondadas
 
   &:focus {
     border-color: #a0aec0;
@@ -155,6 +218,8 @@ export const StyledButton = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  border-radius: 8px; // Bordas mais arredondadas
+
   &:hover {
     background-color: #0056b3;
   }
@@ -168,23 +233,53 @@ export const ConversationContainer = styled.div`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  max-height: 200px; // Ajuste conforme sua necessidade
-  overflow-y: auto; // Permite rolagem se o conteúdo for longo
+  max-height: calc(
+    100% - 20px
+  ); // Descontando o padding, assim ocupa todo o espaço
+  overflow-y: auto;
   background-color: #f9f9f9;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+`;
 
-  & > div {
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 3px;
+export const Message = styled.div<{ isTech: boolean }>`
+  margin-bottom: 10px;
+  padding: 5px 10px; // Aumentei o padding horizontal para melhor visualização
+  border-radius: 15px; // Aumentei para dar um look mais moderno
+  background-color: ${(props) => (props.isTech ? "#dcf6c7" : "#dfd8cf")};
+  align-self: ${(props) => (props.isTech ? "flex-start" : "flex-end")};
+  max-width: 80%; // Limitando a largura máxima de uma mensagem
+  word-break: break-word; // Quebra longas palavras
 
-    &:nth-child(odd) {
-      // Estilo para mensagens ímpares (por exemplo, do usuário)
-      background-color: #e9e9e9;
-    }
+  // Estilização opcional para diferenciar ainda mais as mensagens
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+`;
 
-    &:nth-child(even) {
-      // Estilo para mensagens pares (por exemplo, do técnico)
-      background-color: #d9d9d9;
+export const ReplyContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+
+  & > input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  & > button {
+    padding: 10px 20px;
+    background-color: #4caf50; // Verde como exemplo
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #45a049; // Verde escuro no hover
     }
   }
 `;

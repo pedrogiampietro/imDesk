@@ -15,14 +15,18 @@ export function Ticket() {
   const { user } = useAuth();
 
   const fetchTickets = async () => {
-    if (!user || !user.companies || !user.companies.companyId) {
+    if (
+      !user ||
+      !user.companies ||
+      !user.currentLoggedCompany.currentLoggedCompanyId
+    ) {
       return;
     }
 
     try {
       const { data } = await apiClient().get("/ticket", {
         params: {
-          companyId: user?.companies.companyId,
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
         },
       });
       setTickets(data.body);

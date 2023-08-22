@@ -59,6 +59,7 @@ export function Sidebar() {
     {
       label: "Logout",
       icon: <MdLogout />,
+      to: "/login",
       func: signOut,
     },
   ];

@@ -5,20 +5,48 @@ import { useAuth } from "../../hooks/useAuth";
 import "./styles.css";
 import { apiClient } from "../../services/api";
 
+import { toast } from "react-toastify";
+
+interface Company {
+  id: string;
+  name: string;
+}
+
 export function Login() {
   const { signIn, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [companies, setCompanies] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState("");
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [selectedCompany, setSelectedCompany] = useState<{
+    id: string;
+    name: string;
+  }>({
+    id: "",
+    name: "",
+  });
 
   const handleSignIn = async () => {
+    if (!selectedCompany.id || !selectedCompany.name) {
+      toast.warn("Você precisa selecionar uma empresa para fazer login! 🙋", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+      return;
+    }
+
     const data = {
       email,
       password,
-      companyId: selectedCompany,
+      companyId: selectedCompany.id,
+      companyName: selectedCompany.name,
     };
 
     try {
@@ -47,6 +75,19 @@ export function Login() {
 
     fetchCompanies();
   }, []);
+
+  const handleCompanyChange = (e: any) => {
+    const selectedCompany = companies.find(
+      (company: any) => company.id === e.target.value
+    );
+
+    if (selectedCompany) {
+      setSelectedCompany({
+        id: selectedCompany.id,
+        name: selectedCompany.name,
+      });
+    }
+  };
 
   return (
     <div className="login-root">
@@ -161,8 +202,8 @@ export function Login() {
                     <label htmlFor="company">Company</label>
                     <select
                       id="company"
-                      value={selectedCompany}
-                      onChange={(e) => setSelectedCompany(e.target.value)}
+                      value={selectedCompany.id}
+                      onChange={handleCompanyChange}
                     >
                       <option value="">Select a company</option>
                       {companies.map((company: any) => (

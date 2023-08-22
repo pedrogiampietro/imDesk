@@ -102,14 +102,19 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [selectedDescription, setSelectedDescription] = useState("");
 
   const getTicketType = async () => {
-    if (!user || !user.companies || !user.companies.companyId) {
+    if (
+      !user ||
+      !user.companies ||
+      !user.currentLoggedCompany.currentLoggedCompanyId ||
+      !user.currentLoggedCompany.currentLoggedCompanyName
+    ) {
       return;
     }
 
     try {
       const { data } = await apiClient().get("/ticket-type", {
         params: {
-          companyId: user?.companies.companyId,
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
         },
       });
       setTicketType(data.body);
@@ -121,14 +126,19 @@ export function CreateTicket({ tickets, setTickets }: any) {
   }, [user]);
 
   const getTicketCategory = async () => {
-    if (!user || !user.companies || !user.companies.companyId) {
+    if (
+      !user ||
+      !user.companies ||
+      !user.currentLoggedCompany.currentLoggedCompanyId ||
+      !user.currentLoggedCompany.currentLoggedCompanyName
+    ) {
       return;
     }
 
     try {
       const { data } = await apiClient().get("/ticket-category", {
         params: {
-          companyId: user?.companies.companyId,
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
         },
       });
 
@@ -141,14 +151,19 @@ export function CreateTicket({ tickets, setTickets }: any) {
   }, [user]);
 
   const getTicketPriority = async () => {
-    if (!user || !user.companies || !user.companies.companyId) {
+    if (
+      !user ||
+      !user.companies ||
+      !user.currentLoggedCompany.currentLoggedCompanyId ||
+      !user.currentLoggedCompany.currentLoggedCompanyName
+    ) {
       return;
     }
 
     try {
       const { data } = await apiClient().get("/ticket-priority", {
         params: {
-          companyId: user?.companies.companyId,
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
         },
       });
 
@@ -161,14 +176,19 @@ export function CreateTicket({ tickets, setTickets }: any) {
   }, [user]);
 
   const getTicketLocation = async () => {
-    if (!user || !user.companies || !user.companies.companyId) {
+    if (
+      !user ||
+      !user.companies ||
+      !user.currentLoggedCompany.currentLoggedCompanyId ||
+      !user.currentLoggedCompany.currentLoggedCompanyName
+    ) {
       return;
     }
 
     try {
       const { data } = await apiClient().get("/location", {
         params: {
-          companyId: user?.companies.companyId,
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
         },
       });
 
@@ -198,7 +218,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
       const { data } = await apiClient().post(
         "/ticket",
         {
-          companyId: user?.companies.companyId,
+          companyIds: [user?.currentLoggedCompany.currentLoggedCompanyId],
           ...values,
         },
         {

@@ -53,10 +53,10 @@ export function TicketsModal({
   const [conversations, setConversations] = useState<string[]>([]);
   const [ticketStatus, setTicketStatus] = useState(ticketData.status || "new");
   const [selectedLocation, setSelectedLocation] = useState<string>(
-    ticketData.ticketLocationId.id
+    ticketData.ticketLocation.id
   );
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    ticketData.ticketCategoryId.id
+    ticketData.ticketCategory.id
   );
 
   const [selectedRating, setSelectedRating] = useState(0);
@@ -66,7 +66,7 @@ export function TicketsModal({
       try {
         const { data } = await apiClient().get("/ticket-category", {
           params: {
-            companyId: loggedUser?.companies.companyId,
+            companyId: loggedUser?.currentLoggedCompany.currentLoggedCompanyId,
           },
         });
         setTicketCategory(data.body);
@@ -75,7 +75,7 @@ export function TicketsModal({
       try {
         const { data } = await apiClient().get("/ticket-priority", {
           params: {
-            companyId: loggedUser?.companies.companyId,
+            companyId: loggedUser?.currentLoggedCompany.currentLoggedCompanyId,
           },
         });
         setTicketPriority(data.body);
@@ -84,7 +84,7 @@ export function TicketsModal({
       try {
         const { data } = await apiClient().get("/location", {
           params: {
-            companyId: loggedUser?.companies.companyId,
+            companyId: loggedUser?.currentLoggedCompany.currentLoggedCompanyId,
           },
         });
         setTicketLocation(data.body);
@@ -99,15 +99,13 @@ export function TicketsModal({
           `/ticket/${ticketData.id}/responses`,
           {
             params: {
-              companyId: loggedUser?.companies.companyId,
+              companyId:
+                loggedUser?.currentLoggedCompany.currentLoggedCompanyId,
             },
           }
         );
-        setConversations(
-          data.body.map(
-            (response: any) => `${response.User.name}: ${response.content}`
-          )
-        );
+
+        setConversations(data.body);
       } catch (error) {
         console.error("Erro ao carregar respostas do ticket:", error);
       }
@@ -269,12 +267,12 @@ export function TicketsModal({
     const payload = {
       ticketId: ticketData.id,
       type: "user",
-      message: userResponse,
-      userId: loggedUser.id,
+      content: userResponse,
+      userId: loggedUser.userId,
     };
 
     try {
-      await apiClient().post(`/${ticketData.id}/response`, payload);
+      await apiClient().post(`/ticket/response`, payload);
 
       setConversations((prev) => [...prev, `User: ${userResponse}`]);
       setUserResponse("");
@@ -348,204 +346,212 @@ export function TicketsModal({
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
-        <S.CloseButton
-          onClick={() => {
-            onClose(false);
-            updateTicketsCallback();
-          }}
-        >
-          <FiX size="24" />
-        </S.CloseButton>
-        <S.Title>Ticket #{ticketData.id}</S.Title>
-        <S.InfoGroup>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Status</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent>
-              <S.StyledSelect
-                value={ticketStatus}
-                onChange={handleStatusChange}
-              >
-                <option value="new">Novo</option>
-                <option value="assigned">Atribuido</option>
-                <option value="closed">Fechado</option>
-              </S.StyledSelect>
-            </S.InfoContent>
-          </S.InfoItem>
-          {ticketStatus === "closed" && (
+        <S.LeftSide>
+          <S.InfoGroup>
             <S.InfoItem>
               <S.IconContainer>
-                <FiClock /> <S.InfoTitle>Fechado em</S.InfoTitle>
+                <FiMessageCircle />
+                <S.InfoTitle>Mensagens</S.InfoTitle>
+              </S.IconContainer>
+              <S.ConversationContainer>
+                {conversations.map((msg: any, index: number) => (
+                  <S.Message isTech={msg.User.isTechnician} key={index}>
+                    {`${msg.User.name}: ${msg.content}`}
+                  </S.Message>
+                ))}
+                <S.ReplyContainer>
+                  <S.StyledTextarea
+                    value={
+                      loggedUser.isTechnician
+                        ? technicianResponse
+                        : userResponse
+                    }
+                    onChange={
+                      loggedUser.isTechnician
+                        ? handleTechnicianResponseChange
+                        : handleUserResponseChange
+                    }
+                    placeholder={`Digite sua resposta como ${
+                      loggedUser.isTechnician ? "Técnico" : "Usuário"
+                    }...`}
+                  />
+
+                  <S.StyledButton
+                    onClick={
+                      loggedUser.isTechnician
+                        ? submitTechnicianResponse
+                        : submitUserResponse
+                    }
+                  >
+                    Enviar
+                  </S.StyledButton>
+                </S.ReplyContainer>
+              </S.ConversationContainer>
+            </S.InfoItem>
+          </S.InfoGroup>
+        </S.LeftSide>
+        <S.RightSide>
+          <S.CloseButton
+            onClick={() => {
+              onClose(false);
+              updateTicketsCallback();
+            }}
+          >
+            <FiX size="24" />
+          </S.CloseButton>
+          <S.Title>Ticket #{ticketData.id}</S.Title>
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiAlertCircle /> <S.InfoTitle>Status</S.InfoTitle>
               </S.IconContainer>
               <S.InfoContent>
-                {formatDate(ticketData.closedAt)} por{" "}
-                <strong>{ticketData.closedBy}</strong>
+                <S.StyledSelect
+                  value={ticketStatus}
+                  onChange={handleStatusChange}
+                >
+                  <option value="new">Novo</option>
+                  <option value="assigned">Atribuido</option>
+                  <option value="closed">Fechado</option>
+                </S.StyledSelect>
               </S.InfoContent>
             </S.InfoItem>
-          )}
-        </S.InfoGroup>
+            {ticketStatus === "closed" && (
+              <S.InfoItem>
+                <S.IconContainer>
+                  <FiClock /> <S.InfoTitle>Fechado em</S.InfoTitle>
+                </S.IconContainer>
+                <S.InfoContent>
+                  {formatDate(ticketData.closedAt)} por{" "}
+                  <strong>{ticketData.closedBy}</strong>
+                </S.InfoContent>
+              </S.InfoItem>
+            )}
+          </S.InfoGroup>
 
-        <S.InfoGroup>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Descrição</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent>
-              <S.StyledInput value={description} onChange={handleChange} />
-            </S.InfoContent>
-          </S.InfoItem>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiUser size="15" /> <S.InfoTitle>Técnico Atribuído</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowDropdown(!showDropdown);
-              }}
-            >
-              {changeAssignedTo.length > 2
-                ? changeAssignedTo.map((tech: any) => (
-                    <span key={tech.id}>
-                      {tech.name}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveAssignedTo(tech.id);
-                        }}
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiAlertCircle /> <S.InfoTitle>Descrição</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledInput value={description} onChange={handleChange} />
+              </S.InfoContent>
+            </S.InfoItem>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiUser size="15" />{" "}
+                <S.InfoTitle>Técnico Atribuído</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowDropdown(!showDropdown);
+                }}
+              >
+                {changeAssignedTo.some((tech: any) => tech.name !== "")
+                  ? changeAssignedTo.map((tech: any) => (
+                      <span key={tech.id}>
+                        {tech.name}
+                        {tech.name !== "" && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveAssignedTo(tech.id);
+                            }}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </span>
+                    ))
+                  : "None"}
+
+                {showDropdown && (
+                  <S.Dropdown>
+                    {technicians.map((tech: any) => (
+                      <S.DropdownItem
+                        key={tech.id}
+                        onClick={() => handleAssignTo(tech.id)}
                       >
-                        Remove
-                      </button>
-                    </span>
-                  ))
-                : "None"}
-              {showDropdown && (
-                <S.Dropdown>
-                  {technicians.map((tech: any) => (
-                    <S.DropdownItem
-                      key={tech.id}
-                      onClick={() => handleAssignTo(tech.id)}
-                    >
-                      {tech.name}
-                    </S.DropdownItem>
-                  ))}
-                </S.Dropdown>
-              )}
-            </S.InfoContent>
-          </S.InfoItem>
-        </S.InfoGroup>
-        <S.InfoGroup>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiClock /> <S.InfoTitle>Criado em</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent>
-              {new Date(ticketData.createdAt).toLocaleString()}
-            </S.InfoContent>
-          </S.InfoItem>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Prioridade</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent>
-              <S.StyledSelect
-                value={ticketData.ticketPriorityId.id}
-                onChange={(e) =>
-                  handleDataChange("ticketPriorityId", e.target.value)
-                }
-              >
-                {ticketPriority.map((priority: any) => (
-                  <option key={priority.id} value={priority.id}>
-                    {priority.name}
-                  </option>
-                ))}
-              </S.StyledSelect>
-            </S.InfoContent>
-          </S.InfoItem>
-        </S.InfoGroup>
-        <S.InfoGroup>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Categoria</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent>
-              <S.StyledSelect
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-              >
-                {ticketCategory.map((group: any) => (
-                  <optgroup label={group.label} key={group.label}>
-                    {group.options.map((option: any) => (
-                      <option key={option.id} value={option.id}>
-                        {option.value}
-                      </option>
+                        {tech.name}
+                      </S.DropdownItem>
                     ))}
-                  </optgroup>
-                ))}
-              </S.StyledSelect>
-            </S.InfoContent>
-          </S.InfoItem>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiAlertCircle /> <S.InfoTitle>Localização</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent>
-              <S.StyledSelect
-                value={selectedLocation}
-                onChange={handleLocationChange}
-              >
-                {ticketLocation.map((location: any) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name}
-                  </option>
-                ))}
-              </S.StyledSelect>
-            </S.InfoContent>
-          </S.InfoItem>
-        </S.InfoGroup>
-
-        <S.InfoGroup>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiMessageCircle /> <S.InfoTitle>Responder mensagem</S.InfoTitle>
-            </S.IconContainer>
-            <S.InfoContent>
-              <S.StyledTextarea
-                value={
-                  loggedUser.isTechnician ? technicianResponse : userResponse
-                }
-                onChange={
-                  loggedUser.isTechnician
-                    ? handleTechnicianResponseChange
-                    : handleUserResponseChange
-                }
-                placeholder={`Digite sua resposta como ${
-                  loggedUser.isTechnician ? "Técnico" : "Usuário"
-                }...`}
-              />
-              <S.StyledButton
-                onClick={
-                  loggedUser.isTechnician
-                    ? submitTechnicianResponse
-                    : submitUserResponse
-                }
-              >
-                Enviar
-              </S.StyledButton>
-            </S.InfoContent>
-          </S.InfoItem>
-          <S.InfoItem>
-            <S.IconContainer>
-              <FiMessageCircle /> <S.InfoTitle>Mensagens</S.InfoTitle>
-            </S.IconContainer>
-            <S.ConversationContainer>
-              {conversations.map((msg, index) => (
-                <div key={index}>{msg}</div>
-              ))}
-            </S.ConversationContainer>
-          </S.InfoItem>
-        </S.InfoGroup>
+                  </S.Dropdown>
+                )}
+              </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiClock /> <S.InfoTitle>Criado em</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                {new Date(ticketData.createdAt).toLocaleString()}
+              </S.InfoContent>
+            </S.InfoItem>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiAlertCircle /> <S.InfoTitle>Prioridade</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledSelect
+                  value={ticketData.ticketPriority.id}
+                  onChange={(e) =>
+                    handleDataChange("ticketPriorityId", e.target.value)
+                  }
+                >
+                  {ticketPriority.map((priority: any) => (
+                    <option key={priority.id} value={priority.id}>
+                      {priority.name}
+                    </option>
+                  ))}
+                </S.StyledSelect>
+              </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiAlertCircle /> <S.InfoTitle>Categoria</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledSelect
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                >
+                  {ticketCategory.map((group: any) => (
+                    <optgroup label={group.label} key={group.label}>
+                      {group.options.map((option: any) => (
+                        <option key={option.id} value={option.id}>
+                          {option.value}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </S.StyledSelect>
+              </S.InfoContent>
+            </S.InfoItem>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiAlertCircle /> <S.InfoTitle>Localização</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledSelect
+                  value={selectedLocation}
+                  onChange={handleLocationChange}
+                >
+                  {ticketLocation.map((location: any) => (
+                    <option key={location.id} value={location.id}>
+                      {location.name}
+                    </option>
+                  ))}
+                </S.StyledSelect>
+              </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+        </S.RightSide>
 
         {ticketStatus === "closed" ? (
           <S.InfoGroup>

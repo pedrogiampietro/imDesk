@@ -7,9 +7,9 @@ export interface ITicket {
   id: string;
   description: string;
   ticketType: string;
-  ticketCategory: string;
-  ticketPriority: string;
-  ticketLocation: string;
+  ticketCategoryId: string;
+  ticketPriorityId: string;
+  ticketLocationId: string;
   assignedTo: string[];
   equipaments: string[];
   images: string[];
@@ -22,17 +22,17 @@ export interface ITicket {
   userId: string;
   createdAt: Date;
   updatedAt: Date;
-  ticketCategoryId: {
+  ticketCategory: {
     id: string;
     name: string;
     childrenName: string;
     defaultText: string | null;
   };
-  ticketLocationId: {
+  ticketLocation: {
     id: string;
     name: string;
   };
-  ticketPriorityId: {
+  ticketPriority: {
     id: string;
     name: string;
   };
@@ -80,7 +80,7 @@ export function TicketKanban({
     return (
       ticket.description.includes(searchTerm) ||
       ticket.ticketType.includes(searchTerm) ||
-      ticket.ticketCategory.includes(searchTerm)
+      ticket.ticketCategoryId.includes(searchTerm)
     );
   });
 

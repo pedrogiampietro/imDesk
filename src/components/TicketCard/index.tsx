@@ -17,14 +17,18 @@ export function TicketCard({
   const { user } = useAuth();
 
   const getTechnicians = async () => {
-    if (!user || !user.companies || !user.companies.companyId) {
+    if (
+      !user ||
+      !user.companies ||
+      !user.currentLoggedCompany.currentLoggedCompanyId
+    ) {
       return;
     }
 
     try {
       const { data } = await apiClient().get("/account/technicians", {
         params: {
-          companyId: user?.companies.companyId,
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
         },
       });
       setTechnicians(data);
@@ -39,19 +43,19 @@ export function TicketCard({
 
   return (
     <S.CardContainer
-      urgency={data.ticketPriorityId.name}
+      urgency={data.ticketPriority.name}
       onClick={() => setShowTicketModal(!showTicketModal)}
     >
       <S.TitleOpenedWrapper>
-        <S.Title>{data.ticketCategoryId.childrenName}</S.Title>
+        <S.Title>{data.ticketCategory.childrenName}</S.Title>
         <S.OpenedAt>Criado em {formatarData(data.createdAt as any)}</S.OpenedAt>
       </S.TitleOpenedWrapper>
 
       <S.Description>{data.description}</S.Description>
 
       <S.Info>
-        <S.Urgency urgency={data.ticketPriorityId.name as any}>
-          {data.ticketPriorityId.name}
+        <S.Urgency urgency={data.ticketPriority.name as any}>
+          {data.ticketPriority.name}
         </S.Urgency>
         <S.OpenedBy>Aberto por {data.User.name}</S.OpenedBy>
       </S.Info>

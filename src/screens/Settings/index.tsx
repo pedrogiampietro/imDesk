@@ -9,6 +9,7 @@ import { PriorityForm } from "../../components/Forms/PriorityForm";
 import { CategoryForm } from "../../components/Forms/CategoryForm";
 import { TypeForm } from "../../components/Forms/TypeForm";
 import { ProviderForm } from "../../components/Forms/ProviderForm";
+import { CompanyForm } from "../../components/Forms/CompanyForm";
 
 import * as S from "./styles";
 
@@ -44,6 +45,8 @@ export function Settings() {
         return <CategoryForm companies={companies} />;
       case "provider":
         return <ProviderForm companies={companies} />;
+      case "company":
+        return <CompanyForm companies={companies} />;
       default:
         return null;
     }
@@ -71,6 +74,10 @@ export function Settings() {
         <CardButton
           label="Criar Fornecedor"
           onClick={() => setFormType("provider")}
+        />
+        <CardButton
+          label="Criar Empresa"
+          onClick={() => setFormType("company")}
         />
       </S.CardContainer>
       {renderForm()}

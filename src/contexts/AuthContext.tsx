@@ -27,6 +27,10 @@ type UserAuth = {
     companyId: string;
     companyName: string;
   };
+  currentLoggedCompany: {
+    currentLoggedCompanyId: string;
+    currentLoggedCompanyName: string;
+  };
 };
 
 interface AuthContextData {
@@ -69,7 +73,19 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         name: response.data.name,
         isTechnician: response.data.isTechnician,
         companies: response.data.companies,
+        currentLoggedCompany: {
+          currentLoggedCompanyId:
+            response.data.currentLogged.currentLoggedCompanyId,
+          currentLoggedCompanyName:
+            response.data.currentLogged.currentLoggedCompanyName,
+        },
       });
+
+      const timeOutRedirect = setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 1000);
+
+      return () => clearTimeout(timeOutRedirect);
 
       setStorageModel(auth.TOKEN, response.data.tokens.token);
       setStorageModel(auth.REFRESH_TOKEN, response.data.tokens.refreshToken);
@@ -92,12 +108,6 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
           progress: undefined,
         }
       );
-
-      const timeOutRedirect = setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 1000);
-
-      return () => clearTimeout(timeOutRedirect);
     } catch (err: any) {
       toast.error(err.response.data, {
         position: "top-right",
@@ -127,11 +137,11 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       progress: undefined,
     });
 
-    const timeOutRedirect = setTimeout(() => {
-      window.location.href = "/login";
-    }, 1000);
+    // const timeOutRedirect = setTimeout(() => {
+    //   window.location.href = "/login";
+    // }, 1000);
 
-    return () => clearTimeout(timeOutRedirect);
+    // return () => clearTimeout(timeOutRedirect);
   }
 
   return (
