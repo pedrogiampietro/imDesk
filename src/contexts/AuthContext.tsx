@@ -81,12 +81,6 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         },
       });
 
-      const timeOutRedirect = setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 1000);
-
-      return () => clearTimeout(timeOutRedirect);
-
       setStorageModel(auth.TOKEN, response.data.tokens.token);
       setStorageModel(auth.REFRESH_TOKEN, response.data.tokens.refreshToken);
       setStorageModel(auth.USER, objToStrig);
@@ -108,6 +102,12 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
           progress: undefined,
         }
       );
+
+      const timeOutRedirect = setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 1000);
+
+      return () => clearTimeout(timeOutRedirect);
     } catch (err: any) {
       toast.error(err.response.data, {
         position: "top-right",

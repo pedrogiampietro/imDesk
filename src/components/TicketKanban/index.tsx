@@ -2,6 +2,7 @@ import { useState } from "react";
 import * as S from "./styles";
 
 import { TicketCard } from "../TicketCard";
+import { TicketBoard } from "../TicketBoard";
 
 export interface ITicket {
   id: string;
@@ -17,11 +18,12 @@ export interface ITicket {
   closedBy: string | null;
   closedAt: Date;
   status: string;
-  timeEstimate: number | null;
+  timeEstimate: Date | null;
   isDelay: boolean;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
+  slaDefinitionId: number;
   ticketCategory: {
     id: string;
     name: string;
@@ -127,8 +129,17 @@ export function TicketKanban({
         {/* <S.FilterButton>Filtrar</S.FilterButton> */}
       </S.TabsContainer>
 
+      {/* TicketBoard */}
+
+      <TicketBoard
+        data={data}
+        setShowTicketModal={setShowTicketModal}
+        showTicketModal={showTicketModal}
+        updateTicketsCallback={updateTicketsCallback}
+      />
+
       {/* TicketCard */}
-      {filteredData.map((ticket) => {
+      {/* {filteredData.map((ticket) => {
         return (
           <TicketCard
             key={ticket.id}
@@ -138,7 +149,7 @@ export function TicketKanban({
             updateTicketsCallback={updateTicketsCallback}
           />
         );
-      })}
+      })} */}
     </S.KanbanContainer>
   );
 }

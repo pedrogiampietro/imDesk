@@ -7,6 +7,7 @@ import {
   FiMessageCircle,
   FiStar,
 } from "react-icons/fi";
+import { AiFillCloseCircle } from "react-icons/ai";
 import { ITicket } from "../TicketKanban";
 
 import * as S from "./styles";
@@ -60,6 +61,9 @@ export function TicketsModal({
   );
 
   const [selectedRating, setSelectedRating] = useState(0);
+  const [selectedSLA, setSelectedSLA] = useState(ticketData.slaDefinitionId);
+  const [slas, setSlas] = useState([]);
+  const [manualResolutionDueDate, setManualResolutionDueDate] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -88,6 +92,11 @@ export function TicketsModal({
           },
         });
         setTicketLocation(data.body);
+      } catch (err) {}
+
+      try {
+        const { data } = await apiClient().get("/sla");
+        setSlas(data.body);
       } catch (err) {}
     })();
   }, []);
@@ -343,6 +352,24 @@ export function TicketsModal({
     setSelectedRating(index);
   };
 
+  const handleSLAChange = async (event: any) => {
+    const newSLA = event.target.value;
+    setSelectedSLA(newSLA);
+
+    // Agora, faça uma chamada à API para atualizar o slaDefinitionId
+    try {
+      await apiClient().put(`/ticket/${data.id}?userId=${loggedUser.userId}`, {
+        slaDefinitionId: newSLA,
+      });
+    } catch (error) {
+      console.error(`Erro ao atualizar o slaDefinitionId:`, error);
+    }
+  };
+
+  const handleManualResolutionDueDateChange = (e: any) => {
+    setManualResolutionDueDate(e.target.value);
+  };
+
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
@@ -435,7 +462,7 @@ export function TicketsModal({
                 <FiAlertCircle /> <S.InfoTitle>Descrição</S.InfoTitle>
               </S.IconContainer>
               <S.InfoContent>
-                <S.StyledInput value={description} onChange={handleChange} />
+                <S.StyledTextArea value={description} onChange={handleChange} />
               </S.InfoContent>
             </S.InfoItem>
             <S.InfoItem>
@@ -451,16 +478,32 @@ export function TicketsModal({
               >
                 {changeAssignedTo.some((tech: any) => tech.name !== "")
                   ? changeAssignedTo.map((tech: any) => (
-                      <span key={tech.id}>
-                        {tech.name}
+                      <span
+                        key={tech.id}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <span>{tech.name}</span>
                         {tech.name !== "" && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleRemoveAssignedTo(tech.id);
                             }}
+                            style={{
+                              border: "none",
+                              cursor: "pointer",
+                              marginLeft: "10px",
+                            }}
                           >
-                            Remove
+                            <AiFillCloseCircle
+                              fill="red"
+                              size={18}
+                              style={{ color: "white" }}
+                            />
                           </button>
                         )}
                       </span>
@@ -548,6 +591,50 @@ export function TicketsModal({
                     </option>
                   ))}
                 </S.StyledSelect>
+              </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiClock /> <S.InfoTitle>SLA</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledSelect value={selectedSLA} onChange={handleSLAChange}>
+                  {slas.map((sla: any) => (
+                    <option key={sla.id} value={sla.id}>
+                      {`${sla.ticketPriority} - Tempo estimado: ${sla.resolutionTime}`}
+                    </option>
+                  ))}
+                </S.StyledSelect>
+              </S.InfoContent>
+            </S.InfoItem>
+
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiClock />
+                <S.InfoTitle>Data/Hora Manual de Resolução</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledInput
+                  type="datetime-local"
+                  value={manualResolutionDueDate}
+                  onChange={handleManualResolutionDueDateChange}
+                />
+              </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiClock />
+                <S.InfoTitle>Tempo estimado para solução:</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                {ticketData.timeEstimate
+                  ? formatDate(ticketData.timeEstimate)
+                  : "Data não disponível"}
               </S.InfoContent>
             </S.InfoItem>
           </S.InfoGroup>

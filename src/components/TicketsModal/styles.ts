@@ -67,8 +67,8 @@ export const RightSide = styled.div`
   flex: 40%;
   padding-left: 20px;
 
-  // Agora, você pode definir os estilos para os elementos desta seção.
-  // Por exemplo:
+  overflow: auto;
+  overflow-y: scroll;
 
   > p.info {
     font-size: 16px;
@@ -84,7 +84,8 @@ export const CloseButton = styled.button`
   background: none;
   border: none;
   &:hover {
-    color: ${colors.red}; // Adicionando um feedback no hover
+    color: ${colors.red};
+    cursor: pointer;
   }
 `;
 
@@ -149,7 +150,32 @@ export const DropdownItem = styled.div`
   }
 `;
 
-export const StyledInput = styled.textarea`
+export const StyledTextArea = styled.textarea`
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+  border-radius: 8px;
+
+  &:hover {
+    border-color: #a0aec0;
+  }
+
+  &:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: #a0aec0;
+  }
+`;
+
+export const StyledInput = styled.input`
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #e2e8f0;

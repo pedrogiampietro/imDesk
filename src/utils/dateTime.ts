@@ -47,3 +47,15 @@ export function formatarData(dateString: string) {
 
   return `${day}/${month}/${year} ${hour}:${minute}`;
 }
+
+export function formatDateptBR(dateString: Date): string {
+  const date = new Date(dateString);
+
+  return date.toLocaleString("pt-BR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
