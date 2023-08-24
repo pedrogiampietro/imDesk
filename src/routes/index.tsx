@@ -7,6 +7,7 @@ import { Statistic } from "../screens/Statistic";
 import { Maintenance } from "../screens/Maintenance";
 import { Settings } from "../screens/Settings";
 import { Provider } from "../screens/Provider";
+import { ProfileScreen } from "../screens/ProfileScreen";
 
 import RouteProtector from "./RouteProtector";
 
@@ -65,6 +66,14 @@ export function AppRoutes() {
       element: (
         <RouteProtector>
           <Provider />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/profile",
+      element: (
+        <RouteProtector>
+          <ProfileScreen />
         </RouteProtector>
       ),
     },

@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { TaskBoardCard } from "./TaskBoardCard";
 import { formatDateptBR } from "../../utils/dateTime";
+import { useAuth } from "../../hooks/useAuth";
+import { apiClient } from "../../services/api";
 
 const Container = styled.div`
   display: flex;
@@ -43,18 +45,35 @@ const transformApiData = (apiData: any) => {
 
   return apiData.map((item) => ({
     id: item.id,
-    Task: item.description,
-    Due_Date: formatDateptBR(item.timeEstimate),
+    description: item.description,
+    estimateForResolution: formatDateptBR(item.timeEstimate),
+    createdAt: item.createdAt,
+    priority: item.ticketPriority.name,
     status: item.status,
+    createdBy: {
+      name: item.User.name,
+      avatarUrl: item.User.avatarUrl,
+    },
+    category: {
+      main: item.ticketCategory.name,
+      sub: item.ticketCategory.childrenName,
+    },
   }));
 };
 
 export function TicketBoard({ data }: any) {
   const [columns, setColumns] = useState<any>({});
+  const { user } = useAuth();
 
   const TODO_COLUMN_ID = "todo-column-id";
   const IN_PROGRESS_COLUMN_ID = "in-progress-column-id";
   const DONE_COLUMN_ID = "done-column-id";
+
+  const STATUS_MAPPING = {
+    [TODO_COLUMN_ID]: "new",
+    [IN_PROGRESS_COLUMN_ID]: "in progress",
+    [DONE_COLUMN_ID]: "done",
+  };
 
   if (!data) {
     return <div>Loading...</div>; // Ou qualquer outro JSX que você preferir
@@ -69,18 +88,18 @@ export function TicketBoard({ data }: any) {
       },
       [IN_PROGRESS_COLUMN_ID]: {
         title: "Atribuído",
-        items: transformedData.filter((item) => item.status === "in progress"),
+        items: transformedData.filter((item) => item.status === "assigned"),
       },
       [DONE_COLUMN_ID]: {
         title: "Fechado",
-        items: transformedData.filter((item) => item.status === "done"),
+        items: transformedData.filter((item) => item.status === "closed"),
       },
     };
     setColumns(updatedColumns);
   }, [data]);
 
   const onDragEnd = useCallback(
-    (result: any) => {
+    async (result: any) => {
       const { source, destination } = result;
 
       if (!destination) return;
@@ -93,7 +112,6 @@ export function TicketBoard({ data }: any) {
 
       const sourceItems = [...sourceColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
-
       const destinationItems =
         source.droppableId === destination.droppableId
           ? sourceItems
@@ -108,6 +126,22 @@ export function TicketBoard({ data }: any) {
       };
 
       setColumns(newColumns);
+
+      const ticketId = removed.id;
+      let newStatus = "";
+      if (destination.droppableId === TODO_COLUMN_ID) newStatus = "new";
+      else if (destination.droppableId === IN_PROGRESS_COLUMN_ID)
+        newStatus = "assigned";
+      else if (destination.droppableId === DONE_COLUMN_ID) newStatus = "closed";
+
+      try {
+        await apiClient().put(`/ticket/${ticketId}?userId=${user?.userId}`, {
+          status: newStatus,
+        });
+      } catch (error) {
+        // Lidar com o erro aqui
+        console.error("Error updating ticket status:", error);
+      }
     },
     [columns]
   );

@@ -70,3 +70,26 @@ export const FilterButton = styled.button<{
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
   }
 `;
+
+export const IconButton = styled.button<{ active?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: ${({ active }) =>
+    active ? "rgba(0, 0, 0, 0.1)" : "transparent"};
+  border-radius: 8px;
+  margin-right: 0.62rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;

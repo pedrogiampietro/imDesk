@@ -23,6 +23,7 @@ type UserAuth = {
   name: string;
   email: string;
   isTechnician: boolean;
+  avatarUrl?: string;
   companies: {
     companyId: string;
     companyName: string;
@@ -72,6 +73,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         email: response.data.email,
         name: response.data.name,
         isTechnician: response.data.isTechnician,
+        avatarUrl: response.data.avatarUrl,
         companies: response.data.companies,
         currentLoggedCompany: {
           currentLoggedCompanyId:

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import * as S from "./styles";
 
+import { BsList } from "react-icons/bs";
+import { FiGrid } from "react-icons/fi";
+
 import { TicketCard } from "../TicketCard";
 import { TicketBoard } from "../TicketBoard";
 
@@ -77,6 +80,7 @@ export function TicketKanban({
 }: TicketProps) {
   const [activeTab, setActiveTab] = useState("new");
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState("board");
 
   const searchedData = data.filter((ticket) => {
     return (
@@ -99,57 +103,77 @@ export function TicketKanban({
 
   return (
     <S.KanbanContainer>
-      <S.TabsContainer>
-        <S.TabWrapper>
-          <S.Tab
-            active={activeTab === "new"}
-            onClick={() => setActiveTab("new")}
-          >
-            Novo
-          </S.Tab>
-          <S.Tab
-            active={activeTab === "assigned"}
-            onClick={() => setActiveTab("assigned")}
-          >
-            Atribuído
-          </S.Tab>
-          <S.Tab
-            active={activeTab === "closed"}
-            onClick={() => setActiveTab("closed")}
-          >
-            Fechado
-          </S.Tab>
-        </S.TabWrapper>
-
-        <S.SearchInput
-          placeholder="Pesquisar"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        {/* <S.FilterButton>Filtrar</S.FilterButton> */}
-      </S.TabsContainer>
-
-      {/* TicketBoard */}
-
-      <TicketBoard
-        data={data}
-        setShowTicketModal={setShowTicketModal}
-        showTicketModal={showTicketModal}
-        updateTicketsCallback={updateTicketsCallback}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row-reverse",
+          marginBottom: "1rem",
+        }}
+      >
+        <S.IconButton
+          onClick={() => setViewMode("card")}
+          active={viewMode === "card"}
+        >
+          <BsList />
+        </S.IconButton>
+        <S.IconButton
+          onClick={() => setViewMode("board")}
+          active={viewMode === "board"}
+        >
+          <FiGrid />
+        </S.IconButton>
+      </div>
+      <S.SearchInput
+        placeholder="Pesquisar"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
+      {/* <S.FilterButton>Filtrar</S.FilterButton> */}
+      {viewMode === "card" && (
+        <S.TabsContainer>
+          <S.TabWrapper>
+            <S.Tab
+              active={activeTab === "new"}
+              onClick={() => setActiveTab("new")}
+            >
+              Novo
+            </S.Tab>
+            <S.Tab
+              active={activeTab === "assigned"}
+              onClick={() => setActiveTab("assigned")}
+            >
+              Atribuído
+            </S.Tab>
+            <S.Tab
+              active={activeTab === "closed"}
+              onClick={() => setActiveTab("closed")}
+            >
+              Fechado
+            </S.Tab>
+          </S.TabWrapper>
+        </S.TabsContainer>
+      )}
 
-      {/* TicketCard */}
-      {/* {filteredData.map((ticket) => {
-        return (
-          <TicketCard
-            key={ticket.id}
-            data={ticket}
-            setShowTicketModal={setShowTicketModal}
-            showTicketModal={showTicketModal}
-            updateTicketsCallback={updateTicketsCallback}
-          />
-        );
-      })} */}
+      {viewMode === "board" ? (
+        <TicketBoard
+          data={data}
+          setShowTicketModal={setShowTicketModal}
+          showTicketModal={showTicketModal}
+          updateTicketsCallback={updateTicketsCallback}
+        />
+      ) : (
+        filteredData.map((ticket) => {
+          return (
+            <TicketCard
+              key={ticket.id}
+              data={ticket}
+              setShowTicketModal={setShowTicketModal}
+              showTicketModal={showTicketModal}
+              updateTicketsCallback={updateTicketsCallback}
+            />
+          );
+        })
+      )}
     </S.KanbanContainer>
   );
 }

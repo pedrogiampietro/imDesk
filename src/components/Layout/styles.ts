@@ -14,3 +14,46 @@ export const Main = styled.main`
     font-size: 14px;
   }
 `;
+
+export const TopBar = styled.div`
+  height: 60px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #f6f6f6; // Por exemplo, uma cor de fundo clara
+  border-bottom: 1px solid #ddd;
+`;
+
+export const AvatarButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+  }
+`;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 65px;
+  right: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+
+  a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+`;
