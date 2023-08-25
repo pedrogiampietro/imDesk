@@ -8,9 +8,16 @@ import * as S from "./styles";
 import { apiClient } from "../../services/api";
 
 interface IProviders {
+  id: string;
   name: string;
   email: string;
   address: string;
+  category: string;
+  logoURL: string;
+  price: string;
+  description: string;
+  contracts: any[];
+  services: any[];
 }
 
 export function Provider() {
@@ -21,6 +28,9 @@ export function Provider() {
   );
   const [showModal, setShowModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [contracts, setContracts] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>([]);
+  const [currentTab, setCurrentTab] = useState("Dados Cadastrais");
 
   useEffect(() => {
     async function fetchProviders() {
@@ -34,17 +44,8 @@ export function Provider() {
     fetchProviders();
   }, []);
 
-  const handleEdit = (provider: any) => {
-    setSelectedProvider(provider);
-    setIsEditMode(true);
-    setShowModal(true);
-  };
-
-  const handleView = (provider: any) => {
-    setSelectedProvider(provider);
-    setIsEditMode(false);
-    setShowModal(true);
-  };
+  const handleEdit = (provider: any) => handleViewOrEdit(provider, true);
+  const handleView = (provider: any) => handleViewOrEdit(provider);
 
   const handleModalClose = () => {
     setSelectedProvider(null);
@@ -52,23 +53,71 @@ export function Provider() {
     setShowModal(false);
   };
 
+  const handleViewOrEdit = async (provider: any, isEdit: boolean = false) => {
+    try {
+      const contractsResponse = await apiClient().get(
+        `/providers/contract?providerId=${provider.id}`
+      );
+      const servicesResponse = await apiClient().get(
+        `/providers/service?providerId=${provider.id}`
+      );
+
+      setContracts(contractsResponse.data.body);
+      setServices(servicesResponse.data.body);
+
+      setSelectedProvider(provider);
+      setIsEditMode(isEdit);
+      setShowModal(true);
+    } catch (error) {
+      console.error("Erro ao buscar contratos e serviços:", error);
+    }
+  };
+
   const handleDelete = async (provider: any) => {
     console.log("Excluir fornecedor:", provider);
-    // Faça uma solicitação DELETE para a API para excluir o fornecedor
+
     try {
-      const response = await fetch(`/api/providers/${provider.id}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        // Remova o fornecedor da lista no estado
-        setProviders((prevProviders: any) =>
-          prevProviders.filter((p: any) => p.id !== provider.id)
-        );
-      } else {
-        console.error("Erro ao excluir fornecedor:", await response.text());
-      }
+      const response = await apiClient().delete(
+        `/providers/provider/${provider.id}`
+      );
+
+      setProviders((prevProviders: any) =>
+        prevProviders.filter((p: any) => p.id !== provider.id)
+      );
     } catch (error) {
       console.error("Erro ao excluir fornecedor:", error);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!selectedProvider) return;
+    try {
+      const updatedProvider = {
+        name: selectedProvider.name,
+        email: selectedProvider.email,
+        address: selectedProvider.address,
+        category: selectedProvider.category,
+        logoURL: "",
+        price: selectedProvider.price,
+        description: selectedProvider.description,
+      };
+      const response = await apiClient().put(
+        `/providers/provider/${selectedProvider.id}`,
+        updatedProvider
+      );
+      // Atualizar a lista de providers localmente
+      setProviders((prevProviders) =>
+        prevProviders.map((provider) =>
+          provider.id === selectedProvider.id
+            ? { ...provider, ...updatedProvider }
+            : provider
+        )
+      );
+      setShowModal(false); // Fecha o modal após salvar
+      alert("Fornecedor atualizado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar o fornecedor:", error);
+      alert("Erro ao atualizar o fornecedor. Por favor, tente novamente.");
     }
   };
 
@@ -112,64 +161,183 @@ export function Provider() {
             {isEditMode ? (
               <>
                 <h2>Editar Fornecedor</h2>
-                <form>
-                  <S.Label>
-                    Nome:
-                    <S.Input
-                      type="text"
-                      value={selectedProvider.name}
-                      onChange={(e) =>
-                        setSelectedProvider((prevProvider) => {
-                          if (prevProvider) {
-                            return {
-                              ...prevProvider,
-                              name: e.target.value,
-                            };
+                <S.Tabs>
+                  <S.TabItem
+                    onClick={() => setCurrentTab("Dados Cadastrais")}
+                    active={currentTab === "Dados Cadastrais"}
+                  >
+                    Dados Cadastrais
+                  </S.TabItem>
+                  <S.TabItem
+                    onClick={() => setCurrentTab("Endereços")}
+                    active={currentTab === "Endereços"}
+                  >
+                    Endereços
+                  </S.TabItem>
+                  <S.TabItem
+                    onClick={() => setCurrentTab("Financeiro")}
+                    active={currentTab === "Financeiro"}
+                  >
+                    Financeiro
+                  </S.TabItem>
+                  <S.TabItem
+                    onClick={() => setCurrentTab("Contratos")}
+                    active={currentTab === "Contratos"}
+                  >
+                    Contratos
+                  </S.TabItem>
+                  <S.TabItem
+                    onClick={() => setCurrentTab("Serviços")}
+                    active={currentTab === "Serviços"}
+                  >
+                    Serviços
+                  </S.TabItem>
+                </S.Tabs>
+
+                {currentTab === "Dados Cadastrais" && (
+                  <S.CadastroContainer>
+                    <S.ImageContainer>
+                      <S.Logo
+                        src={selectedProvider.logoURL}
+                        alt="Logo do Fornecedor"
+                      />
+                      <S.UploadButton>Alterar Logo</S.UploadButton>
+                    </S.ImageContainer>
+
+                    <S.FieldsContainer>
+                      <S.Label>
+                        Regime de Tributação:
+                        <S.Select>
+                          <option>Pessoa Física</option>
+                          <option>Pessoa Jurídica</option>
+                        </S.Select>
+                      </S.Label>
+                      <S.Label>
+                        Nome:
+                        <S.Input
+                          type="text"
+                          value={selectedProvider.name}
+                          onChange={(e) =>
+                            setSelectedProvider((prevProvider) => {
+                              if (prevProvider) {
+                                return {
+                                  ...prevProvider,
+                                  name: e.target.value,
+                                };
+                              }
+                              return prevProvider;
+                            })
                           }
-                          return prevProvider;
-                        })
-                      }
-                    />
-                  </S.Label>
-                  <S.Label>
-                    Endereço:
-                    <S.Input
-                      type="text"
-                      value={selectedProvider.address}
-                      onChange={(e) =>
-                        setSelectedProvider((prevProvider) => {
-                          if (prevProvider) {
-                            return {
-                              ...prevProvider,
-                              address: e.target.value,
-                            };
+                        />
+                      </S.Label>
+                      <S.Label>
+                        Endereço:
+                        <S.Input
+                          type="text"
+                          value={selectedProvider.address}
+                          onChange={(e) =>
+                            setSelectedProvider((prevProvider) => {
+                              if (prevProvider) {
+                                return {
+                                  ...prevProvider,
+                                  address: e.target.value,
+                                };
+                              }
+                              return prevProvider;
+                            })
                           }
-                          return prevProvider;
-                        })
-                      }
-                    />
-                  </S.Label>
-                  <S.Label>
-                    Email:
-                    <S.Input
-                      type="text"
-                      value={selectedProvider.email}
-                      onChange={(e) =>
-                        setSelectedProvider((prevProvider) => {
-                          if (prevProvider) {
-                            return {
-                              ...prevProvider,
-                              email: e.target.value,
-                            };
+                        />
+                      </S.Label>
+                      <S.Label>
+                        Email:
+                        <S.Input
+                          type="text"
+                          value={selectedProvider.email}
+                          onChange={(e) =>
+                            setSelectedProvider((prevProvider) => {
+                              if (prevProvider) {
+                                return {
+                                  ...prevProvider,
+                                  email: e.target.value,
+                                };
+                              }
+                              return prevProvider;
+                            })
                           }
-                          return prevProvider;
-                        })
-                      }
-                    />
-                  </S.Label>
-                </form>
+                        />
+                      </S.Label>
+                    </S.FieldsContainer>
+
+                    <S.ProductDetailsContainer>
+                      <S.Label>
+                        Status:
+                        <S.Select>
+                          <option>Ativo</option>
+                          <option>Inativo</option>
+                        </S.Select>
+                      </S.Label>
+                      <S.Label>
+                        Descrição:
+                        <S.TextArea
+                          value={selectedProvider.description}
+                          onChange={(e) =>
+                            setSelectedProvider((prevProvider) => {
+                              if (prevProvider) {
+                                return {
+                                  ...prevProvider,
+                                  description: e.target.value,
+                                };
+                              }
+                              return prevProvider;
+                            })
+                          }
+                        />
+                      </S.Label>
+
+                      <S.Label>
+                        Categoria:
+                        <S.Input
+                          type="text"
+                          value={selectedProvider.category}
+                          onChange={(e) =>
+                            setSelectedProvider((prevProvider) => {
+                              if (prevProvider) {
+                                return {
+                                  ...prevProvider,
+                                  category: e.target.value,
+                                };
+                              }
+                              return prevProvider;
+                            })
+                          }
+                        />
+                      </S.Label>
+
+                      <S.Label>
+                        Preço:
+                        <S.Input
+                          type="number"
+                          value={selectedProvider.price}
+                          onChange={(e) =>
+                            setSelectedProvider((prevProvider: any) => {
+                              if (prevProvider) {
+                                return {
+                                  ...prevProvider,
+                                  price: parseFloat(e.target.value),
+                                };
+                              }
+                              return prevProvider;
+                            })
+                          }
+                        />
+                      </S.Label>
+                    </S.ProductDetailsContainer>
+                  </S.CadastroContainer>
+                )}
+
+                {/* Semelhante aos contratos, adicione um componente ou lista para editar serviços */}
                 <S.ButtonContainer>
-                  <S.Button onClick={handleModalClose}>Salvar</S.Button>
+                  <S.Button onClick={handleSave}>Salvar</S.Button>
                   <S.Button onClick={handleModalClose}>Fechar</S.Button>
                 </S.ButtonContainer>
               </>
@@ -185,6 +353,23 @@ export function Provider() {
                 <div>
                   <strong>Email:</strong> {selectedProvider.email}
                 </div>
+                <h3>Contratos</h3>
+                <ul>
+                  {contracts.map((contract) => (
+                    <li key={contract.id}>
+                      {contract.startDate} - {contract.endDate}
+                    </li>
+                  ))}
+                </ul>
+                <h3>Serviços</h3>
+                <ul>
+                  {services.map((service) => (
+                    <li key={service.id}>
+                      {/* E os detalhes do serviço aqui */}
+                      {service.name} - ${service.price}
+                    </li>
+                  ))}
+                </ul>
                 <S.ButtonContainer>
                   <S.Button onClick={handleModalClose}>Fechar</S.Button>
                 </S.ButtonContainer>

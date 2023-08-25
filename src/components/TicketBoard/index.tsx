@@ -7,6 +7,7 @@ import { TaskBoardCard } from "./TaskBoardCard";
 import { formatDateptBR } from "../../utils/dateTime";
 import { useAuth } from "../../hooks/useAuth";
 import { apiClient } from "../../services/api";
+import { TicketsModal } from "../TicketsModal";
 
 const Container = styled.div`
   display: flex;
@@ -61,9 +62,19 @@ const transformApiData = (apiData: any) => {
   }));
 };
 
-export function TicketBoard({ data }: any) {
-  const [columns, setColumns] = useState<any>({});
+export function TicketBoard({
+  data,
+  showTicketModal,
+  setShowTicketModal,
+  technicians,
+  updateTicketsCallback,
+}: any) {
   const { user } = useAuth();
+  const [originalData, setOriginalData] = useState<any>([]);
+  const [columns, setColumns] = useState<any>({});
+  const [selectedTicket, setSelectedTicket] = useState(null);
+
+  const loggedUser = user;
 
   const TODO_COLUMN_ID = "todo-column-id";
   const IN_PROGRESS_COLUMN_ID = "in-progress-column-id";
@@ -80,7 +91,9 @@ export function TicketBoard({ data }: any) {
   }
 
   useEffect(() => {
+    setOriginalData(data);
     const transformedData = transformApiData(data);
+
     const updatedColumns = {
       [TODO_COLUMN_ID]: {
         title: "Novo",
@@ -146,6 +159,14 @@ export function TicketBoard({ data }: any) {
     [columns]
   );
 
+  const toggleTicketModal = (ticket?: any) => {
+    setShowTicketModal(!showTicketModal);
+    if (ticket) {
+      const originalTicket = originalData.find((t: any) => t.id === ticket.id);
+      setSelectedTicket(originalTicket);
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Container>
@@ -167,6 +188,7 @@ export function TicketBoard({ data }: any) {
                               key={item.id}
                               item={item}
                               index={index}
+                              onCardClick={toggleTicketModal}
                             />
                           );
                         })}
@@ -179,6 +201,16 @@ export function TicketBoard({ data }: any) {
             })}
         </TaskColumnStyles>
       </Container>
+
+      {showTicketModal && selectedTicket && (
+        <TicketsModal
+          data={selectedTicket}
+          onClose={() => toggleTicketModal()}
+          technicians={technicians}
+          loggedUser={loggedUser}
+          updateTicketsCallback={updateTicketsCallback}
+        />
+      )}
     </DragDropContext>
   );
 }

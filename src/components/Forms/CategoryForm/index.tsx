@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { apiClient } from "../../../services/api";
-
+import Select from "react-select";
 import { toast } from "react-toastify";
 
 import * as S from "./styles";
@@ -29,15 +29,20 @@ export function CategoryForm({
     }));
   };
 
-  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedIds = Array.from(event.target.selectedOptions).map(
-      (option) => option.value
-    );
+  const handleCompanySelectChange = (selectedOptions: any) => {
+    const selectedIds = selectedOptions
+      ? selectedOptions.map((option: any) => option.value)
+      : [];
     setFormData((prevData) => ({
       ...prevData,
       companyIds: selectedIds,
     }));
   };
+
+  const companyOptions = companies.map((company) => ({
+    value: company.id,
+    label: company.name,
+  }));
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -102,13 +107,14 @@ export function CategoryForm({
 
       <S.InputGroup>
         <S.InputLabel>Empresa</S.InputLabel>
-        <S.Select multiple onChange={handleCompanyChange}>
-          {companies.map((company) => (
-            <option key={company.id} value={company.id}>
-              {company.name}
-            </option>
-          ))}
-        </S.Select>
+        <Select
+          isMulti
+          options={companyOptions}
+          value={formData.companyIds.map((id) =>
+            companyOptions.find((option) => option.value === id)
+          )}
+          onChange={handleCompanySelectChange}
+        />
       </S.InputGroup>
 
       <S.Button type="submit" disabled={loading}>

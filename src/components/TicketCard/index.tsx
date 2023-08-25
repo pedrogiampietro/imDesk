@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { apiClient } from "../../services/api";
 import * as S from "./styles"; // Consider renaming your styled components for more clarity.
 
 import { formatarData } from "../../utils/dateTime";
@@ -12,32 +11,9 @@ export function TicketCard({
   showTicketModal,
   setShowTicketModal,
   updateTicketsCallback,
+  technicians,
 }: any) {
-  const [technicians, setTechnicians] = useState([]);
   const { user } = useAuth();
-
-  const getTechnicians = async () => {
-    if (
-      !user ||
-      !user.companies ||
-      !user.currentLoggedCompany.currentLoggedCompanyId
-    ) {
-      return;
-    }
-
-    try {
-      const { data } = await apiClient().get("/account/technicians", {
-        params: {
-          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
-        },
-      });
-      setTechnicians(data);
-    } catch (err) {}
-  };
-
-  useEffect(() => {
-    getTechnicians();
-  }, [user]);
 
   const loggedUser = user;
 

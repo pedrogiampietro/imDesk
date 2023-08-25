@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as S from "./styles";
 
 import { BsList } from "react-icons/bs";
@@ -6,6 +6,9 @@ import { FiGrid } from "react-icons/fi";
 
 import { TicketCard } from "../TicketCard";
 import { TicketBoard } from "../TicketBoard";
+
+import { useAuth } from "../../hooks/useAuth";
+import { apiClient } from "../../services/api";
 
 export interface ITicket {
   id: string;
@@ -81,6 +84,9 @@ export function TicketKanban({
   const [activeTab, setActiveTab] = useState("new");
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("board");
+  const [technicians, setTechnicians] = useState([]);
+
+  const { user } = useAuth();
 
   const searchedData = data.filter((ticket) => {
     return (
@@ -100,6 +106,29 @@ export function TicketKanban({
     }
     return true;
   });
+
+  const getTechnicians = async () => {
+    if (
+      !user ||
+      !user.companies ||
+      !user.currentLoggedCompany.currentLoggedCompanyId
+    ) {
+      return;
+    }
+
+    try {
+      const { data } = await apiClient().get("/account/technicians", {
+        params: {
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+        },
+      });
+      setTechnicians(data);
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    getTechnicians();
+  }, [user]);
 
   return (
     <S.KanbanContainer>
@@ -159,6 +188,7 @@ export function TicketKanban({
           data={data}
           setShowTicketModal={setShowTicketModal}
           showTicketModal={showTicketModal}
+          technicians={technicians}
           updateTicketsCallback={updateTicketsCallback}
         />
       ) : (
@@ -169,6 +199,7 @@ export function TicketKanban({
               data={ticket}
               setShowTicketModal={setShowTicketModal}
               showTicketModal={showTicketModal}
+              technicians={technicians}
               updateTicketsCallback={updateTicketsCallback}
             />
           );

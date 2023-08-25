@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { apiClient } from "../../../services/api";
-
+import Select from "react-select";
 import { toast } from "react-toastify";
 
 import * as S from "./styles";
@@ -12,10 +12,14 @@ export function TypeForm({
 }) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
-  const [selectedCompanyIds, setSelectedCompanyIds] = useState<string[]>([]);
+  const [selectedCompanies, setSelectedCompanies] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const selectedCompanyIds = selectedCompanies.map((comp) => comp.value);
 
     setLoading(true);
 
@@ -36,7 +40,7 @@ export function TypeForm({
       });
 
       setName("");
-      setSelectedCompanyIds([]);
+      setSelectedCompanies([]);
 
       setLoading(false);
     } catch (err) {
@@ -45,11 +49,13 @@ export function TypeForm({
     }
   };
 
-  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedIds = Array.from(event.target.selectedOptions).map(
-      (option) => option.value
-    );
-    setSelectedCompanyIds(selectedIds);
+  const options = companies.map((company) => ({
+    value: company.id,
+    label: company.name,
+  }));
+
+  const handleCompanyChange = (selectedOptions: any) => {
+    setSelectedCompanies(selectedOptions || []);
   };
 
   return (
@@ -69,13 +75,13 @@ export function TypeForm({
 
       <S.InputGroup>
         <S.InputLabel>Empresa</S.InputLabel>
-        <S.Select multiple onChange={handleCompanyChange}>
-          {companies.map((company) => (
-            <option key={company.id} value={company.id}>
-              {company.name}
-            </option>
-          ))}
-        </S.Select>
+        <Select
+          isMulti
+          name="companies"
+          options={options}
+          value={selectedCompanies}
+          onChange={handleCompanyChange}
+        />
       </S.InputGroup>
 
       <S.Button type="submit" disabled={loading}>

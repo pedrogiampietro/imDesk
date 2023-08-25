@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { apiClient } from "../../../services/api";
-
+import Select from "react-select";
 import { toast } from "react-toastify";
+import InputMask from "react-input-mask";
 
 import * as S from "./styles";
 
@@ -20,6 +21,7 @@ export function ProviderForm({ companies }: any) {
     address: "",
     companyIds: [],
   });
+  const [phoneMask, setPhoneMask] = useState<string>("(99) 9999-9999");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -29,14 +31,27 @@ export function ProviderForm({ companies }: any) {
     }));
   };
 
-  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedIds = Array.from(event.target.selectedOptions).map(
-      (option) => option.value
-    );
+  const handleCompanySelectChange = (selectedOptions: any) => {
+    const selectedIds = selectedOptions
+      ? selectedOptions.map((option: any) => option.value)
+      : [];
     setFormData((prevData) => ({
       ...prevData,
       companyIds: selectedIds,
     }));
+  };
+
+  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    const justNumbers = value.replace(/[^\d]/g, "");
+
+    if (justNumbers.length <= 10) {
+      setPhoneMask("(99) 9999-9999");
+    } else {
+      setPhoneMask("(99) 99999-9999");
+    }
+
+    handleChange(event);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -75,6 +90,13 @@ export function ProviderForm({ companies }: any) {
     }
   };
 
+  const companyOptions = companies.map((company: any) => ({
+    value: company.companyId,
+    label: company.name,
+  }));
+
+  const InputMaskTyped: React.ComponentType<any> = InputMask;
+
   return (
     <S.FormContainer onSubmit={handleSubmit}>
       <S.FormTitle>Criar Fornecedor</S.FormTitle>
@@ -91,12 +113,15 @@ export function ProviderForm({ companies }: any) {
 
       <S.InputGroup>
         <S.InputLabel>Telefone</S.InputLabel>
-        <S.Input
-          type="text"
-          name="phone"
+        <InputMaskTyped
+          mask="(99) 99999-9999"
           value={formData.phone}
           onChange={handleChange}
-        />
+        >
+          {(inputProps: any) => (
+            <S.Input {...inputProps} type="text" name="phone" />
+          )}
+        </InputMaskTyped>
       </S.InputGroup>
 
       <S.InputGroup>
@@ -121,13 +146,14 @@ export function ProviderForm({ companies }: any) {
 
       <S.InputGroup>
         <S.InputLabel>Empresas</S.InputLabel>
-        <S.Select multiple onChange={handleCompanyChange}>
-          {companies.map((company: any) => (
-            <option key={company.companyId} value={company.companyId}>
-              {company.name}
-            </option>
-          ))}
-        </S.Select>
+        <Select
+          isMulti
+          options={companyOptions}
+          value={formData.companyIds.map((id) =>
+            companyOptions.find((option: any) => option.value === id)
+          )}
+          onChange={handleCompanySelectChange}
+        />
       </S.InputGroup>
 
       <S.Button type="submit" disabled={loading}>

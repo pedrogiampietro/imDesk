@@ -132,10 +132,79 @@ export const ModalContent = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
-  max-width: 600px;
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 10;
+`;
+
+export const Tabs = styled.div`
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+`;
+
+export const TabItem = styled.div<{ active: boolean }>`
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: ${(props) => (props.active ? "3px solid blue" : "none")};
+  &:hover {
+    background-color: #f7f7f7;
+  }
+`;
+
+export const CadastroContainer = styled.div`
+  display: flex;
+  gap: 20px; // espaço entre os elementos
+`;
+
+export const ImageContainer = styled.div`
+  flex: 1; // toma 1 parte do espaço disponível
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const Logo = styled.img`
+  width: 100px; // você pode ajustar isso conforme necessário
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+`;
+
+export const UploadButton = styled.button`
+  // Estilize o botão de upload conforme preferir
+`;
+
+export const FieldsContainer = styled.div`
+  flex: 2; // toma 2 partes do espaço disponível
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const Select = styled.select`
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+`;
+
+export const ProductDetailsContainer = styled.div`
+  flex: 1; // para manter o equilíbrio, mantemos isso também em 1
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const TextArea = styled.textarea`
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: vertical;
 `;

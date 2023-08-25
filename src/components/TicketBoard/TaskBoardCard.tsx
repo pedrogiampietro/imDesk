@@ -102,7 +102,7 @@ const Status = styled.span<{ level: string }>`
   border-radius: 3px;
 `;
 
-export function TaskBoardCard({ item, index }: any) {
+export function TaskBoardCard({ item, index, onCardClick }: any) {
   const displayId = item.id.split("-")[0];
 
   return (
@@ -112,6 +112,7 @@ export function TaskBoardCard({ item, index }: any) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          onClick={() => onCardClick(item)}
         >
           <TaskInformation priority={item.priority}>
             <TopRow>
