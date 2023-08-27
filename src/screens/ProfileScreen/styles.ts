@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-// styles.ts
-
 export const ProfileContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -84,4 +82,16 @@ export const SubmitButton = styled.button`
   &:focus {
     outline: none;
   }
+`;
+
+export const Initials = styled.div`
+  width: 40px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #5469d4;
+  font-weight: bold;
 `;

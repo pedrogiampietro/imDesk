@@ -28,8 +28,6 @@ export function Maintenance() {
   return (
     <Layout>
       <S.Container>
-        <S.Title>Manutenção Preventiva/Corretiva</S.Title>
-
         <S.CreateWrapper>
           <S.CreateButton
             onClick={() => {

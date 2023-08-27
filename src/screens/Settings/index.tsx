@@ -54,8 +54,6 @@ export function Settings() {
 
   return (
     <Layout>
-      <h1>Configurações</h1>
-
       <S.CardContainer>
         <CardButton label="Criar Usuário" onClick={() => setFormType("user")} />
         <CardButton

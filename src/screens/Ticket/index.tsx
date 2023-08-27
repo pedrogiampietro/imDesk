@@ -40,8 +40,6 @@ export function Ticket() {
   return (
     <Layout>
       <S.Container>
-        <S.Title>Novo Ticket</S.Title>
-
         <CreateTicket tickets={tickets} setTickets={setTickets} />
 
         <S.TicketsWrapper>

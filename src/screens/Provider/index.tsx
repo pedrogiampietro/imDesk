@@ -123,8 +123,6 @@ export function Provider() {
 
   return (
     <Layout>
-      <h1>Fornecedores</h1>
-
       <S.Table>
         <S.TableHead>
           <S.TableRow>

@@ -88,10 +88,20 @@ export function ProfileScreen() {
           <S.Form onSubmit={handleSubmit}>
             <S.AvatarInput>
               <label>
-                <S.AvatarPreview
-                  src={avatarPreview ? avatarPreview : user?.avatarUrl}
-                  alt="User Avatar"
-                />
+                {avatarPreview || user?.avatarUrl ? (
+                  <S.AvatarPreview
+                    src={avatarPreview ? avatarPreview : user?.avatarUrl}
+                    alt="User Avatar"
+                  />
+                ) : (
+                  <S.Initials>
+                    {user?.name
+                      ?.split(" ")
+                      .map((name) => name.charAt(0))
+                      .join("")
+                      .toUpperCase()}
+                  </S.Initials>
+                )}
                 <S.AvatarUpload
                   type="file"
                   name="avatar"

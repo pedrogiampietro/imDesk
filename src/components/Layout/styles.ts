@@ -17,11 +17,12 @@ export const Main = styled.main`
 
 export const TopBar = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0.7rem 20px;
   background-color: #f6f6f6;
   border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
 `;
 
 export const CompanyInfo = styled.div`
@@ -31,7 +32,8 @@ export const CompanyInfo = styled.div`
 
   span {
     font-size: 18px;
-    color: #333;
+    font-weight: bold;
+    color: #5469d4;
     margin-left: 10px;
   }
 `;
@@ -67,4 +69,22 @@ export const DropdownMenu = styled.div`
       background-color: #f5f5f5;
     }
   }
+`;
+
+export const Initials = styled.div`
+  width: 40px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #5469d4;
+  font-weight: bold;
+`;
+
+export const CompanyProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 `;
