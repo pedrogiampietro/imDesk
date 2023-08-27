@@ -40,15 +40,14 @@ export const SidebarButton = styled.button<{
 `;
 
 export const Logo = styled.div`
-  width: 52px;
+  width: 76px;
+  cursor: pointer;
+  margin: 0 auto;
 
   img {
     max-width: 100%;
     height: auto;
   }
-  cursor: pointer;
-
-  margin-bottom: ${v.lgSpacing};
 `;
 
 export const Search = styled.div`

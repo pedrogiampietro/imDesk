@@ -13,10 +13,6 @@ import { apiClient } from "../../services/api";
 export interface ITicket {
   id: string;
   description: string;
-  ticketType: string;
-  ticketCategoryId: string;
-  ticketPriorityId: string;
-  ticketLocationId: string;
   assignedTo: string[];
   equipaments: string[];
   images: string[];
@@ -44,7 +40,7 @@ export interface ITicket {
     id: string;
     name: string;
   };
-  ticketTypeId: {
+  ticketType: {
     id: string;
     name: string;
   };
@@ -88,23 +84,28 @@ export function TicketKanban({
 
   const { user } = useAuth();
 
-  const searchedData = data.filter((ticket) => {
+  const isTermIncluded = (term: any, ticket: any) => {
     return (
-      ticket.description.includes(searchTerm) ||
-      ticket.ticketType.includes(searchTerm) ||
-      ticket.ticketCategoryId.includes(searchTerm)
+      ticket.description.toLowerCase().includes(term) ||
+      ticket.ticketType.name.toLowerCase().includes(term) ||
+      ticket.ticketCategory.name.toLowerCase().includes(term)
     );
+  };
+
+  const searchedData = data.filter((ticket) => {
+    const term = searchTerm.toLowerCase();
+    const included = isTermIncluded(term, ticket);
+
+    return included;
   });
 
   const filteredData = searchedData.filter((ticket) => {
-    if (activeTab === "new") {
-      return ticket.status === "new";
-    } else if (activeTab === "assigned") {
-      return ticket.status === "assigned";
-    } else if (activeTab === "closed") {
-      return ticket.status === "closed";
-    }
-    return true;
+    const statusMatch =
+      (activeTab === "new" && ticket.status === "new") ||
+      (activeTab === "assigned" && ticket.status === "assigned") ||
+      (activeTab === "closed" && ticket.status === "closed");
+
+    return statusMatch;
   });
 
   const getTechnicians = async () => {
@@ -185,7 +186,7 @@ export function TicketKanban({
 
       {viewMode === "board" ? (
         <TicketBoard
-          data={data}
+          data={searchedData}
           setShowTicketModal={setShowTicketModal}
           showTicketModal={showTicketModal}
           technicians={technicians}

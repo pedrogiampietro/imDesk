@@ -2,7 +2,7 @@ import { useContext, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-// import { logoSVG } from "../../assets";
+import imDeskLogo from "../../assets/img/logo.jpg";
 
 import {
   AiOutlineHome,
@@ -75,7 +75,9 @@ export function Sidebar() {
           <AiOutlineLeft />
         </S.SidebarButton>
       </>
-      <S.Logo>{/* <img src={logoSVG} alt="logo" /> */}</S.Logo>
+      <S.Logo>
+        <img src={imDeskLogo} alt="logo" />
+      </S.Logo>
       <S.Search
         onClick={searchClickHandler}
         style={!sidebarOpen ? { width: `fit-content` } : {}}
