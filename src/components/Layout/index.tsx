@@ -3,6 +3,8 @@ import { Sidebar } from "../Sidebar/";
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 
+import { IoBusinessOutline } from "react-icons/io5";
+
 import * as S from "./styles";
 
 interface LayoutProps {
@@ -18,6 +20,10 @@ export function Layout({ children }: LayoutProps) {
       <Sidebar />
       <S.Main>
         <S.TopBar>
+          <S.CompanyInfo>
+            <IoBusinessOutline size={20} />
+            <span>{user?.currentLoggedCompany.currentLoggedCompanyName}</span>
+          </S.CompanyInfo>
           <S.AvatarButton onClick={() => setDropdownOpen(!isDropdownOpen)}>
             <img src={user?.avatarUrl} alt="User Avatar" />
           </S.AvatarButton>

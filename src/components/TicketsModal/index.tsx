@@ -377,6 +377,17 @@ export function TicketsModal({
           <S.InfoGroup>
             <S.InfoItem>
               <S.IconContainer>
+                <FiAlertCircle /> <S.InfoTitle>Descrição</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledTextArea value={description} onChange={handleChange} />
+              </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
                 <FiMessageCircle />
                 <S.InfoTitle>Mensagens</S.InfoTitle>
               </S.IconContainer>
@@ -457,14 +468,6 @@ export function TicketsModal({
           </S.InfoGroup>
 
           <S.InfoGroup>
-            <S.InfoItem>
-              <S.IconContainer>
-                <FiAlertCircle /> <S.InfoTitle>Descrição</S.InfoTitle>
-              </S.IconContainer>
-              <S.InfoContent>
-                <S.StyledTextArea value={description} onChange={handleChange} />
-              </S.InfoContent>
-            </S.InfoItem>
             <S.InfoItem>
               <S.IconContainer>
                 <FiUser size="15" />{" "}

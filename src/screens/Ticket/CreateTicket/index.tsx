@@ -9,6 +9,7 @@ import { createNewTicketSchema } from "../../../validations/createTicketSchema";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { toast } from "react-toastify";
 
+import { darkTheme, lightTheme } from "../../../assets/styles/theme";
 import * as S from "./styles";
 
 interface ISelect {
@@ -207,9 +208,12 @@ export function CreateTicket({ tickets, setTickets }: any) {
   );
 
   const groupStyles = {
-    border: "2px dotted red",
+    border: `2px solid ${
+      theme === "dark" ? darkTheme.border : lightTheme.border
+    }`,
     borderRadius: "5px",
-    background: "#f2fcff",
+    background: theme === "dark" ? darkTheme.bg2 : lightTheme.bg2,
+    padding: "10px",
   };
 
   const handleSubmitTicket = async (values: any) => {
@@ -322,14 +326,41 @@ export function CreateTicket({ tickets, setTickets }: any) {
                     groupHeading: (base) => ({
                       ...base,
                       flex: "1 1",
-                      color: "red",
+                      color:
+                        theme === "dark" ? darkTheme.text : lightTheme.text,
                       margin: 0,
+                      fontWeight: "bold",
+                    }),
+                    control: (base) => ({
+                      ...base,
+                      borderColor:
+                        theme === "dark" ? darkTheme.border : lightTheme.border,
+                      boxShadow: "none",
+                      "&:hover": {
+                        borderColor:
+                          theme === "dark"
+                            ? darkTheme.primary
+                            : lightTheme.primary,
+                      },
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color:
+                        theme === "dark"
+                          ? darkTheme.textSecondary
+                          : lightTheme.textSecondary,
+                    }),
+                    singleValue: (base) => ({
+                      ...base,
+                      color:
+                        theme === "dark" ? darkTheme.text : lightTheme.text,
                     }),
                   }}
                 />
               );
             }}
           />
+
           <div>
             {!!errors.ticket_category && (
               <small

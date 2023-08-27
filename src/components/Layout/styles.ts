@@ -16,13 +16,24 @@ export const Main = styled.main`
 `;
 
 export const TopBar = styled.div`
-  height: 60px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding: 0 20px;
-  background-color: #f6f6f6; // Por exemplo, uma cor de fundo clara
+  background-color: #f6f6f6;
   border-bottom: 1px solid #ddd;
+`;
+
+export const CompanyInfo = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+
+  span {
+    font-size: 18px;
+    color: #333;
+    margin-left: 10px;
+  }
 `;
 
 export const AvatarButton = styled.button`
