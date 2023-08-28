@@ -5,8 +5,8 @@ export const lightTheme = {
   bg3: "rgb(230,230,230)",
   text: "rgb(30,30,30)", // Slightly darker for better contrast
   textSecondary: "rgb(80,80,80)", // For secondary text
-  primary: "#5469d4",
-  primaryDark: "#4153b2", // Darker shade for hover effects
+  primary: "#6095aa",
+  primaryDark: "#2b667d", // Darker shade for hover effects
   border: "rgba(0, 0, 0, 0.1)", // Soft border color
 };
 
@@ -17,7 +17,7 @@ export const darkTheme = {
   bg3: "rgb(30,30,30)", // Slightly brighter for better layering
   text: "rgb(210,210,210)",
   textSecondary: "rgb(160,160,160)", // For secondary text
-  primary: "#5469d4",
-  primaryDark: "#4153b2", // Darker shade for hover effects
+  primary: "#6095aa",
+  primaryDark: "#2b667d", // Darker shade for hover effects
   border: "rgba(255, 255, 255, 0.1)", // Soft border color
 };

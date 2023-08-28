@@ -92,6 +92,6 @@ export const Initials = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #5469d4;
+  color: #6095aa;
   font-weight: bold;
 `;

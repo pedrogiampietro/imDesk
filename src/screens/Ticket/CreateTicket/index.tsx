@@ -86,6 +86,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
       ticket_priority: "",
       ticket_location: "",
       ticket_description: "",
+      ticket_images: {},
     },
   });
 
@@ -101,6 +102,9 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [selectedPriority, setSelectedPriority] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState("");
+
+  const [imagesPreview, setImagesPreview] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
   const getTicketType = async () => {
     if (
@@ -217,20 +221,24 @@ export function CreateTicket({ tickets, setTickets }: any) {
   };
 
   const handleSubmitTicket = async (values: any) => {
-    console.log("values", values);
     try {
-      const { data } = await apiClient().post(
-        "/ticket",
-        {
-          companyIds: [user?.currentLoggedCompany.currentLoggedCompanyId],
-          ...values,
-        },
-        {
-          params: {
-            userId: user?.userId,
-          },
-        }
+      const formData = new FormData();
+
+      selectedImages.forEach((image) => {
+        formData.append("ticket_images", image);
+      });
+
+      formData.append(
+        "companyIds",
+        JSON.stringify([user?.currentLoggedCompany.currentLoggedCompanyId])
       );
+      formData.append("values", JSON.stringify(values));
+
+      const { data } = await apiClient().post("/ticket", formData, {
+        params: {
+          userId: user?.userId,
+        },
+      });
 
       setTickets([...tickets, data.body]);
 
@@ -250,9 +258,28 @@ export function CreateTicket({ tickets, setTickets }: any) {
       setSelectedPriority(null);
       setSelectedLocation(null);
       setSelectedDescription("");
+      setImagesPreview([]);
+      setSelectedImages([]);
     } catch (err) {
       console.warn("err", err);
     }
+  };
+
+  const handleImageUpload = (e: any) => {
+    const files = Array.from(e.target.files) as File[];
+    const newPreviewImages = files.map((file) => URL.createObjectURL(file));
+    setImagesPreview([...imagesPreview, ...newPreviewImages]);
+    setSelectedImages([...selectedImages, ...files]);
+  };
+
+  const handleImageDelete = (index: any) => {
+    const newImagesPreview = [...imagesPreview];
+    newImagesPreview.splice(index, 1);
+    setImagesPreview(newImagesPreview);
+
+    const newSelectedImages = [...selectedImages];
+    newSelectedImages.splice(index, 1);
+    setSelectedImages(newSelectedImages);
   };
 
   return (
@@ -475,12 +502,30 @@ export function CreateTicket({ tickets, setTickets }: any) {
           />
         </S.FormGroup>
 
-        {/* <S.FormGroup>
-          <S.Label htmlFor="ticket_type" isActive={theme === "dark"}>
-            Equipamentos:
+        <S.FormGroup>
+          <S.Label htmlFor="ticket_images" isActive={theme === "dark"}>
+            Imagens:
           </S.Label>
-          <S.Input type="text" id="ticket_type" />
-        </S.FormGroup> */}
+          <S.FileInput>
+            <S.Input
+              type="file"
+              id="ticket_images"
+              multiple
+              {...register("ticket_images")}
+              onChange={(e) => handleImageUpload(e)}
+              hidden
+            />
+            <S.FileLabel htmlFor="ticket_images">+</S.FileLabel>
+          </S.FileInput>
+          <S.PreviewContainer>
+            {imagesPreview.map((src, index) => (
+              <S.PreviewImageContainer key={index}>
+                <S.PreviewImage src={src} />
+                <S.DeleteIcon onClick={() => handleImageDelete(index)} />
+              </S.PreviewImageContainer>
+            ))}
+          </S.PreviewContainer>
+        </S.FormGroup>
 
         <S.CreateTicketButton type="submit" isActive={theme === "dark"}>
           Criar Ticket

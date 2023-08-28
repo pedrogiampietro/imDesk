@@ -82,6 +82,19 @@ const Avatar = styled.img`
   margin-right: 8px;
 `;
 
+const Initials = styled.div`
+  width: 40px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6095aa;
+  font-weight: bold;
+  margin-right: 0.65rem;
+`;
+
 const Status = styled.span<{ level: string }>`
   width: 15px;
   height: 15px;
@@ -127,7 +140,18 @@ export function TaskBoardCard({ item, index, onCardClick }: any) {
             </CategoryRow>
             <DescriptionRow>{item.description}</DescriptionRow>
             <UserRow>
-              <Avatar src={item.createdBy.avatarUrl} alt="User avatar" />
+              {item.createdBy.avatarUrl ? (
+                <Avatar src={item.createdBy.avatarUrl} alt="User avatar" />
+              ) : (
+                <Initials>
+                  {item?.createdBy.name
+                    ?.split(" ")
+                    .map((name: any) => name.charAt(0))
+                    .join("")
+                    .toUpperCase()}
+                </Initials>
+              )}
+
               <span>{item.createdBy.name}</span>
             </UserRow>
           </TaskInformation>

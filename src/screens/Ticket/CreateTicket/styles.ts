@@ -49,7 +49,7 @@ export const CreateTicketButton = styled.button<{ isActive: boolean }>`
   background: ${({ theme, isActive }) =>
     !isActive ? theme.bg3 : theme.primary};
   border: 1px solid #000;
-  border-radius: 12px; // bordas ligeiramente mais arredondadas
+  border-radius: 12px;
   outline: none;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
@@ -57,32 +57,98 @@ export const CreateTicketButton = styled.button<{ isActive: boolean }>`
   color: ${({ isActive }) => (isActive ? "#FFF" : "#000")};
   padding: 1rem 3rem;
   cursor: pointer;
-  font-size: 0.8rem; // um pouco maior para melhor legibilidade
+  font-size: 0.8rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease-in-out; // transição para todos os estados
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // adicionando uma sombra suave
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: ${({ theme }) =>
-      theme.primaryDark}; // tom mais escuro no hover
+    background-color: ${({ theme }) => theme.primaryDark};
     color: #fff;
-    transform: translateY(-2px); // elevando ligeiramente o botão
+    transform: translateY(-2px);
     opacity: 0.9;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); // sombra mais pronunciada no hover
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
 
   &:active {
-    transform: translateY(1px); // efeito de pressionar o botão
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); // sombra menos intensa ao pressionar
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   }
 
   &:focus {
-    box-shadow: 0 0 0 3px rgba(58, 123, 255, 0.6); // glow azul ao focar para acessibilidade
+    box-shadow: 0 0 0 3px rgba(58, 123, 255, 0.6);
   }
 
   & svg {
-    margin-left: 0.5rem; // ligeiro ajuste no espaço do ícone
+    margin-left: 0.5rem;
+  }
+`;
+
+export const PreviewContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+export const PreviewImage = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const PreviewImageContainer = styled.div`
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+`;
+
+export const DeleteIcon = styled.div`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:before {
+    content: "×";
+  }
+
+  &:hover {
+    background-color: #ff4d4d;
+  }
+`;
+
+export const FileInput = styled.div`
+  position: relative;
+`;
+
+export const FileLabel = styled.label`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  color: #6095aa;
+  border: 2px solid #6095aa;
+  border-radius: 5px;
+  /* font-size: 24px; */
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(84, 105, 212, 0.1);
   }
 `;

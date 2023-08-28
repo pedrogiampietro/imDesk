@@ -6,6 +6,7 @@ import {
   FiAlertCircle,
   FiMessageCircle,
   FiStar,
+  FiImage,
 } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { ITicket } from "../TicketKanban";
@@ -381,6 +382,28 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledTextArea value={description} onChange={handleChange} />
+              </S.InfoContent>
+            </S.InfoItem>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiImage /> <S.InfoTitle>Imagens</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                {ticketData.images.map((image, index) => (
+                  <a
+                    key={index}
+                    href={image.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ margin: "10px", boxShadow: "2px 2px 10px #ddd" }}
+                  >
+                    <img
+                      src={image.path}
+                      alt={`Ticket Image ${index + 1}`}
+                      width={100}
+                    />
+                  </a>
+                ))}
               </S.InfoContent>
             </S.InfoItem>
           </S.InfoGroup>
