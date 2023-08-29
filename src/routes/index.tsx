@@ -8,6 +8,8 @@ import { Maintenance } from "../screens/Maintenance";
 import { Settings } from "../screens/Settings";
 import { Provider } from "../screens/Provider";
 import { ProfileScreen } from "../screens/ProfileScreen";
+import { Deposit } from "../screens/Deposit";
+import { DepositView } from "../screens/DepositView";
 
 import RouteProtector from "./RouteProtector";
 
@@ -74,6 +76,22 @@ export function AppRoutes() {
       element: (
         <RouteProtector>
           <ProfileScreen />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/deposit",
+      element: (
+        <RouteProtector>
+          <Deposit />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/deposit/:id",
+      element: (
+        <RouteProtector>
+          <DepositView />
         </RouteProtector>
       ),
     },

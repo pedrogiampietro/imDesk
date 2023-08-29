@@ -9,11 +9,14 @@ const limit = 20;
 
 export function apiClient() {
   const token = getStorageModel(auth.TOKEN);
+  const restoreUser = getStorageModel(auth.USER);
+  const user = JSON.parse(restoreUser);
 
   const api = axios.create({
     baseURL: "http://localhost:3333/",
     headers: {
       Authorization: `Bearer ${token}`,
+      userId: user.userId,
       ContentType: "application/json",
       Accept: "application/json",
       "Access-Control-Allow-Origin": "*",
