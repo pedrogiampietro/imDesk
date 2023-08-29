@@ -21,6 +21,8 @@ interface Deposit {
 export function Deposit() {
   const [deposits, setDeposits] = useState<Deposit[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [editingDeposit, setEditingDeposit] = useState<Deposit | null>(null);
+
   const { user } = useAuth();
 
   const navigate = useNavigate();
@@ -55,13 +57,37 @@ export function Deposit() {
     navigate(`/deposit/${id}`);
   };
 
-  const handleDelete = (id: string) => {
-    // history.push(`/deposit/${id}/items`);
+  const handleEdit = (deposit: Deposit) => {
+    setEditingDeposit(deposit);
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirm = window.confirm(
+      "Tem certeza que deseja excluir este depósito?"
+    );
+    if (!confirm) {
+      return;
+    }
+
+    try {
+      await apiClient().delete(`/deposit/${id}`);
+      setDeposits(deposits.filter((deposit) => deposit.id !== id));
+    } catch (error) {
+      console.error("Erro ao excluir o depósito:", error);
+    }
   };
 
   return (
     <Layout>
-      <S.Button onClick={() => setShowModal(true)}>Criar Depósito</S.Button>
+      <S.Button
+        onClick={() => {
+          setShowModal(true);
+          setEditingDeposit(null);
+        }}
+      >
+        Criar Depósito
+      </S.Button>
       <S.Table>
         <thead>
           <S.TableRow>
@@ -82,11 +108,12 @@ export function Deposit() {
               <S.TableCell>
                 {new Date(deposit.createdAt).toLocaleDateString()}
               </S.TableCell>
-              <S.TableCell>{deposit.Company.name}</S.TableCell>
+              <S.TableCell>{deposit?.Company?.name}</S.TableCell>
               <S.TableCell>
                 <S.Button onClick={() => handleClick(deposit.id)}>
                   Visualizar
                 </S.Button>
+                <S.Button onClick={() => handleEdit(deposit)}>Editar</S.Button>
                 <S.Button onClick={() => handleDelete(deposit.id)}>
                   Excluir
                 </S.Button>
@@ -100,6 +127,7 @@ export function Deposit() {
         <S.ModalWrapper>
           <S.ModalContainer>
             <CreateDepositModal
+              editingDeposit={editingDeposit}
               setShowModal={setShowModal}
               setDeposits={setDeposits}
             />

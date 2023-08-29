@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 import "./styles.css";
-import { apiClient } from "../../services/api";
+import axios from "axios";
 
 import { toast } from "react-toastify";
 
@@ -51,9 +51,7 @@ export function Login() {
 
     try {
       await signIn(data);
-    } catch {
-      return;
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -65,7 +63,7 @@ export function Login() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await apiClient().get("/companies/");
+        const response = await axios.get("http://localhost:3333/companies");
 
         setCompanies(response.data.companies);
       } catch (error) {

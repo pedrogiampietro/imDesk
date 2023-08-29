@@ -6,8 +6,9 @@ import {
   removeStorage,
   setStorageModel,
 } from "../utils/storage";
-import { apiClient } from "../services/api";
+import axios from "axios";
 import { toast } from "react-toastify";
+import { apiClient } from "../services/api";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -66,7 +67,10 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
   async function signIn(login: User) {
     try {
-      const response = await apiClient().post("/authenticate/sign-in", login);
+      const response = await axios.post(
+        "http://localhost:3333/authenticate/sign-in",
+        login
+      );
 
       const objToStrig = JSON.stringify({
         userId: response.data.id,

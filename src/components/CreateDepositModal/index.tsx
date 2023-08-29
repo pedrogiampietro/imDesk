@@ -4,15 +4,25 @@ import * as S from "./styles";
 import { apiClient } from "../../services/api";
 import { toast } from "react-toastify";
 
-export function CreateDepositModal({ setShowModal, setDeposits }: any) {
+interface Props {
+  editingDeposit: any | null;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeposits: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+export function CreateDepositModal({
+  editingDeposit,
+  setShowModal,
+  setDeposits,
+}: Props) {
   const [formData, setFormData] = useState<{
     name: string;
     location: string;
     companyIds: string[];
   }>({
-    name: "",
-    location: "",
-    companyIds: [],
+    name: editingDeposit ? editingDeposit.name : "",
+    location: editingDeposit ? editingDeposit.location : "",
+    companyIds: editingDeposit ? [editingDeposit.Company.id] : [],
   });
   const [companies, setCompanies] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,24 +50,36 @@ export function CreateDepositModal({ setShowModal, setDeposits }: any) {
     setLoading(true);
 
     try {
-      const response = await apiClient().post("/deposit", {
-        companyId: formData.companyIds,
-        name: formData.name,
-        location: formData.location,
-      });
+      let response: any;
+      if (editingDeposit) {
+        // Edição
+        response = await apiClient().put(`/deposit/${editingDeposit.id}`, {
+          companyId: formData.companyIds[0],
+          name: formData.name,
+          location: formData.location,
+          userId: "09a456f2-1348-490d-8359-c5da81b6f1a2",
+        });
 
-      toast.success("Sucesso! Seu deposito foi adicionado com sucesso!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+        toast.success("Sucesso! Seu depósito foi atualizado com sucesso!");
 
-      const newDeposit = response.data.body;
-      setDeposits((prevDeposits: any) => [...prevDeposits, newDeposit]);
+        setDeposits((prevDeposits) =>
+          prevDeposits.map((deposit) =>
+            deposit.id === editingDeposit.id ? response.data.body : deposit
+          )
+        );
+      } else {
+        // Criação
+        response = await apiClient().post("/deposit", {
+          companyId: formData.companyIds,
+          name: formData.name,
+          location: formData.location,
+        });
+
+        toast.success("Sucesso! Seu depósito foi criado com sucesso!");
+
+        const newDeposit = response.data.body;
+        setDeposits((prevDeposits) => [...prevDeposits, newDeposit]);
+      }
 
       setShowModal(false);
       setLoading(false);
@@ -76,7 +98,9 @@ export function CreateDepositModal({ setShowModal, setDeposits }: any) {
 
   return (
     <>
-      <h1 style={{ marginBottom: "1rem" }}>Criar novo deposito</h1>
+      <h1 style={{ marginBottom: "1rem" }}>
+        {editingDeposit ? "Atualizar deposito" : "Criar novo deposito"}
+      </h1>
       <S.FormGroup>
         <S.Label htmlFor="name">Nome</S.Label>
         <S.Input
@@ -84,6 +108,7 @@ export function CreateDepositModal({ setShowModal, setDeposits }: any) {
           name="name"
           id="name"
           placeholder="Nome do deposito"
+          value={formData.name}
           onChange={(e) =>
             setFormData((prevData) => ({
               ...prevData,
@@ -99,6 +124,7 @@ export function CreateDepositModal({ setShowModal, setDeposits }: any) {
           name="location"
           id="location"
           placeholder="Localização do equipamento"
+          value={formData.location}
           onChange={(e) =>
             setFormData((prevData) => ({
               ...prevData,
@@ -112,15 +138,23 @@ export function CreateDepositModal({ setShowModal, setDeposits }: any) {
         <S.InputLabel>Empresa</S.InputLabel>
         <Select
           options={companyOptions}
-          value={companyOptions.find(
-            (option: any) => option.value === companies.id
-          )}
+          value={
+            editingDeposit
+              ? companyOptions.find(
+                  (option: any) => option.value === editingDeposit.companyId
+                )
+              : companyOptions.find(
+                  (option: any) => option.value === companies.id
+                )
+          }
           onChange={handleCompanySelectChange}
         />
       </S.InputGroup>
 
       <S.Button type="submit" disabled={loading} onClick={() => handleSubmit()}>
-        {loading ? "Carregando..." : "Adicionar Depósito"}
+        {loading
+          ? "Carregando..."
+          : `${editingDeposit ? "Atualizar" : "Adicionar"} Depósito`}
       </S.Button>
     </>
   );
