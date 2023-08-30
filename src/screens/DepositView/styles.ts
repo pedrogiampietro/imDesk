@@ -61,7 +61,9 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
   padding: 10px;
-  border: 1px solid ${(props) => props.theme.border};
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
 `;
 
 export const Button = styled.button`

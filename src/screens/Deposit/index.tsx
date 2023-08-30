@@ -5,6 +5,7 @@ import { Layout } from "../../components/Layout";
 import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { CreateDepositModal } from "../../components/CreateDepositModal";
+import { DropdownMenuComponent } from "../../components/DropdownMenu";
 
 import * as S from "./styles";
 
@@ -22,6 +23,7 @@ export function Deposit() {
   const [deposits, setDeposits] = useState<Deposit[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingDeposit, setEditingDeposit] = useState<Deposit | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const { user } = useAuth();
 
@@ -110,13 +112,11 @@ export function Deposit() {
               </S.TableCell>
               <S.TableCell>{deposit?.Company?.name}</S.TableCell>
               <S.TableCell>
-                <S.Button onClick={() => handleClick(deposit.id)}>
-                  Visualizar
-                </S.Button>
-                <S.Button onClick={() => handleEdit(deposit)}>Editar</S.Button>
-                <S.Button onClick={() => handleDelete(deposit.id)}>
-                  Excluir
-                </S.Button>
+                <DropdownMenuComponent
+                  onView={() => handleClick(deposit.id)}
+                  onEdit={() => handleEdit(deposit)}
+                  onDelete={() => handleDelete(deposit.id)}
+                />
               </S.TableCell>
             </S.TableRow>
           ))}

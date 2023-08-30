@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { Layout } from "../../components/Layout";
 import { apiClient } from "../../services/api";
 import { CreateItemModal } from "../../components/CreateItemModal";
+import { DropdownMenuComponent } from "../../components/DropdownMenu";
 
 import * as S from "./styles";
 import { FiSave } from "react-icons/fi";
@@ -202,14 +203,10 @@ export function DepositView() {
                         </S.Button>
                       </>
                     ) : (
-                      <>
-                        <S.Button onClick={() => handleEditClick(item.id)}>
-                          <FaPencilAlt size={20} />
-                        </S.Button>
-                        <S.Button onClick={() => handleDeleteClick(item.id)}>
-                          <FaTrash size={20} />
-                        </S.Button>
-                      </>
+                      <DropdownMenuComponent
+                        onEdit={() => handleEditClick(item.id)}
+                        onDelete={() => handleDeleteClick(item.id)}
+                      />
                     )}
                   </S.TableCell>
                 </S.TableRow>

@@ -3,6 +3,7 @@ import Select from "react-select";
 import * as S from "./styles";
 import { apiClient } from "../../services/api";
 import { toast } from "react-toastify";
+import { useAuth } from "../../hooks/useAuth";
 
 interface Props {
   editingDeposit: any | null;
@@ -19,18 +20,25 @@ export function CreateDepositModal({
     name: string;
     location: string;
     companyIds: string[];
+    userId: string[];
   }>({
     name: editingDeposit ? editingDeposit.name : "",
     location: editingDeposit ? editingDeposit.location : "",
-    companyIds: editingDeposit ? [editingDeposit.Company.id] : [],
+    companyIds: editingDeposit ? [editingDeposit?.Company?.id] : [],
+    userId: editingDeposit
+      ? editingDeposit?.users?.map((user: any) => user.id)
+      : [],
   });
   const [companies, setCompanies] = useState<any>([]);
+  const [users, setUsers] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await apiClient().get("/companies/");
+        const response = await apiClient().get("/companies");
 
         setCompanies(response.data.companies);
       } catch (error) {
@@ -39,6 +47,23 @@ export function CreateDepositModal({
     };
 
     fetchCompanies();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await apiClient().get("/account/users", {
+          params: {
+            companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          },
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching companies", error);
+      }
+    };
+
+    fetchUsers();
   }, []);
 
   const companyOptions = companies.map((company: any) => ({
@@ -57,14 +82,19 @@ export function CreateDepositModal({
           companyId: formData.companyIds[0],
           name: formData.name,
           location: formData.location,
-          userId: "09a456f2-1348-490d-8359-c5da81b6f1a2",
+          userId: formData.userId,
         });
 
         toast.success("Sucesso! Seu depósito foi atualizado com sucesso!");
 
+        const updatedDepot = response.data.body;
+        updatedDepot.users = updatedDepot.DepotUsers.map(
+          (depotUser: any) => depotUser.User
+        );
+
         setDeposits((prevDeposits) =>
           prevDeposits.map((deposit) =>
-            deposit.id === editingDeposit.id ? response.data.body : deposit
+            deposit.id === editingDeposit.id ? updatedDepot : deposit
           )
         );
       } else {
@@ -95,6 +125,23 @@ export function CreateDepositModal({
       companyIds: selectedOption ? selectedOption.value : "",
     }));
   };
+
+  const handleUserSelectChange = (selectedOptions: any) => {
+    const userIds = selectedOptions
+      ? selectedOptions.map((option: any) => option.value)
+      : [];
+    setFormData((prevData) => ({
+      ...prevData,
+      userId: userIds,
+    }));
+  };
+
+  const userOptions = users
+    ? users.map((user: any) => ({
+        value: user.id,
+        label: user.name,
+      }))
+    : [];
 
   return (
     <>
@@ -148,6 +195,18 @@ export function CreateDepositModal({
                 )
           }
           onChange={handleCompanySelectChange}
+        />
+      </S.InputGroup>
+
+      <S.InputGroup>
+        <S.InputLabel>Usuário</S.InputLabel>
+        <Select
+          isMulti
+          options={userOptions}
+          value={formData?.userId?.map((id) =>
+            userOptions.find((option: any) => option.value === id)
+          )}
+          onChange={handleUserSelectChange}
         />
       </S.InputGroup>
 

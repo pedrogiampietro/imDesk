@@ -39,13 +39,18 @@ export const ModalContainer = styled.div`
 `;
 
 export const Button = styled.button`
-  padding: 10px;
-  margin: 10px;
-  background-color: #007bff;
-  color: white;
+  padding: 8px 12px;
+  background-color: #6095aa;
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #2b667d;
+  }
 `;
 
 export const Table = styled.table`
@@ -55,19 +60,23 @@ export const Table = styled.table`
 
 export const TableHeader = styled.th`
   padding: 10px;
-  border: 1px solid #ddd;
   text-align: left;
+  background-color: ${(props) => props.theme.primary};
+  color: white;
+  border: 1px solid ${(props) => props.theme.border};
 `;
 
 export const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: ${(props) => props.theme.bg2};
   }
 `;
 
 export const TableCell = styled.td`
   padding: 10px;
   border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
 `;
 
 export const CloseButtonModal = styled.button`
