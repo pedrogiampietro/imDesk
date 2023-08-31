@@ -62,6 +62,9 @@ export function TicketsModal({
   const [selectedCategory, setSelectedCategory] = useState<string>(
     ticketData.ticketCategory.id
   );
+  const [selectedPriority, setSelectedPriority] = useState(
+    ticketData.ticketPriority.id
+  );
 
   const [selectedRating, setSelectedRating] = useState(0);
   const [selectedSLA, setSelectedSLA] = useState(ticketData.slaDefinitionId);
@@ -316,6 +319,12 @@ export function TicketsModal({
     handleDataChange("ticketCategoryId", newCategory);
   };
 
+  const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPriority = e.target.value;
+    setSelectedPriority(newPriority);
+    handleDataChange("ticketPriorityId", newPriority);
+  };
+
   function formatDate(dateString: Date): string {
     const date = new Date(dateString);
 
@@ -447,10 +456,12 @@ export function TicketsModal({
       );
 
       toast.success("Sucesso! Seu depósito foi atualizado com sucesso!");
-    } catch (error) {
-      toast.error(
-        "Que pena! Não conseguimos por algum motivo atualizar seu deposito."
-      );
+
+      setQuantityUsed(0);
+      setSelectedDeposit("");
+      setSelectedDepositItem("");
+    } catch (error: any) {
+      toast.error(`Que pena! ${error.response.data.message}.`);
       console.error("Erro ao salvar a quantidade de item consumido:", error);
     }
   };
@@ -484,7 +495,7 @@ export function TicketsModal({
                     style={{ margin: "10px", boxShadow: "2px 2px 10px #ddd" }}
                   >
                     <img
-                      src={image}
+                      src={image.path}
                       alt={`Ticket Image ${index + 1}`}
                       width={100}
                     />
@@ -652,10 +663,8 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledSelect
-                  value={ticketData.ticketPriority.id}
-                  onChange={(e) =>
-                    handleDataChange("ticketPriorityId", e.target.value)
-                  }
+                  value={selectedPriority}
+                  onChange={handlePriorityChange}
                 >
                   {ticketPriority.map((priority: any) => (
                     <option key={priority.id} value={priority.id}>
@@ -749,7 +758,8 @@ export function TicketsModal({
                   : "Data não disponível"}
               </S.InfoContent>
             </S.InfoItem>
-
+          </S.InfoGroup>
+          <S.InfoGroup>
             <S.InfoItem>
               <S.IconContainer>
                 <FiBox /> <S.InfoTitle>Depósitos</S.InfoTitle>
@@ -809,6 +819,42 @@ export function TicketsModal({
                   </div>
                 )}
               </S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.UsedItemsHistory>
+                <h2>Historico de Itens Utilizados</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Quantidade</th>
+                      <th>Custo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ticketData?.usedItems?.map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.name}</td>
+                        <td>{item.quantity}</td>
+                        <td>{item.cost}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div
+                  style={{
+                    textAlign: "right",
+                  }}
+                >
+                  Total:{" "}
+                  {ticketData?.usedItems?.reduce(
+                    (total, item) => total + item.cost,
+                    0
+                  )}
+                </div>
+              </S.UsedItemsHistory>
             </S.InfoItem>
           </S.InfoGroup>
         </S.RightSide>

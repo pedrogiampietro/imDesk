@@ -57,7 +57,15 @@ export interface ITicket {
     updatedAt: Date;
   };
   TicketEvaluation: TicketEvaluation[];
+  usedItems: usedItems[];
 }
+
+type usedItems = {
+  cost: number;
+  id: string;
+  name: string;
+  quantity: number;
+};
 
 type TicketEvaluation = {
   id: string;

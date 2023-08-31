@@ -274,9 +274,7 @@ export const ConversationContainer = styled.div`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  max-height: calc(
-    100% - 20px
-  ); // Descontando o padding, assim ocupa todo o espaço
+  max-height: calc(100% - 20px);
   overflow-y: auto;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -286,14 +284,13 @@ export const ConversationContainer = styled.div`
 
 export const Message = styled.div<{ isTech: boolean }>`
   margin-bottom: 10px;
-  padding: 5px 10px; // Aumentei o padding horizontal para melhor visualização
-  border-radius: 15px; // Aumentei para dar um look mais moderno
+  padding: 5px 10px;
+  border-radius: 15px;
   background-color: ${(props) => (props.isTech ? "#dcf6c7" : "#dfd8cf")};
   align-self: ${(props) => (props.isTech ? "flex-start" : "flex-end")};
-  max-width: 80%; // Limitando a largura máxima de uma mensagem
-  word-break: break-word; // Quebra longas palavras
+  max-width: 80%;
+  word-break: break-word;
 
-  // Estilização opcional para diferenciar ainda mais as mensagens
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 `;
 
@@ -314,14 +311,47 @@ export const ReplyContainer = styled.div`
 
   & > button {
     padding: 10px 20px;
-    background-color: #4caf50; // Verde como exemplo
+    background-color: #6095aa;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
 
     &:hover {
-      background-color: #45a049; // Verde escuro no hover
+      background-color: #2b667d;
     }
+  }
+`;
+
+export const UsedItemsHistory = styled.div`
+  margin: 20px 0;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #6095aa;
+    color: white;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
   }
 `;
