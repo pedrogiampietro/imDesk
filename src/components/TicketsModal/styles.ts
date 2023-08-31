@@ -255,6 +255,21 @@ export const StyledButton = styled.button`
   }
 `;
 
+export const Button = styled.button`
+  padding: 8px 12px;
+  background-color: #6095aa;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #2b667d;
+  }
+`;
+
 export const ConversationContainer = styled.div`
   padding: 10px;
   border: 1px solid #ccc;

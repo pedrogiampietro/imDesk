@@ -7,6 +7,7 @@ import {
   FiMessageCircle,
   FiStar,
   FiImage,
+  FiBox,
 } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { ITicket } from "../TicketKanban";
@@ -14,6 +15,7 @@ import { ITicket } from "../TicketKanban";
 import * as S from "./styles";
 import { apiClient } from "../../services/api";
 import { useDebounce } from "../../hooks/useDebounce";
+import { toast } from "react-toastify";
 
 type TicketsModalProps = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -65,6 +67,11 @@ export function TicketsModal({
   const [selectedSLA, setSelectedSLA] = useState(ticketData.slaDefinitionId);
   const [slas, setSlas] = useState([]);
   const [manualResolutionDueDate, setManualResolutionDueDate] = useState("");
+  const [deposits, setDeposits] = useState<any[]>([]);
+  const [depositItems, setDepositItems] = useState<any[]>([]);
+  const [selectedDeposit, setSelectedDeposit] = useState("");
+  const [selectedDepositItem, setSelectedDepositItem] = useState("");
+  const [quantityUsed, setQuantityUsed] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -371,6 +378,83 @@ export function TicketsModal({
     setManualResolutionDueDate(e.target.value);
   };
 
+  const fetchDeposits = async () => {
+    try {
+      const response = await apiClient().get("/deposit", {
+        params: {
+          companyId: loggedUser?.currentLoggedCompany.currentLoggedCompanyId,
+        },
+      });
+
+      setDeposits(response.data.body);
+    } catch (error) {
+      console.error("An error occurred while fetching depositos:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDeposits();
+  }, []);
+
+  const handleDepositChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const newValue = event.target.value;
+    setSelectedDeposit(newValue);
+    if (newValue) {
+      fetchDepositItems(newValue);
+    }
+  };
+
+  const fetchDepositItems = async (depositId: string) => {
+    try {
+      const response = await apiClient().get(`/deposit-item/items`, {
+        params: {
+          depotId: depositId,
+        },
+      });
+
+      setDepositItems(response.data.body);
+    } catch (error) {
+      console.error("An error occurred while fetching deposito items:", error);
+    }
+  };
+
+  const handleDepositItemChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedDepositItem(event.target.value);
+  };
+
+  const handleSaveQuantityUsed = async () => {
+    if (!quantityUsed) {
+      // mostrar uma mensagem de erro para o usuário
+      return;
+    }
+
+    // payload
+    const payload = {
+      depositId: selectedDeposit,
+      itemId: selectedDepositItem,
+      quantityNew: quantityUsed,
+      ticketId: ticketData.id,
+    };
+
+    try {
+      await apiClient().put(
+        `deposit-item/items/quantity/${selectedDepositItem}`,
+        payload
+      );
+
+      toast.success("Sucesso! Seu depósito foi atualizado com sucesso!");
+    } catch (error) {
+      toast.error(
+        "Que pena! Não conseguimos por algum motivo atualizar seu deposito."
+      );
+      console.error("Erro ao salvar a quantidade de item consumido:", error);
+    }
+  };
+
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
@@ -384,12 +468,14 @@ export function TicketsModal({
                 <S.StyledTextArea value={description} onChange={handleChange} />
               </S.InfoContent>
             </S.InfoItem>
+          </S.InfoGroup>
+          <S.InfoGroup>
             <S.InfoItem>
               <S.IconContainer>
                 <FiImage /> <S.InfoTitle>Imagens</S.InfoTitle>
               </S.IconContainer>
               <S.InfoContent>
-                {ticketData.images.map((image, index) => (
+                {ticketData?.images?.map((image: any, index) => (
                   <a
                     key={index}
                     href={image.path}
@@ -398,7 +484,7 @@ export function TicketsModal({
                     style={{ margin: "10px", boxShadow: "2px 2px 10px #ddd" }}
                   >
                     <img
-                      src={image.path}
+                      src={image}
                       alt={`Ticket Image ${index + 1}`}
                       width={100}
                     />
@@ -661,6 +747,67 @@ export function TicketsModal({
                 {ticketData.timeEstimate
                   ? formatDate(ticketData.timeEstimate)
                   : "Data não disponível"}
+              </S.InfoContent>
+            </S.InfoItem>
+
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiBox /> <S.InfoTitle>Depósitos</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledSelect
+                  value={selectedDeposit}
+                  onChange={handleDepositChange}
+                >
+                  <option value="">Selecione um depósito</option>
+                  {deposits.map((deposito: any) => (
+                    <option key={deposito.id} value={deposito.id}>
+                      {deposito.name}
+                    </option>
+                  ))}
+                </S.StyledSelect>
+
+                {selectedDeposit && (
+                  <div style={{ display: "block", marginTop: "10px" }}>
+                    <S.StyledSelect
+                      value={selectedDepositItem}
+                      onChange={handleDepositItemChange}
+                      style={{ marginBottom: "10px" }}
+                    >
+                      <option value="">Selecione um item</option>
+                      {depositItems.map((item: any) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </S.StyledSelect>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <label style={{ marginRight: "10px" }}>Quantidade:</label>
+
+                      <S.StyledInput
+                        type="number"
+                        min="1"
+                        value={quantityUsed}
+                        onChange={(e) =>
+                          setQuantityUsed(Number(e.target.value))
+                        }
+                      />
+                    </div>
+
+                    <div style={{ marginTop: "10px", textAlign: "center" }}>
+                      <S.Button onClick={handleSaveQuantityUsed}>
+                        Atualizar Deposito
+                      </S.Button>
+                    </div>
+                  </div>
+                )}
               </S.InfoContent>
             </S.InfoItem>
           </S.InfoGroup>

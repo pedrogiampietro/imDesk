@@ -11,11 +11,13 @@ export function CreateItemModal({ setShowModal, setDepositItems }: any) {
     quantity: string;
     depotId: string;
     category: string;
+    cost: number;
   }>({
     name: "",
     quantity: "",
     depotId: "",
     category: "",
+    cost: 0,
   });
   const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
@@ -29,6 +31,7 @@ export function CreateItemModal({ setShowModal, setDepositItems }: any) {
         quantity: Number(formData.quantity),
         category: formData.category,
         depotId: id,
+        cost: formData.cost,
       });
 
       toast.success("Sucesso! Seu item foi adicionada com sucesso!", {
@@ -89,6 +92,22 @@ export function CreateItemModal({ setShowModal, setDepositItems }: any) {
             setFormData((prevData) => ({
               ...prevData,
               quantity: e.target.value,
+            }))
+          }
+        />
+      </S.FormGroup>
+
+      <S.FormGroup>
+        <S.Label htmlFor="cost">Valor Unitario</S.Label>
+        <S.Input
+          type="number"
+          name="cost"
+          id="cost"
+          placeholder="Valor Unit Ex: 100 = R$ 100,00"
+          onChange={(e) =>
+            setFormData((prevData) => ({
+              ...prevData,
+              cost: Number(e.target.value),
             }))
           }
         />
