@@ -16,6 +16,8 @@ import * as S from "./styles";
 import { apiClient } from "../../services/api";
 import { useDebounce } from "../../hooks/useDebounce";
 import { toast } from "react-toastify";
+import { TodoList } from "../TodoList";
+import { AddTodo } from "../TodoList/AddTodo";
 
 type TicketsModalProps = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +26,10 @@ type TicketsModalProps = {
   loggedUser: any;
   updateTicketsCallback: any;
 };
+
+interface Todo {
+  text: string;
+}
 
 export function TicketsModal({
   onClose,
@@ -75,6 +81,11 @@ export function TicketsModal({
   const [selectedDeposit, setSelectedDeposit] = useState("");
   const [selectedDepositItem, setSelectedDepositItem] = useState("");
   const [quantityUsed, setQuantityUsed] = useState(0);
+
+  const [todos, setTodos] = useState<Todo[]>([
+    { text: "Learn React" },
+    { text: "Learn TypeScript" },
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -466,6 +477,10 @@ export function TicketsModal({
     }
   };
 
+  const handleAddTodo = (text: string) => {
+    setTodos([...todos, { text }]);
+  };
+
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
@@ -546,6 +561,14 @@ export function TicketsModal({
                 </S.ReplyContainer>
               </S.ConversationContainer>
             </S.InfoItem>
+          </S.InfoGroup>
+
+          <S.InfoGroup>
+            <div>
+              <h1>Lista de Tarefas Realizadas</h1>
+              <AddTodo onAdd={handleAddTodo} />
+              <TodoList todos={todos} />
+            </div>
           </S.InfoGroup>
         </S.LeftSide>
         <S.RightSide>

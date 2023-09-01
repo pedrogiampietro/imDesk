@@ -8,6 +8,7 @@ export const CardContainer = styled.div`
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  text-align: center;
 `;
 
 export const Title = styled.div`

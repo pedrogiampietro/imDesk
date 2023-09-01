@@ -35,9 +35,10 @@ export const Modal = styled.div`
 `;
 
 export const LeftSide = styled.div`
-  flex: 60%; // Ajuste de acordo com sua preferência
-  padding-right: 20px; // espaço entre a parte esquerda e direita
-  border-right: 1px solid ${colors.borderGrey}; // borda entre as duas partes
+  flex: 60%;
+  padding-right: 20px;
+  border-right: 1px solid ${colors.borderGrey};
+  overflow-y: auto;
 
   > h2 {
     font-size: 24px;
@@ -90,9 +91,9 @@ export const CloseButton = styled.button`
 `;
 
 export const Title = styled.h2`
-  margin-bottom: 25px; // Um pouco mais de espaço
+  margin-bottom: 25px;
   color: ${colors.darkGrey};
-  font-size: 24px; // Tamanho da fonte um pouco maior
+  font-size: 24px;
 `;
 
 export const InfoGroup = styled.div`
@@ -109,7 +110,7 @@ export const InfoItem = styled.div`
   margin-right: 1rem;
 
   &:last-child {
-    margin-right: 0; // Retirar margin-right do último item
+    margin-right: 0;
   }
 `;
 
@@ -235,6 +236,7 @@ export const StyledTextarea = styled.textarea`
 `;
 
 export const StyledButton = styled.button`
+  width: 100%;
   display: inline-block;
   background-color: #007bff;
   color: #fff;
@@ -256,6 +258,7 @@ export const StyledButton = styled.button`
 `;
 
 export const Button = styled.button`
+  width: 100%;
   padding: 8px 12px;
   background-color: #6095aa;
   color: #fff;

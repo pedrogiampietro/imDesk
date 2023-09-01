@@ -13,7 +13,7 @@ export const CardContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 0 0 16px;
   background-color: white;
 `;
 
