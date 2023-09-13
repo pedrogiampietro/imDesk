@@ -15,7 +15,7 @@ import {
   MdOutlineAnalytics,
   MdOutlineComputer,
 } from "react-icons/md";
-import { FaFileContract, FaWarehouse} from "react-icons/fa";
+import { FaFileContract, FaWarehouse } from "react-icons/fa";
 import { BsPeople } from "react-icons/bs";
 
 import { ThemeContext } from "./../../App";
@@ -172,6 +172,12 @@ const linksArray = [
     label: "Estoque",
     icon: <FaWarehouse />,
     to: "/deposit",
+    notification: 0,
+  },
+  {
+    label: "Nutrição",
+    icon: <FaWarehouse />,
+    to: "/nutrition",
     notification: 0,
   },
 ];
