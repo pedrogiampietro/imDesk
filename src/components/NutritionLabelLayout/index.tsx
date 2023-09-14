@@ -1,7 +1,16 @@
-import React, { useRef } from "react";
+import React from "react";
 import "./styles.css";
 
 export const NutritionLabelLayout = React.forwardRef(({ paciente }, ref) => {
+  // Extração das informações do campo 'nome' para obter o nome completo e a data de nascimento
+  const nomeData = paciente.nome ? paciente.nome.split("INT:") : ["", ""];
+  const [nomeCompleto, dadosAdicionais] = nomeData;
+  const dataDetalhes = dadosAdicionais
+    ? dadosAdicionais.split("DN:")
+    : ["", ""];
+  const [intData, dnData] = dataDetalhes;
+  const dataNascimento = dnData ? new Date(dnData.split(" ")[0]) : null;
+
   return (
     <div
       ref={ref}
@@ -10,27 +19,31 @@ export const NutritionLabelLayout = React.forwardRef(({ paciente }, ref) => {
         margin: "10px",
         padding: "10px",
         width: "377px",
-        height: "170px",
+        height: "220px",
       }}
     >
       <p>
-        <strong>Nome Completo:</strong> {paciente.nome_completo}
+        <strong>Nome Completo:</strong> {nomeCompleto}
+      </p>
+      <p>
+        <strong>Data de Internação:</strong>{" "}
+        {intData ? intData.split(" ")[0] : ""}
       </p>
       <p>
         <strong>Data de Nascimento:</strong>{" "}
-        {new Date(paciente.data_nascimento).toLocaleDateString()}
+        {dataNascimento ? dataNascimento.toLocaleDateString() : ""}
       </p>
       <p>
-        <strong>Dieta:</strong>
+        <strong>Dieta:</strong> {paciente.dieta}
       </p>
       <p>
-        <strong>Almoço:</strong> {paciente.dieta.almoco}
+        <strong>Almoço e Jantar:</strong> {paciente.refeicoes?.almocoJantar}
       </p>
       <p>
-        <strong>Jantar:</strong> {paciente.dieta.jantar}
+        <strong>Outras refeições:</strong> {paciente.refeicoes?.outros}
       </p>
       <p>
-        <strong>Observações:</strong> {paciente.dieta.observacoes}
+        <strong>Observações:</strong> {paciente.observacoesNutricionista}
       </p>
     </div>
   );

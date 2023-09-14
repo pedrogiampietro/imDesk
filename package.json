@@ -30,6 +30,7 @@
     "react-to-print": "^2.14.13",
     "react-toastify": "^9.1.1",
     "styled-components": "^5.3.6",
+    "xlsx": "^0.18.5",
     "yarn": "^1.22.19",
     "yup": "^0.32.11"
   },
