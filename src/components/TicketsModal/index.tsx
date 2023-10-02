@@ -186,6 +186,7 @@ export function TicketsModal({
     setChangeAssignedTo([...changeAssignedTo, tech]);
 
     handleDataChange("assignedTo", { id: techId, name: tech.name });
+    handleDataChange("status", "assigned");
 
     if (ticketStatus === "new") {
       setTicketStatus("assigned");

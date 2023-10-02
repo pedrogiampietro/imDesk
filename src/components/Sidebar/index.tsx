@@ -175,10 +175,4 @@ const linksArray = [
     to: "/deposit",
     notification: 0,
   },
-  {
-    label: "Nutrição",
-    icon: <MdFoodBank />,
-    to: "/nutrition",
-    notification: 0,
-  },
 ];
