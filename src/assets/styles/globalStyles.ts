@@ -11,4 +11,8 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Roboto', sans-serif;
         letter-spacing: .6px;
     }
+
+    body.modal-open {
+    overflow: hidden;
+  }
 `;

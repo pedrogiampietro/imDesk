@@ -28,7 +28,9 @@ type TicketsModalProps = {
 };
 
 interface Todo {
-  text: string;
+  id: string;
+  description: string;
+  completed: boolean;
 }
 
 export function TicketsModal({
@@ -81,11 +83,7 @@ export function TicketsModal({
   const [selectedDeposit, setSelectedDeposit] = useState("");
   const [selectedDepositItem, setSelectedDepositItem] = useState("");
   const [quantityUsed, setQuantityUsed] = useState(0);
-
-  const [todos, setTodos] = useState<Todo[]>([
-    { text: "Learn React" },
-    { text: "Learn TypeScript" },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -150,6 +148,19 @@ export function TicketsModal({
       setSelectedRating(data.TicketEvaluation[0]?.rating);
     }
   }, [selectedRating]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await apiClient().get("/todoo", {
+          params: {
+            ticketId: ticketData.id,
+          },
+        });
+        setTodos(data.body);
+      } catch (err) {}
+    })();
+  }, []);
 
   const handleDataChange = async (field: string, newValue: any) => {
     const payload = { [field]: newValue };
@@ -463,7 +474,7 @@ export function TicketsModal({
 
     try {
       await apiClient().put(
-        `deposit-item/items/quantity/${selectedDepositItem}`,
+        `/deposit-item/items/quantity/${selectedDepositItem}`,
         payload
       );
 
@@ -478,8 +489,21 @@ export function TicketsModal({
     }
   };
 
-  const handleAddTodo = (text: string) => {
-    setTodos([...todos, { text }]);
+  const handleAddTodo = async (description: string) => {
+    try {
+      const response = await apiClient().post(`/todoo`, {
+        description,
+        ticketId: ticketData.id,
+      });
+
+      const newTodo = response.data.body;
+
+      toast.success("Sucesso! Seu todo foi criado com sucesso!");
+
+      setTodos((prevTodos) => [...prevTodos, newTodo]);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -568,7 +592,7 @@ export function TicketsModal({
             <div>
               <h1>Lista de Tarefas Realizadas</h1>
               <AddTodo onAdd={handleAddTodo} />
-              <TodoList todos={todos} />
+              <TodoList todos={todos} setTodos={setTodos} />
             </div>
           </S.InfoGroup>
         </S.LeftSide>

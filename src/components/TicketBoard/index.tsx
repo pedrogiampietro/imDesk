@@ -80,14 +80,8 @@ export function TicketBoard({
   const IN_PROGRESS_COLUMN_ID = "in-progress-column-id";
   const DONE_COLUMN_ID = "done-column-id";
 
-  const STATUS_MAPPING = {
-    [TODO_COLUMN_ID]: "new",
-    [IN_PROGRESS_COLUMN_ID]: "in progress",
-    [DONE_COLUMN_ID]: "done",
-  };
-
   if (!data) {
-    return <div>Loading...</div>; // Ou qualquer outro JSX que você preferir
+    return <div>Loading...</div>;
   }
 
   useEffect(() => {
@@ -164,6 +158,12 @@ export function TicketBoard({
     if (ticket) {
       const originalTicket = originalData.find((t: any) => t.id === ticket.id);
       setSelectedTicket(originalTicket);
+    }
+
+    if (!showTicketModal) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
     }
   };
 

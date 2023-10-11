@@ -25,17 +25,16 @@ export const ModalWrapper = styled.div`
 
 export const Modal = styled.div`
   position: relative;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   background: ${colors.white};
-  border-radius: 20px;
   padding: 30px 40px;
   box-shadow: 0px 10px 50px -10px rgba(0, 0, 0, 0.3);
   display: flex;
 `;
 
 export const LeftSide = styled.div`
-  flex: 60%;
+  flex: 50%;
   padding-right: 20px;
   border-right: 1px solid ${colors.borderGrey};
   overflow-y: auto;
@@ -65,7 +64,7 @@ export const LeftSide = styled.div`
 `;
 
 export const RightSide = styled.div`
-  flex: 40%;
+  flex: 50%;
   padding-left: 20px;
 
   overflow: auto;
