@@ -33,7 +33,7 @@ export const CompanyInfo = styled.div`
   span {
     font-size: 18px;
     font-weight: bold;
-    color: #6095aa;
+    color: #7f56d8;
     margin-left: 10px;
   }
 `;
@@ -79,7 +79,7 @@ export const Initials = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #6095aa;
+  color: #7f56d8;
   font-weight: bold;
 `;
 

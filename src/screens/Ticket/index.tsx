@@ -12,6 +12,7 @@ import { useAuth } from "../../hooks/useAuth";
 export function Ticket() {
   const [tickets, setTickets] = useState([]);
   const [showTicketModal, setShowTicketModal] = useState<boolean>(false);
+  const [showQuickCreateTicket, setShowQuickCreateTicket] = useState(false);
   const { user } = useAuth();
 
   const fetchTickets = async () => {
@@ -40,15 +41,19 @@ export function Ticket() {
   return (
     <Layout>
       <S.Container>
-        <CreateTicket tickets={tickets} setTickets={setTickets} />
-
         <S.TicketsWrapper>
           <TicketKanban
             data={tickets}
             setShowTicketModal={setShowTicketModal}
             showTicketModal={showTicketModal}
             updateTicketsCallback={fetchTickets}
+            showQuickCreateTicket={showQuickCreateTicket}
+            setShowQuickCreateTicket={setShowQuickCreateTicket}
           />
+
+          {showQuickCreateTicket && (
+            <CreateTicket tickets={tickets} setTickets={setTickets} />
+          )}
         </S.TicketsWrapper>
       </S.Container>
     </Layout>

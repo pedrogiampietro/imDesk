@@ -528,7 +528,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
         </S.FormGroup>
 
         <S.CreateTicketButton type="submit" isActive={theme === "dark"}>
-          Criar Ticket
+          Enviar
         </S.CreateTicketButton>
       </S.Form>
     </S.Wrapper>

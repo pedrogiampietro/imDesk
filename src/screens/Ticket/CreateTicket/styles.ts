@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  background: #fff;
 `;
 
 export const Form = styled.form`
@@ -48,8 +49,6 @@ export const TextArea = styled.textarea`
 export const CreateTicketButton = styled.button<{ isActive: boolean }>`
   background: ${({ theme, isActive }) =>
     !isActive ? theme.bg3 : theme.primary};
-  border: 1px solid #000;
-  border-radius: 12px;
   outline: none;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
@@ -142,8 +141,8 @@ export const FileLabel = styled.label`
   width: 50px;
   height: 50px;
   background-color: transparent;
-  color: #6095aa;
-  border: 2px solid #6095aa;
+  color: #7f56d8;
+  border: 2px solid #7f56d8;
   border-radius: 5px;
   /* font-size: 24px; */
   cursor: pointer;

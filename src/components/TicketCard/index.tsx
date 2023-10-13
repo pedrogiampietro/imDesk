@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import * as S from "./styles"; // Consider renaming your styled components for more clarity.
-
+import * as S from "./styles";
 import { formatarData } from "../../utils/dateTime";
 import { TicketsModal } from "../TicketsModal";
 
@@ -14,26 +12,47 @@ export function TicketCard({
   technicians,
 }: any) {
   const { user } = useAuth();
-
   const loggedUser = user;
+
+  function getInitials(name: string): string {
+    const names = name.split(" ");
+    return names.length >= 2
+      ? (names[0][0] + names[names.length - 1][0]).toUpperCase()
+      : names[0][0].toUpperCase();
+  }
 
   return (
     <S.CardContainer
       urgency={data.ticketPriority.name}
       onClick={() => setShowTicketModal(!showTicketModal)}
     >
-      <S.TitleOpenedWrapper>
-        <S.Title>{data.ticketCategory.childrenName}</S.Title>
+      <S.FlexWrapper>
+        <S.FlexWrapper>
+          <S.StatusCircle urgency={data.ticketPriority.name} />
+          <S.TicketId>Ticket# 2023-CS123</S.TicketId>
+        </S.FlexWrapper>
+
         <S.OpenedAt>Criado em {formatarData(data.createdAt as any)}</S.OpenedAt>
-      </S.TitleOpenedWrapper>
+      </S.FlexWrapper>
+
+      <S.Title>{data.ticketCategory.childrenName}</S.Title>
 
       <S.Description>{data.description}</S.Description>
 
+      <S.TopLine></S.TopLine>
+
       <S.Info>
-        <S.Urgency urgency={data.ticketPriority.name as any}>
-          {data.ticketPriority.name}
-        </S.Urgency>
-        <S.OpenedBy>Aberto por {data.User.name}</S.OpenedBy>
+        <S.FlexWrapper>
+          {data.User.avatarUrl ? (
+            <S.Avatar src={data.User.avatarUrl} alt={data.User.name} />
+          ) : (
+            <S.DefaultAvatar>{getInitials(data.User.name)}</S.DefaultAvatar>
+          )}
+          <S.OpenedBy>Aberto por {data.User.name}</S.OpenedBy>
+        </S.FlexWrapper>
+        <S.OpenModalLink onClick={() => setShowTicketModal(true)}>
+          Abrir modal
+        </S.OpenModalLink>
       </S.Info>
 
       {showTicketModal && (

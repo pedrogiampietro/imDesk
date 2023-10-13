@@ -106,7 +106,7 @@ export const ModalBody = styled.div`
     border: 1px solid hsl(0, 0%, 80%);
     border-bottom: 1px dashed #5c5c5c;
     padding: 0 0 0.2rem 0;
-    background-color: rgb(230, 230, 230);
+    background-color: #c3aff0;
     margin: 0 0 1.2rem 0;
   }
 `;

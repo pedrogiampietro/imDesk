@@ -259,7 +259,7 @@ export const StyledButton = styled.button`
 export const Button = styled.button`
   width: 100%;
   padding: 8px 12px;
-  background-color: #6095aa;
+  background-color: #7f56d8;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -313,7 +313,7 @@ export const ReplyContainer = styled.div`
 
   & > button {
     padding: 10px 20px;
-    background-color: #6095aa;
+    background-color: #7f56d8;
     color: white;
     border: none;
     border-radius: 8px;
@@ -349,7 +349,7 @@ export const UsedItemsHistory = styled.div`
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #6095aa;
+    background-color: #7f56d8;
     color: white;
   }
 

@@ -3,6 +3,11 @@ import * as S from "./styles";
 
 import { BsList } from "react-icons/bs";
 import { FiGrid } from "react-icons/fi";
+import {
+  MdOutlineMarkEmailUnread,
+  MdOutlineMarkEmailRead,
+  MdOutlineLock,
+} from "react-icons/md";
 
 import { TicketCard } from "../TicketCard";
 import { TicketBoard } from "../TicketBoard";
@@ -77,6 +82,8 @@ type TicketProps = {
   setShowTicketModal: any;
   showTicketModal: any;
   updateTicketsCallback: any;
+  showQuickCreateTicket: any;
+  setShowQuickCreateTicket: any;
 };
 
 export function TicketKanban({
@@ -84,6 +91,8 @@ export function TicketKanban({
   setShowTicketModal,
   showTicketModal,
   updateTicketsCallback,
+  showQuickCreateTicket,
+  setShowQuickCreateTicket,
 }: TicketProps) {
   const [activeTab, setActiveTab] = useState("new");
   const [searchTerm, setSearchTerm] = useState("");
@@ -141,6 +150,27 @@ export function TicketKanban({
 
   return (
     <S.KanbanContainer>
+      <S.FiltersWrapper>
+        <S.SearchInput
+          placeholder="Pesquisar"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <S.ControlsGroup>
+          <S.Select>
+            <option value="priority">Select Priority</option>
+            {/* Você pode adicionar as opções de prioridade aqui */}
+          </S.Select>
+          <S.Select>
+            <option value="week">This Week</option>
+            {/* Você pode adicionar as opções de semana aqui */}
+          </S.Select>
+          <S.CreateButton onClick={() => setShowQuickCreateTicket(true)}>
+            Criar novo Ticket
+          </S.CreateButton>
+        </S.ControlsGroup>
+      </S.FiltersWrapper>
+
       <div
         style={{
           display: "flex",
@@ -161,12 +191,7 @@ export function TicketKanban({
           <FiGrid />
         </S.IconButton>
       </div>
-      <S.SearchInput
-        placeholder="Pesquisar"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      {/* <S.FilterButton>Filtrar</S.FilterButton> */}
+
       {viewMode === "card" && (
         <S.TabsContainer>
           <S.TabWrapper>
@@ -174,19 +199,28 @@ export function TicketKanban({
               active={activeTab === "new"}
               onClick={() => setActiveTab("new")}
             >
-              Novo
+              <S.TabIconWrapper>
+                <MdOutlineMarkEmailUnread />
+              </S.TabIconWrapper>
+              <S.TabTitle>Todos os Tickets</S.TabTitle>
             </S.Tab>
             <S.Tab
               active={activeTab === "assigned"}
               onClick={() => setActiveTab("assigned")}
             >
-              Atribuído
+              <S.TabIconWrapper>
+                <MdOutlineMarkEmailRead />
+              </S.TabIconWrapper>
+              <S.TabTitle>Atribuído</S.TabTitle>
             </S.Tab>
             <S.Tab
               active={activeTab === "closed"}
               onClick={() => setActiveTab("closed")}
             >
-              Fechado
+              <S.TabIconWrapper>
+                <MdOutlineLock />
+              </S.TabIconWrapper>
+              <S.TabTitle>Fechado</S.TabTitle>
             </S.Tab>
           </S.TabWrapper>
         </S.TabsContainer>

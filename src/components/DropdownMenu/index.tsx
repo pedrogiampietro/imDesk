@@ -13,8 +13,8 @@ const DropdownMenu = styled.div`
 `;
 
 const DropdownButton = styled.button<{ rotate: boolean }>`
-  color: ${(props) => (props.rotate ? "#6095aa" : "white")};
-  background-color: ${(props) => (props.rotate ? "white" : "#6095aa")};
+  color: ${(props) => (props.rotate ? "#7F56D8;" : "white")};
+  background-color: ${(props) => (props.rotate ? "white" : "#7F56D8;")};
   padding: 16px;
   font-size: 16px;
   border: none;
