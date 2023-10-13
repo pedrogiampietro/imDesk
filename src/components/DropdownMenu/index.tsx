@@ -24,7 +24,7 @@ const DropdownButton = styled.button<{ rotate: boolean }>`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: ${(props) => (props.rotate ? "#ddd" : "#2b667d")};
+    background-color: ${(props) => (props.rotate ? "#ddd" : "#c3aff0")};
   }
 
   transform: ${(props) => (props.rotate ? "rotate(90deg)" : "none")};

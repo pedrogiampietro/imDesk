@@ -18,57 +18,6 @@ interface ISelect {
   value: string;
 }
 
-interface Ticket {
-  id: string;
-  description: string;
-  ticketType: string;
-  ticketCategory: string;
-  ticketPriority: string;
-  ticketLocation: string;
-  assignedTo: string[];
-  equipaments: any[];
-  images: any[];
-  assignedToAt: string | null;
-  closedBy: string | null;
-  closedAt: string | null;
-  status: string;
-  timeEstimate: number | null;
-  isDelay: boolean;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  ticketCategoryId: {
-    id: string;
-    name: string;
-    childrenName: string;
-    defaultText: string | null;
-  };
-  ticketLocationId: {
-    id: string;
-    name: string;
-  };
-  ticketPriorityId: {
-    id: string;
-    name: string;
-  };
-  ticketTypeId: {
-    id: string;
-    name: string;
-  };
-  User: {
-    id: string;
-    username: string;
-    name: string;
-    email: string;
-    password: string;
-    phone: string;
-    ramal: string;
-    sector: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-}
-
 export function CreateTicket({ tickets, setTickets }: any) {
   const {
     handleSubmit,

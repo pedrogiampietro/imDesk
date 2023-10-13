@@ -148,7 +148,7 @@ export const OpenedBy = styled.span`
 
 export const TopLine = styled.div`
   height: 1px;
-  background-color: #7f56d8;
+  background-color: #e7e7e7;
   margin-bottom: 8px;
   width: 100%;
 `;

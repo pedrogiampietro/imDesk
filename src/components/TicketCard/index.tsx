@@ -21,10 +21,20 @@ export function TicketCard({
       : names[0][0].toUpperCase();
   }
 
+  const toggleTicketModal = () => {
+    setShowTicketModal(!showTicketModal);
+
+    if (!showTicketModal) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+  };
+
   return (
     <S.CardContainer
       urgency={data.ticketPriority.name}
-      onClick={() => setShowTicketModal(!showTicketModal)}
+      onClick={toggleTicketModal}
     >
       <S.FlexWrapper>
         <S.FlexWrapper>

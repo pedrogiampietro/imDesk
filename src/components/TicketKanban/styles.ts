@@ -9,7 +9,9 @@ export const KanbanContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  margin: 1rem;
+  margin: 0 1rem;
+  background-color: #fff;
+  padding: 2rem;
 `;
 
 export const TabsContainer = styled.div`
@@ -150,4 +152,11 @@ export const CreateButton = styled.button`
   }
 
   transition: background 0.3s;
+`;
+
+export const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: 20px;
 `;

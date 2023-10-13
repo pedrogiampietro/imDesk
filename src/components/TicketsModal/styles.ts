@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const colors = {
-  primary: "#007bff",
+  primary: "#7F56D8",
   primaryDark: "#0056b3",
   lightGrey: "#f4f4f4",
   darkGrey: "#333",
@@ -150,31 +150,6 @@ export const DropdownItem = styled.div`
   }
 `;
 
-export const StyledTextArea = styled.textarea`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  background-color: #fff;
-  border-radius: 8px;
-
-  &:hover {
-    border-color: #a0aec0;
-  }
-
-  &:focus {
-    border-color: #3182ce;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-    outline: none;
-  }
-
-  &::placeholder {
-    color: #a0aec0;
-  }
-`;
-
 export const StyledInput = styled.input`
   width: 100%;
   padding: 8px 12px;
@@ -229,7 +204,7 @@ export const StyledTextarea = styled.textarea`
   resize: vertical; // permite o redimensionamento vertical do textarea
   margin-bottom: 10px;
   &:focus {
-    border-color: #007bff;
+    border-color: #7f56d8;
     outline: none;
   }
 `;
@@ -237,7 +212,7 @@ export const StyledTextarea = styled.textarea`
 export const StyledButton = styled.button`
   width: 100%;
   display: inline-block;
-  background-color: #007bff;
+  background-color: #7f56d8;
   color: #fff;
   padding: 10px 15px;
   border: none;
@@ -268,7 +243,7 @@ export const Button = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #2b667d;
+    background-color: #c3aff0;
   }
 `;
 
@@ -320,7 +295,7 @@ export const ReplyContainer = styled.div`
     cursor: pointer;
 
     &:hover {
-      background-color: #2b667d;
+      background-color: #c3aff0;
     }
   }
 `;

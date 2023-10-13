@@ -3,18 +3,15 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   width: 50%;
   display: flex;
-  align-items: center;
-  justify-content: center;
   margin: 0 auto;
   background: #fff;
+  padding: 2rem;
 `;
 
 export const Form = styled.form`
   width: 500px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;
 
 export const FormGroup = styled.div`
@@ -32,18 +29,20 @@ export const Input = styled.input``;
 
 export const TextArea = styled.textarea`
   width: 100%;
-  height: 60px;
+  height: 150px;
   overflow-y: auto;
-  resize: none;
+  resize: vertical;
   outline: none;
   font-family: Poppins;
   font-weight: 500;
   color: #333;
   border: 1px solid hsl(0, 0%, 80%);
-  border-bottom: 1px dashed #5c5c5c;
-  padding: 0 0 0.2rem 0;
-  background-color: rgb(230, 230, 230);
+  border-bottom: 1px dashed #7f56d8;
+  padding: 0.5rem;
+  background-color: #fff;
   margin: 0 0 1.2rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
 `;
 
 export const CreateTicketButton = styled.button<{ isActive: boolean }>`
@@ -64,7 +63,7 @@ export const CreateTicketButton = styled.button<{ isActive: boolean }>`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: ${({ theme }) => theme.primaryDark};
+    background-color: ${({ theme }) => theme.bg3};
     color: #fff;
     transform: translateY(-2px);
     opacity: 0.9;
@@ -144,7 +143,6 @@ export const FileLabel = styled.label`
   color: #7f56d8;
   border: 2px solid #7f56d8;
   border-radius: 5px;
-  /* font-size: 24px; */
   cursor: pointer;
 
   &:hover {

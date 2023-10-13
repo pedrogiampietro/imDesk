@@ -51,7 +51,7 @@ export const Button = styled.button`
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: #007bff;
+  background-color: #7f56d8;
   color: #fff;
   transition: background-color 0.2s;
 
@@ -103,7 +103,7 @@ export const ActionButton = styled.button<ActionButtonProps>`
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  background-color: ${(props) => (props.danger ? "#dc3545" : "#007bff")};
+  background-color: ${(props) => (props.danger ? "#dc3545" : "#7F56D8")};
   color: #fff;
   transition: background-color 0.3s;
 

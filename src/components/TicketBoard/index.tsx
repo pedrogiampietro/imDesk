@@ -146,7 +146,6 @@ export function TicketBoard({
           status: newStatus,
         });
       } catch (error) {
-        // Lidar com o erro aqui
         console.error("Error updating ticket status:", error);
       }
     },

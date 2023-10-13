@@ -516,7 +516,7 @@ export function TicketsModal({
                 <FiAlertCircle /> <S.InfoTitle>Descrição</S.InfoTitle>
               </S.IconContainer>
               <S.InfoContent>
-                <S.StyledTextArea value={description} onChange={handleChange} />
+                <S.StyledTextarea value={description} onChange={handleChange} />
               </S.InfoContent>
             </S.InfoItem>
           </S.InfoGroup>

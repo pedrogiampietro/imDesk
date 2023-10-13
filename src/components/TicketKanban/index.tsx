@@ -15,6 +15,8 @@ import { TicketBoard } from "../TicketBoard";
 import { useAuth } from "../../hooks/useAuth";
 import { apiClient } from "../../services/api";
 
+import { Pagination } from "../../components/Pagination";
+
 export interface ITicket {
   id: string;
   description: string;
@@ -98,6 +100,8 @@ export function TicketKanban({
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("board");
   const [technicians, setTechnicians] = useState([]);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
 
   const { user } = useAuth();
 
@@ -148,6 +152,9 @@ export function TicketKanban({
     getTechnicians();
   }, [user]);
 
+  const startIndexTickets = (page - 1) * perPage;
+  const endIndexTickets = startIndexTickets + perPage;
+
   return (
     <S.KanbanContainer>
       <S.FiltersWrapper>
@@ -162,11 +169,15 @@ export function TicketKanban({
             {/* Você pode adicionar as opções de prioridade aqui */}
           </S.Select>
           <S.Select>
-            <option value="week">This Week</option>
-            {/* Você pode adicionar as opções de semana aqui */}
+            <option value="">Por página..</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
           </S.Select>
-          <S.CreateButton onClick={() => setShowQuickCreateTicket(true)}>
-            Criar novo Ticket
+          <S.CreateButton
+            onClick={() => setShowQuickCreateTicket(!showQuickCreateTicket)}
+          >
+            {showQuickCreateTicket ? "Fechar novo Ticket" : "Criar novo Ticket"}
           </S.CreateButton>
         </S.ControlsGroup>
       </S.FiltersWrapper>
@@ -235,7 +246,7 @@ export function TicketKanban({
           updateTicketsCallback={updateTicketsCallback}
         />
       ) : (
-        filteredData.map((ticket) => {
+        filteredData.slice(startIndexTickets, endIndexTickets).map((ticket) => {
           return (
             <TicketCard
               key={ticket.id}
@@ -248,6 +259,26 @@ export function TicketKanban({
           );
         })
       )}
+
+      {filteredData.length > 0 ? (
+        <>
+          <S.PaginationWrapper>
+            <span>
+              {page * perPage - perPage + 1} de {filteredData.length} registros
+            </span>
+          </S.PaginationWrapper>
+          {perPage >= filteredData.length ? null : (
+            <S.PaginationWrapper>
+              <Pagination
+                totalCountOfRegisters={filteredData.length}
+                currentPage={page}
+                onPageChange={setPage}
+                registersPerPage={perPage}
+              />
+            </S.PaginationWrapper>
+          )}
+        </>
+      ) : null}
     </S.KanbanContainer>
   );
 }

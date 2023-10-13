@@ -18,6 +18,6 @@ export const darkTheme = {
   text: "rgb(210,210,210)",
   textSecondary: "rgb(160,160,160)", // For secondary text
   primary: "#7F56D8",
-  primaryDark: "#2b667d", // Darker shade for hover effects
+  primaryDark: "#c3aff0", // Darker shade for hover effects
   border: "rgba(255, 255, 255, 0.1)", // Soft border color
 };
