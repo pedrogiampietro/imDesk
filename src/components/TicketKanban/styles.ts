@@ -12,6 +12,7 @@ export const KanbanContainer = styled.div`
   margin: 0 1rem;
   background-color: #fff;
   padding: 2rem;
+  border-radius: 10px;
 `;
 
 export const TabsContainer = styled.div`
@@ -112,7 +113,7 @@ export const FiltersWrapper = styled.div`
 export const ControlsGroup = styled.div`
   display: flex;
   align-items: center;
-  width: 30%;
+  width: 60%;
 
   & > *:not(:last-child) {
     margin-right: 8px; // Espaçamento entre os controles

@@ -244,6 +244,7 @@ export function TicketKanban({
           showTicketModal={showTicketModal}
           technicians={technicians}
           updateTicketsCallback={updateTicketsCallback}
+          showQuickCreateTicket={showQuickCreateTicket}
         />
       ) : (
         filteredData.slice(startIndexTickets, endIndexTickets).map((ticket) => {

@@ -28,10 +28,13 @@ export function Ticket() {
       const { data } = await apiClient().get("/ticket", {
         params: {
           companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          currentUserId: user.userId,
         },
       });
       setTickets(data.body);
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {

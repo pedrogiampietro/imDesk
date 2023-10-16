@@ -13,6 +13,7 @@ import { DepositView } from "../screens/DepositView";
 
 import RouteProtector from "./RouteProtector";
 import { Nutrition } from "../screens/Nutrition";
+import { Inventory } from "../screens/Inventory";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -85,6 +86,14 @@ export function AppRoutes() {
       element: (
         <RouteProtector>
           <Deposit />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/inventory",
+      element: (
+        <RouteProtector>
+          <Inventory />
         </RouteProtector>
       ),
     },

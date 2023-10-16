@@ -14,8 +14,9 @@ import {
   MdLogout,
   MdOutlineAnalytics,
   MdOutlineComputer,
+  MdInventory,
 } from "react-icons/md";
-import { FaFileContract, FaWarehouse, FaBowlFood } from "react-icons/fa";
+import { FaFileContract, FaWarehouse } from "react-icons/fa";
 import { BsPeople } from "react-icons/bs";
 import { MdFoodBank } from "react-icons/md";
 
@@ -145,18 +146,18 @@ const linksArray = [
     to: "/dashboard",
     notification: 0,
   },
-  {
-    label: "Estatisticas",
-    icon: <MdOutlineAnalytics />,
-    to: "/statistics",
-    notification: 0,
-  },
-  {
-    label: "Manutenção",
-    icon: <MdOutlineComputer />,
-    to: "/maintenance",
-    notification: 0,
-  },
+  // {
+  //   label: "Estatisticas",
+  //   icon: <MdOutlineAnalytics />,
+  //   to: "/statistics",
+  //   notification: 0,
+  // },
+  // {
+  //   label: "Manutenção",
+  //   icon: <MdOutlineComputer />,
+  //   to: "/maintenance",
+  //   notification: 0,
+  // },
   {
     label: "Tickets",
     icon: <BsPeople />,
@@ -173,6 +174,12 @@ const linksArray = [
     label: "Estoque",
     icon: <FaWarehouse />,
     to: "/deposit",
+    notification: 0,
+  },
+  {
+    label: "Inventário",
+    icon: <MdInventory />,
+    to: "/inventory",
     notification: 0,
   },
 ];

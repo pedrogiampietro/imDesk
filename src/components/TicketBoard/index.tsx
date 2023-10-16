@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
-import { v4 as uuidv4 } from "uuid";
 
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { TaskBoardCard } from "./TaskBoardCard";
@@ -18,7 +17,6 @@ const TaskList = styled.div`
   display: flex;
   flex-direction: column;
   background: #f3f3f3;
-  min-width: 341px;
   border-radius: 5px;
   padding: 15px 15px;
   margin-right: 45px;
@@ -29,14 +27,6 @@ const TaskColumnStyles = styled.div`
   display: flex;
   width: 100%;
   min-height: 80vh;
-`;
-
-const Title = styled.span`
-  color: #10957d;
-  background: rgba(16, 149, 125, 0.15);
-  padding: 2px 10px;
-  border-radius: 5px;
-  align-self: flex-start;
 `;
 
 const transformApiData = (apiData: any) => {
@@ -68,6 +58,7 @@ export function TicketBoard({
   setShowTicketModal,
   technicians,
   updateTicketsCallback,
+  showQuickCreateTicket,
 }: any) {
   const { user } = useAuth();
   const [originalData, setOriginalData] = useState<any>([]);
@@ -166,6 +157,10 @@ export function TicketBoard({
     }
   };
 
+  const containerStyle = showQuickCreateTicket
+    ? { width: `280px` }
+    : { width: "350px" };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Container>
@@ -178,6 +173,7 @@ export function TicketBoard({
                   <Droppable droppableId={columnId}>
                     {(provided) => (
                       <TaskList
+                        style={containerStyle}
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >
