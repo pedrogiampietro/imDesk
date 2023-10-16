@@ -1,8 +1,6 @@
-// src/components/InventoryTabs.tsx
 import React from "react";
 import styled from "styled-components";
 
-// Estilos para os componentes das abas
 const TabsContainer = styled.div`
   display: flex;
   margin-bottom: 20px;
@@ -18,7 +16,7 @@ const Tab = styled.div`
   margin-right: 5px;
 
   &:hover {
-    background: #f2f2f2;
+    background: #c3aff0;
   }
 `;
 
@@ -35,13 +33,13 @@ export const InventoryTabs: React.FC<InventoryTabsProps> = ({
     <TabsContainer>
       <Tab
         onClick={() => setActiveTab("computers")}
-        style={{ background: activeTab === "computers" ? "#e2e2e2" : "" }}
+        style={{ background: activeTab === "computers" ? "#c3aff0" : "" }}
       >
         Computadores
       </Tab>
       <Tab
         onClick={() => setActiveTab("printers")}
-        style={{ background: activeTab === "printers" ? "#e2e2e2" : "" }}
+        style={{ background: activeTab === "printers" ? "#c3aff0" : "" }}
       >
         Impressoras
       </Tab>

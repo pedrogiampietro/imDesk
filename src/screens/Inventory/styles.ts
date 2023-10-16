@@ -1,10 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  /* display: flex;
-  width: 100%;
-  height: 100vh; */
-`;
+export const Container = styled.div``;
 
 export const Button = styled.button`
   padding: 8px 12px;
@@ -28,7 +24,6 @@ export const Table = styled.table`
 
 export const TableHeader = styled.th`
   padding: 10px;
-  text-align: left;
   background-color: ${(props) => props.theme.primary};
   color: white;
   border: 1px solid ${(props) => props.theme.border};
@@ -42,7 +37,7 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #c3aff0;
   text-align: center;
   vertical-align: middle;
 `;

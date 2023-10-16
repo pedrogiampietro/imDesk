@@ -1,11 +1,11 @@
-// src/pages/Inventory/index.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { Layout } from "../../components/Layout";
-import { InventoryTabs } from "./InventoryTabs"; // importe o novo componente
+import { InventoryTabs } from "./InventoryTabs";
+import { DropdownMenuComponent } from "../../components/DropdownMenu";
 import * as S from "./styles";
 
 export function Inventory() {
-  const [activeTab, setActiveTab] = useState("computers"); // controle do estado da aba ativa
+  const [activeTab, setActiveTab] = useState("computers");
   const [inventory, setInventory] = useState([
     {
       id: "d290f1ee-6c54-4b01-90e6-d701748f0851",
@@ -58,55 +58,88 @@ export function Inventory() {
       type: "impressora",
       EquipmentCompanies: [],
     },
-    // Adicione quantos objetos mais forem necessários para o seu mock
-  ]); // você precisará carregar os inventários com base na aba ativa
+  ]);
 
-  // Renderize o conteúdo com base na aba ativa
+  const handleClick = (id: string) => {};
+
+  const handleEdit = (inventory: any) => {};
+
+  const handleDelete = async (id: string) => {};
+
+  const getComputers = () => {
+    return inventory.filter((item) => item.type === "computador");
+  };
+
+  const getPrinters = () => {
+    return inventory.filter((item) => item.type === "impressora");
+  };
+
   const renderInventoryContent = () => {
+    let content;
+
     switch (activeTab) {
       case "computers":
-        return (
-          <>
-            <S.Table>
-              <thead>
-                <S.TableRow>
-                  <S.TableHeader>Nº</S.TableHeader>
-                  <S.TableHeader>Nome</S.TableHeader>
-                  <S.TableHeader>Modelo</S.TableHeader>
-                  <S.TableHeader>Serial</S.TableHeader>
-                  <S.TableHeader>Patrimonio</S.TableHeader>
-                  <S.TableHeader>Tipo</S.TableHeader>
-                </S.TableRow>
-              </thead>
-              <tbody>
-                {inventory.map((deposit, index) => (
-                  <S.TableRow key={deposit.id}>
-                    <S.TableCell>{index + 1}</S.TableCell>
-                    <S.TableCell>{deposit.name}</S.TableCell>
-                    <S.TableCell>{deposit.location}</S.TableCell>
-                    <S.TableCell>
-                      {new Date(deposit.createdAt).toLocaleDateString()}
-                    </S.TableCell>
-                    <S.TableCell>{deposit?.Company?.name}</S.TableCell>
-                    {/* <S.TableCell>
-                      <DropdownMenuComponent
-                        onView={() => handleClick(deposit.id)}
-                        onEdit={() => handleEdit(deposit)}
-                        onDelete={() => handleDelete(deposit.id)}
-                      />
-                    </S.TableCell> */}
-                  </S.TableRow>
-                ))}
-              </tbody>
-            </S.Table>
-          </>
-        ); //
+        const computers = getComputers();
+        content = computers.map((computer, index) => (
+          <S.TableRow key={computer.id}>
+            <S.TableCell>{index + 1}</S.TableCell>
+            <S.TableCell>{computer.name}</S.TableCell>
+            <S.TableCell>{computer.model}</S.TableCell>
+            <S.TableCell>{computer.serialNumber}</S.TableCell>
+            <S.TableCell>{computer.patrimonyTag}</S.TableCell>
+            <S.TableCell>{computer.type}</S.TableCell>
+            <S.TableCell>
+              <DropdownMenuComponent
+                onView={() => handleClick(computer.id)}
+                onEdit={() => handleEdit(computer)}
+                onDelete={() => handleDelete(computer.id)}
+              />
+            </S.TableCell>
+          </S.TableRow>
+        ));
+        break;
+
       case "printers":
-        return <div>Conteúdo do inventário de Impressoras</div>; // substitua pelo seu componente ou lógica real
-      // outros casos para diferentes tipos de inventário
+        const printers = getPrinters();
+        content = printers.map((printer, index) => (
+          <S.TableRow key={printer.id}>
+            <S.TableCell>{index + 1}</S.TableCell>
+            <S.TableCell>{printer.name}</S.TableCell>
+            <S.TableCell>{printer.model}</S.TableCell>
+            <S.TableCell>{printer.serialNumber}</S.TableCell>
+            <S.TableCell>{printer.patrimonyTag}</S.TableCell>
+            <S.TableCell>{printer.type}</S.TableCell>
+            <S.TableCell>
+              <DropdownMenuComponent
+                onView={() => handleClick(printer.id)}
+                onEdit={() => handleEdit(printer)}
+                onDelete={() => handleDelete(printer.id)}
+              />
+            </S.TableCell>
+          </S.TableRow>
+        ));
+        break;
+
       default:
-        return null;
+        content = null;
     }
+
+    return (
+      <S.Table>
+        <thead>
+          <S.TableRow>
+            <S.TableHeader>Nº</S.TableHeader>
+            <S.TableHeader>Nome</S.TableHeader>
+            <S.TableHeader>Modelo</S.TableHeader>
+            <S.TableHeader>Serial</S.TableHeader>
+            <S.TableHeader>Patrimonio</S.TableHeader>
+            <S.TableHeader>Tipo</S.TableHeader>
+            <S.TableHeader>Ações</S.TableHeader>
+          </S.TableRow>
+        </thead>
+        <tbody>{content}</tbody>
+      </S.Table>
+    );
   };
 
   return (
