@@ -13,7 +13,7 @@ export function apiClient() {
   const user = JSON.parse(restoreUser);
 
   const api = axios.create({
-    baseURL: "http://10.0.101.70:3333/",
+    baseURL: "http://localhost:3333/",
     headers: {
       Authorization: `Bearer ${token}`,
       userId: user.userId,

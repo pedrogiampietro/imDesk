@@ -91,7 +91,7 @@ export function Inventory() {
         ));
         break;
 
-      case "Impressoras":
+      case "Impressora":
         const impressoras = getImpressoras();
         content = impressoras.map((printer, index) => (
           <S.TableRow key={printer.id}>
