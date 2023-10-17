@@ -74,7 +74,7 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #c3aff0;
   text-align: center;
   vertical-align: middle;
 `;

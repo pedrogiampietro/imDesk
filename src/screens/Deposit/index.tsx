@@ -23,7 +23,6 @@ export function Deposit() {
   const [deposits, setDeposits] = useState<Deposit[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingDeposit, setEditingDeposit] = useState<Deposit | null>(null);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const { user } = useAuth();
 

@@ -32,14 +32,14 @@ export const InventoryTabs: React.FC<InventoryTabsProps> = ({
   return (
     <TabsContainer>
       <Tab
-        onClick={() => setActiveTab("computers")}
-        style={{ background: activeTab === "computers" ? "#c3aff0" : "" }}
+        onClick={() => setActiveTab("Computador")}
+        style={{ background: activeTab === "Computador" ? "#c3aff0" : "" }}
       >
         Computadores
       </Tab>
       <Tab
-        onClick={() => setActiveTab("printers")}
-        style={{ background: activeTab === "printers" ? "#c3aff0" : "" }}
+        onClick={() => setActiveTab("Impressora")}
+        style={{ background: activeTab === "Impressora" ? "#c3aff0" : "" }}
       >
         Impressoras
       </Tab>

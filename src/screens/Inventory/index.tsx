@@ -1,64 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "../../components/Layout";
 import { InventoryTabs } from "./InventoryTabs";
 import { DropdownMenuComponent } from "../../components/DropdownMenu";
 import * as S from "./styles";
+import { CreateItemInventoryModal } from "../../components/CreateItemInventoryModal";
+import { FiX } from "react-icons/fi";
+import { apiClient } from "../../services/api";
+import { useAuth } from "../../hooks/useAuth";
+
+interface IEquipament {
+  id: string;
+  name: string;
+  model: string;
+  serialNumber: string;
+  patrimonyTag: string;
+  type: string;
+}
 
 export function Inventory() {
-  const [activeTab, setActiveTab] = useState("computers");
-  const [inventory, setInventory] = useState([
-    {
-      id: "d290f1ee-6c54-4b01-90e6-d701748f0851",
-      name: "Computador Escritório 1",
-      model: "XYZ 123",
-      serialNumber: "SN123456789",
-      patrimonyTag: "PT10001",
-      type: "computador",
-      EquipmentCompanies: [
-        {
-          companyId: "6b3e2a22-8861-4eb9-9f21-4d3fdd051a04",
-        },
-        {
-          companyId: "bc24f7d2-8f8f-498a-b7b9-2f48f6e3e01b",
-        },
-      ],
-    },
-    {
-      id: "d3f2b2aa-acd5-44b8-94d1-2d3e18b7a6c4",
-      name: "Impressora Multifuncional",
-      model: "ABC 9000",
-      serialNumber: "SN987654321",
-      patrimonyTag: "PT10002",
-      type: "impressora",
-      EquipmentCompanies: [
-        {
-          companyId: "6b3e2a22-8861-4eb9-9f21-4d3fdd051a04",
-        },
-      ],
-    },
-    {
-      id: "2d641b19-5912-4b90-8bdf-98a2e18f7f21",
-      name: "Computador Escritório 2",
-      model: "XYZ 456",
-      serialNumber: "SN123451234",
-      patrimonyTag: "PT10003",
-      type: "computador",
-      EquipmentCompanies: [
-        {
-          companyId: "bc24f7d2-8f8f-498a-b7b9-2f48f6e3e01b",
-        },
-      ],
-    },
-    {
-      id: "b5a2c8f5-8f85-4c8b-9f6e-2d9f9e5c44b9",
-      name: "Impressora Rápida",
-      model: "FAST100",
-      serialNumber: "SN192837465",
-      patrimonyTag: "PT10004",
-      type: "impressora",
-      EquipmentCompanies: [],
-    },
-  ]);
+  const [activeTab, setActiveTab] = useState("Computador");
+  const [inventory, setInventory] = useState<IEquipament[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [editingInventoryItem, setEditingInventoryItem] = useState(null);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      if (
+        !user ||
+        !user.companies ||
+        !user.currentLoggedCompany.currentLoggedCompanyId ||
+        !user.currentLoggedCompany.currentLoggedCompanyName
+      ) {
+        return;
+      }
+
+      try {
+        const response = await apiClient().get("/equipament", {
+          params: {
+            companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          },
+        });
+
+        setInventory(response.data.body);
+      } catch (error) {
+        console.error("Error fetching companies", error);
+      }
+    };
+
+    fetchCompanies();
+  }, [user]);
 
   const handleClick = (id: string) => {};
 
@@ -66,21 +58,21 @@ export function Inventory() {
 
   const handleDelete = async (id: string) => {};
 
-  const getComputers = () => {
-    return inventory.filter((item) => item.type === "computador");
+  const getComputador = () => {
+    return inventory.filter((item) => item.type === "Computador");
   };
 
-  const getPrinters = () => {
-    return inventory.filter((item) => item.type === "impressora");
+  const getImpressoras = () => {
+    return inventory.filter((item) => item.type === "Impressora");
   };
 
   const renderInventoryContent = () => {
     let content;
 
     switch (activeTab) {
-      case "computers":
-        const computers = getComputers();
-        content = computers.map((computer, index) => (
+      case "Computador":
+        const computador = getComputador();
+        content = computador.map((computer, index) => (
           <S.TableRow key={computer.id}>
             <S.TableCell>{index + 1}</S.TableCell>
             <S.TableCell>{computer.name}</S.TableCell>
@@ -99,9 +91,9 @@ export function Inventory() {
         ));
         break;
 
-      case "printers":
-        const printers = getPrinters();
-        content = printers.map((printer, index) => (
+      case "Impressoras":
+        const impressoras = getImpressoras();
+        content = impressoras.map((printer, index) => (
           <S.TableRow key={printer.id}>
             <S.TableCell>{index + 1}</S.TableCell>
             <S.TableCell>{printer.name}</S.TableCell>
@@ -125,30 +117,62 @@ export function Inventory() {
     }
 
     return (
-      <S.Table>
-        <thead>
-          <S.TableRow>
-            <S.TableHeader>Nº</S.TableHeader>
-            <S.TableHeader>Nome</S.TableHeader>
-            <S.TableHeader>Modelo</S.TableHeader>
-            <S.TableHeader>Serial</S.TableHeader>
-            <S.TableHeader>Patrimonio</S.TableHeader>
-            <S.TableHeader>Tipo</S.TableHeader>
-            <S.TableHeader>Ações</S.TableHeader>
-          </S.TableRow>
-        </thead>
-        <tbody>{content}</tbody>
-      </S.Table>
+      <>
+        <S.Table>
+          <thead>
+            <S.TableRow>
+              <S.TableHeader>Nº</S.TableHeader>
+              <S.TableHeader>Nome</S.TableHeader>
+              <S.TableHeader>Modelo</S.TableHeader>
+              <S.TableHeader>Serial</S.TableHeader>
+              <S.TableHeader>Patrimonio</S.TableHeader>
+              <S.TableHeader>Tipo</S.TableHeader>
+              <S.TableHeader>Ações</S.TableHeader>
+            </S.TableRow>
+          </thead>
+          <tbody>{content}</tbody>
+        </S.Table>
+      </>
     );
   };
 
   return (
     <Layout>
       <S.Container>
-        <h1>Inventário</h1>
-        <InventoryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <S.Header>
+          <InventoryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <S.Button
+            onClick={() => {
+              setShowModal(true);
+              setEditingInventoryItem(null);
+            }}
+          >
+            Adicionar Item
+          </S.Button>
+        </S.Header>
         {renderInventoryContent()}
       </S.Container>
+
+      {showModal && (
+        <S.ModalWrapper>
+          <S.ModalContainer>
+            <CreateItemInventoryModal
+              editingInventoryItem={editingInventoryItem}
+              setShowModal={setShowModal}
+              setInventory={setInventory}
+            />
+
+            <S.CloseButtonModal
+              type="button"
+              onClick={() => {
+                setShowModal(false);
+              }}
+            >
+              <FiX size="22" />
+            </S.CloseButtonModal>
+          </S.ModalContainer>
+        </S.ModalWrapper>
+      )}
     </Layout>
   );
 }

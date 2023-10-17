@@ -63,7 +63,7 @@ export function Login() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:3333/companies");
+        const response = await axios.get("http://10.0.101.70:3333/companies");
 
         setCompanies(response.data.companies);
       } catch (error) {
@@ -195,7 +195,12 @@ export function Login() {
             <div className="formbg">
               <div className="formbg-inner padding-horizontal--48">
                 <span className="padding-bottom--15">Faça login :)</span>
-                <form onSubmit={handleSignIn}>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSignIn();
+                  }}
+                >
                   <div className="field padding-bottom--24">
                     <label htmlFor="company">Company</label>
                     <select

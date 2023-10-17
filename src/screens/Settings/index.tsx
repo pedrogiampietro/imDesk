@@ -10,6 +10,7 @@ import { CategoryForm } from "../../components/Forms/CategoryForm";
 import { TypeForm } from "../../components/Forms/TypeForm";
 import { ProviderForm } from "../../components/Forms/ProviderForm";
 import { CompanyForm } from "../../components/Forms/CompanyForm";
+import { GroupForm } from "../../components/Forms/GroupForm";
 
 import * as S from "./styles";
 
@@ -47,6 +48,8 @@ export function Settings() {
         return <ProviderForm companies={companies} />;
       case "company":
         return <CompanyForm companies={companies} />;
+      case "group":
+        return <GroupForm companies={companies} />;
       default:
         return null;
     }
@@ -77,6 +80,7 @@ export function Settings() {
           label="Criar Empresa"
           onClick={() => setFormType("company")}
         />
+        <CardButton label="Criar Grupo" onClick={() => setFormType("group")} />
       </S.CardContainer>
       {renderForm()}
     </Layout>
