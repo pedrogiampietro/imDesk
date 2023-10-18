@@ -25,7 +25,53 @@ export const Label = styled.label<{ isActive: boolean }>`
   color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
 `;
 
-export const Input = styled.input``;
+export const Input = styled.input`
+  font-size: 16px;
+  line-height: 28px;
+  padding: 8px 16px;
+  margin-bottom: 1rem;
+  width: 100%;
+  min-height: 44px;
+  border: unset;
+  border-radius: 4px;
+  outline-color: rgb(84 105 212 / 0.5);
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px;
+  flex-grow: 1;
+
+  &:disabled {
+    background: #f3f4f6;
+  }
+`;
+
+export const TagInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`;
+
+export const Tag = styled.span`
+  background-color: #e1e8ed; // qualquer cor que você queira para o fundo da tag
+  color: #333;
+  border-radius: 2px;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  font-size: 14px;
+`;
+
+export const RemoveTagButton = styled.button`
+  background: none;
+  border: none;
+  color: #700;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 4px;
+`;
 
 export const TextArea = styled.textarea`
   width: 100%;

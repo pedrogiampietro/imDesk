@@ -35,6 +35,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
       ticket_priority: "",
       ticket_location: "",
       ticket_description: "",
+      ticket_patrimonyTag: "",
       ticket_images: {},
     },
   });
@@ -51,6 +52,8 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [selectedPriority, setSelectedPriority] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState("");
+  const [selectedPatrimonyTag, setSelectedPatrimonyTag] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -231,12 +234,30 @@ export function CreateTicket({ tickets, setTickets }: any) {
     setSelectedImages(newSelectedImages);
   };
 
+  const handleRemoveTag = () => {
+    setSelectedPatrimonyTag("");
+    setInputValue("");
+  };
+
+  const handleInputBlur = (e: any) => {
+    const value = e.target.value;
+    createTag(value);
+  };
+
+  const createTag = (value: any) => {
+    const formattedValue = value.trim().replace(/[, ]+$/, "");
+    if (formattedValue) {
+      setSelectedPatrimonyTag(formattedValue);
+      setInputValue("");
+    }
+  };
+
   return (
     <S.Wrapper>
       <S.Form onSubmit={handleSubmit(handleSubmitTicket)}>
         <S.FormGroup>
           <S.Label htmlFor="ticket_type" isActive={theme === "dark"}>
-            Tipo de Chamado:
+            Tipo de Chamado:*
           </S.Label>
           <Controller
             control={control}
@@ -253,6 +274,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                     onChange(v.id);
                     setSelectedType(v);
                   }}
+                  required
                 />
               );
             }}
@@ -332,6 +354,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                         theme === "dark" ? darkTheme.text : lightTheme.text,
                     }),
                   }}
+                  required
                 />
               );
             }}
@@ -376,6 +399,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                     onChange(v.id);
                     setSelectedPriority(v);
                   }}
+                  required
                 />
               );
             }}
@@ -417,6 +441,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                     onChange(v.id);
                     setSelectedLocation(v);
                   }}
+                  required
                 />
               );
             }}
@@ -440,6 +465,45 @@ export function CreateTicket({ tickets, setTickets }: any) {
           )}
         </S.FormGroup>
         <S.FormGroup>
+          <S.Label htmlFor="ticket_patrimonyTag">Patrimônio:</S.Label>
+          <S.TagInputContainer>
+            {selectedPatrimonyTag && (
+              <S.Tag>
+                #{selectedPatrimonyTag}
+                <S.RemoveTagButton onClick={handleRemoveTag}>
+                  ×
+                </S.RemoveTagButton>
+              </S.Tag>
+            )}
+            <S.Input
+              type="text"
+              value={inputValue}
+              placeholder="Número do patrimônio"
+              onChange={(e) => setInputValue(e.target.value)}
+              onBlur={handleInputBlur}
+              disabled={!!selectedPatrimonyTag}
+              required
+            />
+          </S.TagInputContainer>
+          {!!errors.ticket_patrimonyTag && (
+            <small
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: "10px",
+                color: "red",
+              }}
+            >
+              <MdOutlineErrorOutline
+                fill="red"
+                size={16}
+                style={{ marginRight: "3px" }}
+              />
+              {errors.ticket_patrimonyTag.message}
+            </small>
+          )}
+        </S.FormGroup>
+        <S.FormGroup>
           <S.Label htmlFor="ticket_description" isActive={theme === "dark"}>
             Descrição:
           </S.Label>
@@ -448,6 +512,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
             className="basic-single"
             {...register("ticket_description")}
             onChange={(e) => setSelectedDescription(e.target.value)}
+            required
           />
         </S.FormGroup>
 

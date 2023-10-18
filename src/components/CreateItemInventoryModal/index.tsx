@@ -30,8 +30,12 @@ export function CreateItemInventoryModal({
     serialNumber: editingInventoryItem ? editingInventoryItem.serialNumber : "",
     patrimonyTag: editingInventoryItem ? editingInventoryItem.patrimonyTag : "",
     type: editingInventoryItem ? editingInventoryItem.type : "",
-    companyId: editingInventoryItem ? editingInventoryItem.companyId : "",
-    groupId: editingInventoryItem ? editingInventoryItem.groupId : "",
+    companyId: editingInventoryItem
+      ? editingInventoryItem.EquipmentCompanies[0].companyId
+      : "",
+    groupId: editingInventoryItem
+      ? editingInventoryItem.EquipmentCompanies[0].groupId
+      : "",
   });
   const [companies, setCompanies] = useState<any>([]);
   const [groups, setGroups] = useState<any>([]);
@@ -84,12 +88,15 @@ export function CreateItemInventoryModal({
       if (editingInventoryItem) {
         // Edição
         response = await apiClient().put(
-          `/deposit/${editingInventoryItem.id}`,
+          `/equipament/${editingInventoryItem.id}`,
           {
-            // companyId: formData.companyIds[0],
-            // name: formData.name,
-            // model: formData.model,
-            // userId: formData.userId,
+            companyId: formData.companyId,
+            name: formData.name,
+            model: formData.model,
+            serialNumber: formData.serialNumber,
+            patrimonyTag: formData.patrimonyTag,
+            type: formData.type,
+            groupId: Number(formData.groupId),
           }
         );
 
@@ -249,16 +256,9 @@ export function CreateItemInventoryModal({
         <S.InputLabel>Empresa</S.InputLabel>
         <Select
           options={companyOptions}
-          value={
-            editingInventoryItem
-              ? companyOptions.find(
-                  (option: any) =>
-                    option.value === editingInventoryItem.companyId
-                )
-              : companyOptions.find(
-                  (option: any) => option.value === companies.id
-                )
-          }
+          value={companyOptions.find(
+            (option: any) => option.value === formData.companyId
+          )}
           onChange={handleCompanySelectChange}
         />
       </S.InputGroup>
@@ -267,13 +267,9 @@ export function CreateItemInventoryModal({
         <S.InputLabel>Grupo</S.InputLabel>
         <Select
           options={groupOptions}
-          value={
-            editingInventoryItem
-              ? groupOptions.find(
-                  (option: any) => option.value === editingInventoryItem.groupId
-                )
-              : groupOptions.find((option: any) => option.value === groups.id)
-          }
+          value={groupOptions.find(
+            (option: any) => option.value === formData.groupId
+          )}
           onChange={handleGroupSelectChange}
         />
       </S.InputGroup>

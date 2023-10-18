@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "../../components/Layout";
 import { InventoryTabs } from "./InventoryTabs";
 import { DropdownMenuComponent } from "../../components/DropdownMenu";
@@ -24,6 +25,7 @@ export function Inventory() {
   const [editingInventoryItem, setEditingInventoryItem] = useState(null);
 
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -52,9 +54,14 @@ export function Inventory() {
     fetchCompanies();
   }, [user]);
 
-  const handleClick = (id: string) => {};
+  const handleClick = (id: string) => {
+    navigate(`/deposit/${id}`);
+  };
 
-  const handleEdit = (inventory: any) => {};
+  const handleEdit = (inventory: any) => {
+    setEditingInventoryItem(inventory);
+    setShowModal(true);
+  };
 
   const handleDelete = async (id: string) => {};
 
@@ -82,7 +89,6 @@ export function Inventory() {
             <S.TableCell>{computer.type}</S.TableCell>
             <S.TableCell>
               <DropdownMenuComponent
-                onView={() => handleClick(computer.id)}
                 onEdit={() => handleEdit(computer)}
                 onDelete={() => handleDelete(computer.id)}
               />
@@ -103,7 +109,6 @@ export function Inventory() {
             <S.TableCell>{printer.type}</S.TableCell>
             <S.TableCell>
               <DropdownMenuComponent
-                onView={() => handleClick(printer.id)}
                 onEdit={() => handleEdit(printer)}
                 onDelete={() => handleDelete(printer.id)}
               />
