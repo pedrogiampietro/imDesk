@@ -251,12 +251,13 @@ export const ConversationContainer = styled.div`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  max-height: calc(100% - 20px);
+  max-height: 340px;
   overflow-y: auto;
   background-color: #f9f9f9;
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
+  padding-bottom: 20px;
 `;
 
 export const Message = styled.div<{ isTech: boolean }>`

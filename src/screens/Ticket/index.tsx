@@ -8,8 +8,10 @@ import * as S from "./styles";
 import { apiClient } from "../../services/api";
 import { CreateTicket } from "./CreateTicket";
 import { useAuth } from "../../hooks/useAuth";
+import { LottieLoad } from "../../components/LottieLoading";
 
 export function Ticket() {
+  const [loading, setLoading] = useState(false);
   const [tickets, setTickets] = useState([]);
   const [showTicketModal, setShowTicketModal] = useState<boolean>(false);
   const [showQuickCreateTicket, setShowQuickCreateTicket] = useState(false);
@@ -25,6 +27,7 @@ export function Ticket() {
     }
 
     try {
+      setLoading(true);
       const { data } = await apiClient().get("/ticket", {
         params: {
           companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
@@ -33,7 +36,10 @@ export function Ticket() {
       });
       setTickets(data.body);
     } catch (err) {
+      setLoading(false);
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,20 +50,24 @@ export function Ticket() {
   return (
     <Layout>
       <S.Container>
-        <S.TicketsWrapper>
-          <TicketKanban
-            data={tickets}
-            setShowTicketModal={setShowTicketModal}
-            showTicketModal={showTicketModal}
-            updateTicketsCallback={fetchTickets}
-            showQuickCreateTicket={showQuickCreateTicket}
-            setShowQuickCreateTicket={setShowQuickCreateTicket}
-          />
+        {loading ? (
+          <LottieLoad />
+        ) : (
+          <S.TicketsWrapper>
+            <TicketKanban
+              data={tickets}
+              setShowTicketModal={setShowTicketModal}
+              showTicketModal={showTicketModal}
+              updateTicketsCallback={fetchTickets}
+              showQuickCreateTicket={showQuickCreateTicket}
+              setShowQuickCreateTicket={setShowQuickCreateTicket}
+            />
 
-          {showQuickCreateTicket && (
-            <CreateTicket tickets={tickets} setTickets={setTickets} />
-          )}
-        </S.TicketsWrapper>
+            {showQuickCreateTicket && (
+              <CreateTicket tickets={tickets} setTickets={setTickets} />
+            )}
+          </S.TicketsWrapper>
+        )}
       </S.Container>
     </Layout>
   );

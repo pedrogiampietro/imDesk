@@ -88,3 +88,10 @@ export const CloseButtonModal = styled.button`
   font-size: 0;
   cursor: pointer;
 `;
+
+export const NoItemsMessage = styled.div`
+  margin-top: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+`;

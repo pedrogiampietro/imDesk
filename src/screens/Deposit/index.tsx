@@ -101,24 +101,30 @@ export function Deposit() {
           </S.TableRow>
         </thead>
         <tbody>
-          {deposits.map((deposit, index) => (
-            <S.TableRow key={deposit.id}>
-              <S.TableCell>{index + 1}</S.TableCell>
-              <S.TableCell>{deposit.name}</S.TableCell>
-              <S.TableCell>{deposit.location}</S.TableCell>
-              <S.TableCell>
-                {new Date(deposit.createdAt).toLocaleDateString()}
-              </S.TableCell>
-              <S.TableCell>{deposit?.Company?.name}</S.TableCell>
-              <S.TableCell>
-                <DropdownMenuComponent
-                  onView={() => handleClick(deposit.id)}
-                  onEdit={() => handleEdit(deposit)}
-                  onDelete={() => handleDelete(deposit.id)}
-                />
-              </S.TableCell>
-            </S.TableRow>
-          ))}
+          {deposits.length > 0 ? (
+            deposits.map((deposit, index) => (
+              <S.TableRow key={deposit.id}>
+                <S.TableCell>{index + 1}</S.TableCell>
+                <S.TableCell>{deposit.name}</S.TableCell>
+                <S.TableCell>{deposit.location}</S.TableCell>
+                <S.TableCell>
+                  {new Date(deposit.createdAt).toLocaleDateString()}
+                </S.TableCell>
+                <S.TableCell>{deposit?.Company?.name}</S.TableCell>
+                <S.TableCell>
+                  <DropdownMenuComponent
+                    onView={() => handleClick(deposit.id)}
+                    onEdit={() => handleEdit(deposit)}
+                    onDelete={() => handleDelete(deposit.id)}
+                  />
+                </S.TableCell>
+              </S.TableRow>
+            ))
+          ) : (
+            <S.NoItemsMessage>
+              Esse depósito ainda não tem itens para visualizar.
+            </S.NoItemsMessage>
+          )}
         </tbody>
       </S.Table>
 

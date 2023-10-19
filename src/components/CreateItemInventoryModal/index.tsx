@@ -24,6 +24,7 @@ export function CreateItemInventoryModal({
     type: string;
     companyId: string;
     groupId: string;
+    locationId: string;
   }>({
     name: editingInventoryItem ? editingInventoryItem.name : "",
     model: editingInventoryItem ? editingInventoryItem.model : "",
@@ -36,8 +37,10 @@ export function CreateItemInventoryModal({
     groupId: editingInventoryItem
       ? editingInventoryItem.EquipmentCompanies[0].groupId
       : "",
+    locationId: editingInventoryItem ? editingInventoryItem.locationId : "",
   });
   const [companies, setCompanies] = useState<any>([]);
+  const [locations, setLocations] = useState<any>([]);
   const [groups, setGroups] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -51,6 +54,24 @@ export function CreateItemInventoryModal({
         setCompanies(response.data.companies);
       } catch (error) {
         console.error("Error fetching companies", error);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await apiClient().get("/location", {
+          params: {
+            companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          },
+        });
+
+        setLocations(response.data.body);
+      } catch (error) {
+        console.error("Error fetching locations", error);
       }
     };
 
@@ -74,11 +95,6 @@ export function CreateItemInventoryModal({
 
     fetchGroups();
   }, []);
-
-  const companyOptions = companies.map((company: any) => ({
-    value: company.id,
-    label: company.name,
-  }));
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -123,6 +139,7 @@ export function CreateItemInventoryModal({
           patrimonyTag: formData.patrimonyTag,
           type: formData.type,
           groupId: Number(formData.groupId),
+          locationId: formData.locationId,
         });
 
         toast.success("Sucesso! Seu depósito foi criado com sucesso!");
@@ -153,12 +170,29 @@ export function CreateItemInventoryModal({
     }));
   };
 
+  const handleLocationSelectChange = (selectedOption: any) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      locationId: selectedOption ? selectedOption.value : "",
+    }));
+  };
+
   const groupOptions = groups
     ? groups.map((group: any) => ({
         value: group.id,
         label: group.name,
       }))
     : [];
+
+  const companyOptions = companies.map((company: any) => ({
+    value: company.id,
+    label: company.name,
+  }));
+
+  const locationsOptions = locations.map((location: any) => ({
+    value: location.id,
+    label: location.name,
+  }));
 
   return (
     <>
@@ -260,6 +294,17 @@ export function CreateItemInventoryModal({
             (option: any) => option.value === formData.companyId
           )}
           onChange={handleCompanySelectChange}
+        />
+      </S.InputGroup>
+
+      <S.InputGroup>
+        <S.InputLabel>Localização</S.InputLabel>
+        <Select
+          options={locationsOptions}
+          value={locationsOptions.find(
+            (option: any) => option.value === formData.locationId
+          )}
+          onChange={handleLocationSelectChange}
         />
       </S.InputGroup>
 

@@ -8,6 +8,7 @@ import { CreateItemInventoryModal } from "../../components/CreateItemInventoryMo
 import { FiX } from "react-icons/fi";
 import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
+import { LottieLoad } from "../../components/LottieLoading";
 
 interface IEquipament {
   id: string;
@@ -23,12 +24,14 @@ export function Inventory() {
   const [inventory, setInventory] = useState<IEquipament[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingInventoryItem, setEditingInventoryItem] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompanies = async () => {
+      setLoading(true);
+
       if (
         !user ||
         !user.companies ||
@@ -47,16 +50,15 @@ export function Inventory() {
 
         setInventory(response.data.body);
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching companies", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCompanies();
   }, [user]);
-
-  const handleClick = (id: string) => {
-    navigate(`/deposit/${id}`);
-  };
 
   const handleEdit = (inventory: any) => {
     setEditingInventoryItem(inventory);
@@ -79,46 +81,62 @@ export function Inventory() {
     switch (activeTab) {
       case "Computador":
         const computador = getComputador();
-        content = computador.map((computer, index) => (
-          <S.TableRow key={computer.id}>
-            <S.TableCell>{index + 1}</S.TableCell>
-            <S.TableCell>{computer.name}</S.TableCell>
-            <S.TableCell>{computer.model}</S.TableCell>
-            <S.TableCell>{computer.serialNumber}</S.TableCell>
-            <S.TableCell>{computer.patrimonyTag}</S.TableCell>
-            <S.TableCell>{computer.type}</S.TableCell>
-            <S.TableCell>
-              <DropdownMenuComponent
-                onEdit={() => handleEdit(computer)}
-                onDelete={() => handleDelete(computer.id)}
-              />
-            </S.TableCell>
-          </S.TableRow>
-        ));
+        content = computador.length ? (
+          computador.map((computer, index) => (
+            <S.TableRow key={computer.id}>
+              <S.TableCell>{index + 1}</S.TableCell>
+              <S.TableCell>{computer.name}</S.TableCell>
+              <S.TableCell>{computer.model}</S.TableCell>
+              <S.TableCell>{computer.serialNumber}</S.TableCell>
+              <S.TableCell>{computer.patrimonyTag}</S.TableCell>
+              <S.TableCell>{computer.type}</S.TableCell>
+              <S.TableCell>
+                <DropdownMenuComponent
+                  onEdit={() => handleEdit(computer)}
+                  onDelete={() => handleDelete(computer.id)}
+                />
+              </S.TableCell>
+            </S.TableRow>
+          ))
+        ) : (
+          <S.NoItemsMessage>
+            Esse inventário ainda não tem itens para visualizar.
+          </S.NoItemsMessage>
+        );
         break;
 
       case "Impressora":
         const impressoras = getImpressoras();
-        content = impressoras.map((printer, index) => (
-          <S.TableRow key={printer.id}>
-            <S.TableCell>{index + 1}</S.TableCell>
-            <S.TableCell>{printer.name}</S.TableCell>
-            <S.TableCell>{printer.model}</S.TableCell>
-            <S.TableCell>{printer.serialNumber}</S.TableCell>
-            <S.TableCell>{printer.patrimonyTag}</S.TableCell>
-            <S.TableCell>{printer.type}</S.TableCell>
-            <S.TableCell>
-              <DropdownMenuComponent
-                onEdit={() => handleEdit(printer)}
-                onDelete={() => handleDelete(printer.id)}
-              />
-            </S.TableCell>
-          </S.TableRow>
-        ));
+        content = impressoras.length ? (
+          impressoras.map((printer, index) => (
+            <S.TableRow key={printer.id}>
+              <S.TableCell>{index + 1}</S.TableCell>
+              <S.TableCell>{printer.name}</S.TableCell>
+              <S.TableCell>{printer.model}</S.TableCell>
+              <S.TableCell>{printer.serialNumber}</S.TableCell>
+              <S.TableCell>{printer.patrimonyTag}</S.TableCell>
+              <S.TableCell>{printer.type}</S.TableCell>
+              <S.TableCell>
+                <DropdownMenuComponent
+                  onEdit={() => handleEdit(printer)}
+                  onDelete={() => handleDelete(printer.id)}
+                />
+              </S.TableCell>
+            </S.TableRow>
+          ))
+        ) : (
+          <S.NoItemsMessage>
+            Esse inventário ainda não tem itens para visualizar.
+          </S.NoItemsMessage>
+        );
         break;
 
       default:
-        content = null;
+        content = (
+          <S.NoItemsMessage>
+            Esse inventário ainda não tem itens para visualizar.
+          </S.NoItemsMessage>
+        );
     }
 
     return (
@@ -155,7 +173,7 @@ export function Inventory() {
             Adicionar Item
           </S.Button>
         </S.Header>
-        {renderInventoryContent()}
+        {loading ? <LottieLoad /> : renderInventoryContent()}
       </S.Container>
 
       {showModal && (

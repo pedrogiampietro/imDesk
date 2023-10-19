@@ -95,3 +95,10 @@ export const ModalContainer = styled.div`
     width: 100%;
   }
 `;
+
+export const NoItemsMessage = styled.div`
+  margin-top: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+`;

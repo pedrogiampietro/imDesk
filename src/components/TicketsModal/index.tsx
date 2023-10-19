@@ -240,7 +240,6 @@ export function TicketsModal({
     }
   };
 
-  // Function to handle click outside the modal
   const handleClickOutsideModal = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose(false);
@@ -248,7 +247,6 @@ export function TicketsModal({
     }
   };
 
-  // Function to prevent click event propagation within the modal
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -270,6 +268,12 @@ export function TicketsModal({
     setTechnicianResponse(e.target.value);
   };
 
+  const handleUserResponseChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setUserResponse(e.target.value);
+  };
+
   const submitTechnicianResponse = async () => {
     if (technicianResponse.trim() === "") return;
 
@@ -283,24 +287,29 @@ export function TicketsModal({
 
     try {
       // Faça a chamada à API
-      await apiClient().post(`/ticket/response`, payload);
+      const result = await apiClient().post(`/ticket/response`, payload);
 
-      // Atualize o estado local após a chamada bem-sucedida à API
-      setConversations((prev) => [
-        ...prev,
-        `Technician: ${technicianResponse}`,
-      ]);
-      setTechnicianResponse("");
+      if (result.status === 200 && result.data) {
+        const responseBody = result.data.body;
+
+        const newMessage = {
+          User: {
+            name: loggedUser.name,
+            isTechnician: loggedUser.isTechnician,
+          },
+          ...responseBody,
+        };
+
+        setConversations((prevConversations) => [
+          ...prevConversations,
+          newMessage,
+        ]);
+
+        setTechnicianResponse("");
+      }
     } catch (error) {
       console.error("Erro ao enviar a resposta do técnico:", error);
-      // Você pode querer adicionar alguma notificação ou feedback para o usuário aqui
     }
-  };
-
-  const handleUserResponseChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setUserResponse(e.target.value);
   };
 
   const submitUserResponse = async () => {
@@ -315,7 +324,11 @@ export function TicketsModal({
     };
 
     try {
-      await apiClient().post(`/ticket/response`, payload);
+      const result = await apiClient().post(`/ticket/response`, payload);
+
+      console.log("user.result", result);
+      console.log("user.userResponse", userResponse);
+      console.log("user.payload", payload);
 
       setConversations((prev) => [...prev, `User: ${userResponse}`]);
       setUserResponse("");
@@ -557,38 +570,36 @@ export function TicketsModal({
               </S.IconContainer>
               <S.ConversationContainer>
                 {conversations.map((msg: any, index: number) => (
-                  <S.Message isTech={msg.User.isTechnician} key={index}>
-                    {`${msg.User.name}: ${msg.content}`}
+                  <S.Message isTech={msg?.User?.isTechnician} key={index}>
+                    {`${msg?.User?.name}: ${msg.content}`}
                   </S.Message>
                 ))}
-                <S.ReplyContainer>
-                  <S.StyledTextarea
-                    value={
-                      loggedUser.isTechnician
-                        ? technicianResponse
-                        : userResponse
-                    }
-                    onChange={
-                      loggedUser.isTechnician
-                        ? handleTechnicianResponseChange
-                        : handleUserResponseChange
-                    }
-                    placeholder={`Digite sua resposta como ${
-                      loggedUser.isTechnician ? "Técnico" : "Usuário"
-                    }...`}
-                  />
-
-                  <S.StyledButton
-                    onClick={
-                      loggedUser.isTechnician
-                        ? submitTechnicianResponse
-                        : submitUserResponse
-                    }
-                  >
-                    Enviar
-                  </S.StyledButton>
-                </S.ReplyContainer>
               </S.ConversationContainer>
+              <S.ReplyContainer>
+                <S.StyledTextarea
+                  value={
+                    loggedUser.isTechnician ? technicianResponse : userResponse
+                  }
+                  onChange={
+                    loggedUser.isTechnician
+                      ? handleTechnicianResponseChange
+                      : handleUserResponseChange
+                  }
+                  placeholder={`Digite sua resposta como ${
+                    loggedUser.isTechnician ? "Técnico" : "Usuário"
+                  }...`}
+                />
+
+                <S.StyledButton
+                  onClick={
+                    loggedUser.isTechnician
+                      ? submitTechnicianResponse
+                      : submitUserResponse
+                  }
+                >
+                  Enviar
+                </S.StyledButton>
+              </S.ReplyContainer>
             </S.InfoItem>
           </S.InfoGroup>
 

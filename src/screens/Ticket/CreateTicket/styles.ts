@@ -21,7 +21,7 @@ export const FormGroup = styled.div`
   margin-bottom: 1rem;
 `;
 
-export const Label = styled.label<{ isActive: boolean }>`
+export const Label = styled.label<{ isActive?: boolean }>`
   color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
 `;
 
