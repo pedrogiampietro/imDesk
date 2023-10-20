@@ -10,6 +10,7 @@ import {
   FiBox,
 } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { MdOutlineDescription } from "react-icons/md";
 import { ITicket } from "../TicketKanban";
 
 import * as S from "./styles";
@@ -84,6 +85,8 @@ export function TicketsModal({
   const [selectedDepositItem, setSelectedDepositItem] = useState("");
   const [quantityUsed, setQuantityUsed] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+
+  const newId = ticketData.id.split("-");
 
   useEffect(() => {
     (async () => {
@@ -277,7 +280,6 @@ export function TicketsModal({
   const submitTechnicianResponse = async () => {
     if (technicianResponse.trim() === "") return;
 
-    // Construa o payload. Este é um exemplo genérico, ajuste conforme sua API
     const payload = {
       ticketId: ticketData.id,
       type: "technician",
@@ -286,7 +288,6 @@ export function TicketsModal({
     };
 
     try {
-      // Faça a chamada à API
       const result = await apiClient().post(`/ticket/response`, payload);
 
       if (result.status === 200 && result.data) {
@@ -315,7 +316,6 @@ export function TicketsModal({
   const submitUserResponse = async () => {
     if (userResponse.trim() === "") return;
 
-    // Construa o payload
     const payload = {
       ticketId: ticketData.id,
       type: "user",
@@ -325,10 +325,6 @@ export function TicketsModal({
 
     try {
       const result = await apiClient().post(`/ticket/response`, payload);
-
-      console.log("user.result", result);
-      console.log("user.userResponse", userResponse);
-      console.log("user.payload", payload);
 
       setConversations((prev) => [...prev, `User: ${userResponse}`]);
       setUserResponse("");
@@ -473,11 +469,9 @@ export function TicketsModal({
 
   const handleSaveQuantityUsed = async () => {
     if (!quantityUsed) {
-      // mostrar uma mensagem de erro para o usuário
       return;
     }
 
-    // payload
     const payload = {
       depositId: selectedDeposit,
       itemId: selectedDepositItem,
@@ -571,6 +565,9 @@ export function TicketsModal({
               <S.ConversationContainer>
                 {conversations.map((msg: any, index: number) => (
                   <S.Message isTech={msg?.User?.isTechnician} key={index}>
+                    <S.Timestamp>
+                      {formatDate(new Date(msg.createdAt))}{" "}
+                    </S.Timestamp>
                     {`${msg?.User?.name}: ${msg.content}`}
                   </S.Message>
                 ))}
@@ -610,6 +607,15 @@ export function TicketsModal({
               <TodoList todos={todos} setTodos={setTodos} />
             </div>
           </S.InfoGroup>
+
+          <S.InfoGroup>
+            <S.InfoItem>
+              <S.IconContainer>
+                <MdOutlineDescription /> <S.InfoTitle>Imagens</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent></S.InfoContent>
+            </S.InfoItem>
+          </S.InfoGroup>
         </S.LeftSide>
         <S.RightSide>
           <S.CloseButton
@@ -620,7 +626,14 @@ export function TicketsModal({
           >
             <FiX size="24" />
           </S.CloseButton>
-          <S.Title>Ticket #{ticketData.id}</S.Title>
+          <S.WelcomeWrapper>
+            <S.Title>Ticket #{newId[0]}</S.Title>
+            <p>
+              Total de Tickets abertos para esse Patrimônio:{" "}
+              <strong>{ticketData.equipmentUsage[0].usageCount}</strong>
+            </p>
+          </S.WelcomeWrapper>
+
           <S.InfoGroup>
             <S.InfoItem>
               <S.IconContainer>

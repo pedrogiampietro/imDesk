@@ -20,11 +20,12 @@ interface IEquipament {
 }
 
 export function Inventory() {
-  const [activeTab, setActiveTab] = useState("Computador");
+  const [selectedType, setSelectedType] = useState("Computador");
   const [inventory, setInventory] = useState<IEquipament[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingInventoryItem, setEditingInventoryItem] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [equipmentTypes, setEquipmentTypes] = useState<string[] | any>([]);
 
   const { user } = useAuth();
 
@@ -48,6 +49,11 @@ export function Inventory() {
           },
         });
 
+        const uniqueTypes = Array.from(
+          new Set(response.data.body.map((item: any) => item.type))
+        );
+
+        setEquipmentTypes(uniqueTypes);
         setInventory(response.data.body);
       } catch (error) {
         setLoading(false);
@@ -67,77 +73,38 @@ export function Inventory() {
 
   const handleDelete = async (id: string) => {};
 
-  const getComputador = () => {
-    return inventory.filter((item) => item.type === "Computador");
+  const filteredInventory = () => {
+    return inventory.filter((item) => item.type === selectedType);
   };
 
-  const getImpressoras = () => {
-    return inventory.filter((item) => item.type === "Impressora");
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedType(event.target.value);
   };
 
   const renderInventoryContent = () => {
-    let content;
-
-    switch (activeTab) {
-      case "Computador":
-        const computador = getComputador();
-        content = computador.length ? (
-          computador.map((computer, index) => (
-            <S.TableRow key={computer.id}>
-              <S.TableCell>{index + 1}</S.TableCell>
-              <S.TableCell>{computer.name}</S.TableCell>
-              <S.TableCell>{computer.model}</S.TableCell>
-              <S.TableCell>{computer.serialNumber}</S.TableCell>
-              <S.TableCell>{computer.patrimonyTag}</S.TableCell>
-              <S.TableCell>{computer.type}</S.TableCell>
-              <S.TableCell>
-                <DropdownMenuComponent
-                  onEdit={() => handleEdit(computer)}
-                  onDelete={() => handleDelete(computer.id)}
-                />
-              </S.TableCell>
-            </S.TableRow>
-          ))
-        ) : (
-          <S.NoItemsMessage>
-            Esse inventário ainda não tem itens para visualizar.
-          </S.NoItemsMessage>
-        );
-        break;
-
-      case "Impressora":
-        const impressoras = getImpressoras();
-        content = impressoras.length ? (
-          impressoras.map((printer, index) => (
-            <S.TableRow key={printer.id}>
-              <S.TableCell>{index + 1}</S.TableCell>
-              <S.TableCell>{printer.name}</S.TableCell>
-              <S.TableCell>{printer.model}</S.TableCell>
-              <S.TableCell>{printer.serialNumber}</S.TableCell>
-              <S.TableCell>{printer.patrimonyTag}</S.TableCell>
-              <S.TableCell>{printer.type}</S.TableCell>
-              <S.TableCell>
-                <DropdownMenuComponent
-                  onEdit={() => handleEdit(printer)}
-                  onDelete={() => handleDelete(printer.id)}
-                />
-              </S.TableCell>
-            </S.TableRow>
-          ))
-        ) : (
-          <S.NoItemsMessage>
-            Esse inventário ainda não tem itens para visualizar.
-          </S.NoItemsMessage>
-        );
-        break;
-
-      default:
-        content = (
-          <S.NoItemsMessage>
-            Esse inventário ainda não tem itens para visualizar.
-          </S.NoItemsMessage>
-        );
-    }
+    const filteredItems = filteredInventory();
+    let content = filteredItems.length ? (
+      filteredItems.map((item, index) => (
+        <S.TableRow key={item.id}>
+          <S.TableCell>{index + 1}</S.TableCell>
+          <S.TableCell>{item.name}</S.TableCell>
+          <S.TableCell>{item.model}</S.TableCell>
+          <S.TableCell>{item.serialNumber}</S.TableCell>
+          <S.TableCell>{item.patrimonyTag}</S.TableCell>
+          <S.TableCell>{item.type}</S.TableCell>
+          <S.TableCell>
+            <DropdownMenuComponent
+              onEdit={() => handleEdit(item)}
+              onDelete={() => handleDelete(item.id)}
+            />
+          </S.TableCell>
+        </S.TableRow>
+      ))
+    ) : (
+      <S.NoItemsMessage>
+        Esse inventário ainda não tem itens para visualizar.
+      </S.NoItemsMessage>
+    );
 
     return (
       <>
@@ -163,7 +130,16 @@ export function Inventory() {
     <Layout>
       <S.Container>
         <S.Header>
-          <InventoryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <div>
+            <select value={selectedType} onChange={handleTypeChange}>
+              {equipmentTypes.map((type: any) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <S.Button
             onClick={() => {
               setShowModal(true);

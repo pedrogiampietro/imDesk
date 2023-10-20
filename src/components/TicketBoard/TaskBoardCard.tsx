@@ -129,7 +129,7 @@ export function TaskBoardCard({ item, index, onCardClick }: any) {
         >
           <TaskInformation priority={item.priority}>
             <TopRow>
-              <span>ID: {displayId}</span>
+              <span>ID: #{displayId}</span>
               <span>
                 {formatarData(item.createdAt)}
                 <Status level={item.priority}></Status>

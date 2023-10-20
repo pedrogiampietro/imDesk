@@ -14,6 +14,8 @@ export function TicketCard({
   const { user } = useAuth();
   const loggedUser = user;
 
+  const newId = data.id.split("-");
+
   function getInitials(name: string): string {
     const names = name.split(" ");
     return names.length >= 2
@@ -39,7 +41,7 @@ export function TicketCard({
       <S.FlexWrapper>
         <S.FlexWrapper>
           <S.StatusCircle urgency={data.ticketPriority.name} />
-          <S.TicketId>Ticket# 2023-CS123</S.TicketId>
+          <S.TicketId>ID: #{newId[0]}</S.TicketId>
         </S.FlexWrapper>
 
         <S.OpenedAt>Criado em {formatarData(data.createdAt as any)}</S.OpenedAt>

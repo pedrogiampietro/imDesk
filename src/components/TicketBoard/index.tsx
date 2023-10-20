@@ -166,7 +166,7 @@ export function TicketBoard({
       <Container>
         <TaskColumnStyles>
           {columns &&
-            Object.entries(columns).map(([columnId, column], idx) => {
+            Object.entries(columns).map(([columnId, column]: any, idx) => {
               return (
                 <div key={columnId}>
                   <h3>{column.title}</h3>

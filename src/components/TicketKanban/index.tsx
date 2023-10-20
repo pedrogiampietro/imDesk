@@ -65,7 +65,13 @@ export interface ITicket {
   };
   TicketEvaluation: TicketEvaluation[];
   usedItems: usedItems[];
+  equipmentUsage: equipment[];
 }
+
+type equipment = {
+  equipmentId: string;
+  usageCount: number;
+};
 
 type usedItems = {
   cost: number;
@@ -86,6 +92,9 @@ type TicketProps = {
   updateTicketsCallback: any;
   showQuickCreateTicket: any;
   setShowQuickCreateTicket: any;
+  ticketPriority: any;
+  selectedTicketPriority: any;
+  setSelectedTicketPriority: any;
 };
 
 export function TicketKanban({
@@ -95,6 +104,9 @@ export function TicketKanban({
   updateTicketsCallback,
   showQuickCreateTicket,
   setShowQuickCreateTicket,
+  ticketPriority,
+  selectedTicketPriority,
+  setSelectedTicketPriority,
 }: TicketProps) {
   const [activeTab, setActiveTab] = useState("new");
   const [searchTerm, setSearchTerm] = useState("");
@@ -155,6 +167,11 @@ export function TicketKanban({
   const startIndexTickets = (page - 1) * perPage;
   const endIndexTickets = startIndexTickets + perPage;
 
+  const handleLocationSelectChange = (event: any) => {
+    const selectedValue = event.target.value;
+    setSelectedTicketPriority(selectedValue);
+  };
+
   return (
     <S.KanbanContainer>
       <S.FiltersWrapper>
@@ -164,10 +181,16 @@ export function TicketKanban({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <S.ControlsGroup>
-          <S.Select>
-            <option value="priority">Select Priority</option>
-            {/* Você pode adicionar as opções de prioridade aqui */}
+          <S.Select
+            value={selectedTicketPriority}
+            onChange={handleLocationSelectChange}
+          >
+            <option value="">Filtrar por prioridade</option>
+            {ticketPriority.map((priority: any) => {
+              return <option value={priority.id}>{priority.name}</option>;
+            })}
           </S.Select>
+
           <S.Select>
             <option value="">Por página..</option>
             <option value="10">10</option>

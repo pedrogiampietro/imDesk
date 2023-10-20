@@ -42,6 +42,7 @@ export function CreateItemInventoryModal({
   const [companies, setCompanies] = useState<any>([]);
   const [locations, setLocations] = useState<any>([]);
   const [groups, setGroups] = useState<any>([]);
+  const [equipmentTypes, setEquipmentTypes] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { user } = useAuth();
@@ -94,6 +95,24 @@ export function CreateItemInventoryModal({
     };
 
     fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    const fetchEquipmentType = async () => {
+      try {
+        const response = await apiClient().get("/equipmentType", {
+          params: {
+            companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          },
+        });
+
+        setEquipmentTypes(response.data.body);
+      } catch (error) {
+        console.error("Não foi possível buscar os grupos", error);
+      }
+    };
+
+    fetchEquipmentType();
   }, []);
 
   const handleSubmit = async () => {
@@ -156,6 +175,13 @@ export function CreateItemInventoryModal({
     }
   };
 
+  const handleTypeSelectChange = (selectedOption: any) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      type: selectedOption ? selectedOption.label : "",
+    }));
+  };
+
   const handleCompanySelectChange = (selectedOption: any) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -184,15 +210,26 @@ export function CreateItemInventoryModal({
       }))
     : [];
 
-  const companyOptions = companies.map((company: any) => ({
-    value: company.id,
-    label: company.name,
-  }));
+  const equipmentTypesOptions = equipmentTypes
+    ? equipmentTypes.map((types: any) => ({
+        value: types.id,
+        label: types.name,
+      }))
+    : [];
 
-  const locationsOptions = locations.map((location: any) => ({
-    value: location.id,
-    label: location.name,
-  }));
+  const companyOptions = companies
+    ? companies.map((company: any) => ({
+        value: company.id,
+        label: company.name,
+      }))
+    : [];
+
+  const locationsOptions = locations
+    ? locations.map((location: any) => ({
+        value: location.id,
+        label: location.name,
+      }))
+    : [];
 
   return (
     <>
@@ -271,18 +308,12 @@ export function CreateItemInventoryModal({
 
       <S.FormGroup>
         <S.Label htmlFor="type">Tipo do Equipamento</S.Label>
-        <S.Input
-          type="text"
-          name="type"
-          id="type"
-          placeholder="Tipo de equipamento"
-          value={formData.type}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              type: e.target.value,
-            }))
-          }
+        <Select
+          options={equipmentTypesOptions}
+          value={equipmentTypesOptions.find(
+            (option: any) => option.value === formData.type
+          )}
+          onChange={handleTypeSelectChange}
         />
       </S.FormGroup>
 

@@ -15,7 +15,36 @@ export function Ticket() {
   const [tickets, setTickets] = useState([]);
   const [showTicketModal, setShowTicketModal] = useState<boolean>(false);
   const [showQuickCreateTicket, setShowQuickCreateTicket] = useState(false);
+  const [ticketPriority, setTicketPriority] = useState([]);
+  const [selectedTicketPriority, setSelectedTicketPriority] = useState("");
+
   const { user } = useAuth();
+
+  useEffect(() => {
+    async function fetchPriority() {
+      if (
+        !user ||
+        !user.companies ||
+        !user.currentLoggedCompany.currentLoggedCompanyId ||
+        !user.currentLoggedCompany.currentLoggedCompanyName
+      ) {
+        return;
+      }
+
+      try {
+        const response = await apiClient().get("/ticket-priority", {
+          params: {
+            companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          },
+        });
+
+        setTicketPriority(response.data.body);
+      } catch (error) {
+        console.error("Erro ao buscar as prioridades:", error);
+      }
+    }
+    fetchPriority();
+  }, [user]);
 
   const fetchTickets = async () => {
     if (
@@ -32,6 +61,7 @@ export function Ticket() {
         params: {
           companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
           currentUserId: user.userId,
+          ticketPriorityId: selectedTicketPriority,
         },
       });
       setTickets(data.body);
@@ -45,7 +75,7 @@ export function Ticket() {
 
   useEffect(() => {
     fetchTickets();
-  }, [user]);
+  }, [user, selectedTicketPriority]);
 
   return (
     <Layout>
@@ -61,6 +91,10 @@ export function Ticket() {
               updateTicketsCallback={fetchTickets}
               showQuickCreateTicket={showQuickCreateTicket}
               setShowQuickCreateTicket={setShowQuickCreateTicket}
+              setTicketPriority={setTicketPriority}
+              ticketPriority={ticketPriority}
+              selectedTicketPriority={selectedTicketPriority}
+              setSelectedTicketPriority={setSelectedTicketPriority}
             />
 
             {showQuickCreateTicket && (

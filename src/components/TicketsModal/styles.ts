@@ -77,6 +77,14 @@ export const RightSide = styled.div`
   }
 `;
 
+export const WelcomeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 25px;
+`;
+
 export const CloseButton = styled.button`
   position: absolute;
   right: 20px;
@@ -90,7 +98,6 @@ export const CloseButton = styled.button`
 `;
 
 export const Title = styled.h2`
-  margin-bottom: 25px;
   color: ${colors.darkGrey};
   font-size: 24px;
 `;
@@ -261,6 +268,7 @@ export const ConversationContainer = styled.div`
 `;
 
 export const Message = styled.div<{ isTech: boolean }>`
+  position: relative;
   margin-bottom: 10px;
   padding: 5px 10px;
   border-radius: 15px;
@@ -270,6 +278,13 @@ export const Message = styled.div<{ isTech: boolean }>`
   word-break: break-word;
 
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+`;
+
+export const Timestamp = styled.span`
+  position: absolute;
+  top: 27px;
+  font-size: 0.7rem;
+  color: #555;
 `;
 
 export const ReplyContainer = styled.div`

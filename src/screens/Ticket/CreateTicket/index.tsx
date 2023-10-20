@@ -54,6 +54,8 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [selectedDescription, setSelectedDescription] = useState("");
   const [selectedPatrimonyTag, setSelectedPatrimonyTag] = useState<any>("");
   const [patrimonies, setPatrimonies] = useState([]);
+  const [isCustomPatrimony, setIsCustomPatrimony] = useState(false);
+  const [customPatrimonyValue, setCustomPatrimonyValue] = useState("");
 
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -259,6 +261,10 @@ export function CreateTicket({ tickets, setTickets }: any) {
     } catch (error) {
       console.error("Erro ao buscar patrimônios:", error);
     }
+  };
+
+  const handleCustomPatrimonyChange = (e: any) => {
+    setCustomPatrimonyValue(e.target.value);
   };
 
   return (
@@ -477,7 +483,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
         <S.FormGroup>
           <S.Label htmlFor="ticket_patrimonyTag">Patrimônio:</S.Label>
           <S.TagInputContainer>
-            {selectedPatrimonyTag && (
+            {selectedPatrimonyTag && !isCustomPatrimony && (
               <S.Tag>
                 #{selectedPatrimonyTag.patrimonyTag}
                 <S.RemoveTagButton onClick={handleRemoveTag}>
@@ -485,17 +491,35 @@ export function CreateTicket({ tickets, setTickets }: any) {
                 </S.RemoveTagButton>
               </S.Tag>
             )}
-            <Select
-              placeholder={"<Selecione>"}
-              options={patrimonies}
-              value={selectedPatrimonyTag}
-              getOptionLabel={(option: any) => `#${option.patrimonyTag}`}
-              getOptionValue={(option: any) => option.id}
-              onChange={(v: any) => {
-                setSelectedPatrimonyTag(v);
-              }}
-              required
-            />
+            {!isCustomPatrimony ? (
+              <Select
+                placeholder={"<Selecione>"}
+                options={[
+                  ...patrimonies,
+                  { id: "custom", patrimonyTag: "Outro (inserir manualmente)" },
+                ]} // adicionar uma opção para customizar
+                value={selectedPatrimonyTag}
+                getOptionLabel={(option) => `#${option.patrimonyTag}`}
+                getOptionValue={(option) => option.id}
+                onChange={(v) => {
+                  if (v.id === "custom") {
+                    // Se o usuário selecionar a opção personalizada, permitimos que ele insira um texto
+                    setIsCustomPatrimony(true);
+                    // Limpa a seleção atual, pois vamos inserir um novo valor
+                    setSelectedPatrimonyTag(null);
+                  } else {
+                    setSelectedPatrimonyTag(v);
+                  }
+                }}
+              />
+            ) : (
+              <input
+                type="text"
+                placeholder="Insira o patrimônio"
+                value={customPatrimonyValue}
+                onChange={handleCustomPatrimonyChange}
+              />
+            )}
           </S.TagInputContainer>
           {!!errors.ticket_patrimonyTag && (
             <small
