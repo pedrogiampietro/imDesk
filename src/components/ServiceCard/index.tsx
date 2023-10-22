@@ -5,9 +5,7 @@ import { RiAlertFill } from "react-icons/ri";
 const CardContainer = styled.div`
   width: 20%;
   height: fit-content;
-
-  background: #fff;
-  border: 1px solid #ddd;
+  background-color: ${({ theme }) => theme.bg2};
   border-radius: 5px;
   padding: 20px;
   margin: 0 15px 0 10px;
@@ -35,6 +33,10 @@ const CardItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 5px;
+
+  & span {
+    color: ${({ theme }) => theme.text};
+  }
 
   svg {
     margin-right: 10px;

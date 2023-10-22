@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
-import styled from "@emotion/styled";
-
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { TaskBoardCard } from "./TaskBoardCard";
 import { formatDateptBR } from "../../utils/dateTime";
@@ -8,26 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { apiClient } from "../../services/api";
 import { TicketsModal } from "../TicketsModal";
 
-const Container = styled.div`
-  display: flex;
-`;
-
-const TaskList = styled.div`
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  background: #f3f3f3;
-  border-radius: 5px;
-  padding: 15px 15px;
-  margin-right: 45px;
-`;
-
-const TaskColumnStyles = styled.div`
-  margin: 8px;
-  display: flex;
-  width: 100%;
-  min-height: 80vh;
-`;
+import * as S from "./styles";
 
 const transformApiData = (apiData: any) => {
   if (!apiData || !Array.isArray(apiData)) {
@@ -163,8 +142,8 @@ export function TicketBoard({
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Container>
-        <TaskColumnStyles>
+      <S.Container>
+        <S.TaskColumnStyles>
           {columns &&
             Object.entries(columns).map(([columnId, column]: any, idx) => {
               return (
@@ -172,7 +151,7 @@ export function TicketBoard({
                   <h3>{column.title}</h3>
                   <Droppable droppableId={columnId}>
                     {(provided) => (
-                      <TaskList
+                      <S.TaskList
                         style={containerStyle}
                         ref={provided.innerRef}
                         {...provided.droppableProps}
@@ -188,14 +167,14 @@ export function TicketBoard({
                           );
                         })}
                         {provided.placeholder}
-                      </TaskList>
+                      </S.TaskList>
                     )}
                   </Droppable>
                 </div>
               );
             })}
-        </TaskColumnStyles>
-      </Container>
+        </S.TaskColumnStyles>
+      </S.Container>
 
       {showTicketModal && selectedTicket && (
         <TicketsModal

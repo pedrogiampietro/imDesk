@@ -20,6 +20,7 @@ import { Pagination } from "../../components/Pagination";
 export interface ITicket {
   id: string;
   description: string;
+  observationServiceExecuted?: string;
   assignedTo: string[];
   equipaments: string[];
   images: string[];

@@ -83,6 +83,8 @@ export function Inventory() {
 
   const renderInventoryContent = () => {
     const filteredItems = filteredInventory();
+
+    console.log("filteredItems", filteredItems);
     let content = filteredItems.length ? (
       filteredItems.map((item, index) => (
         <S.TableRow key={item.id}>
@@ -132,6 +134,7 @@ export function Inventory() {
         <S.Header>
           <div>
             <select value={selectedType} onChange={handleTypeChange}>
+              <option value="">Selecione</option>
               {equipmentTypes.map((type: any) => (
                 <option key={type} value={type}>
                   {type}

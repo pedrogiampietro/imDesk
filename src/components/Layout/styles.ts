@@ -8,7 +8,7 @@ export const Layout = styled.div`
 
 export const Main = styled.main`
   width: 100%;
-  padding: calc(${v.smSpacing} * 2);
+  /* padding: calc(${v.smSpacing} * 2); */
 
   h1 {
     font-size: 14px;
@@ -20,7 +20,7 @@ export const TopBar = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0.7rem 20px;
-  background-color: #f6f6f6;
+  background-color: ${({ theme }) => theme.bg2};
   border-bottom: 1px solid #ddd;
   margin-bottom: 1rem;
 `;

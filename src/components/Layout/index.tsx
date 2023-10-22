@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Sidebar } from "../Sidebar/";
 import { useAuth } from "../../hooks/useAuth";
 import { Breadcrumb } from "../../components/Breadcrumb";
-
 import { IoBusinessOutline } from "react-icons/io5";
 
 import * as S from "./styles";
@@ -14,6 +13,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+
   const { user, signOut } = useAuth();
 
   const location = useLocation();

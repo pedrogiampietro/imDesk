@@ -1,10 +1,28 @@
 import styled from "styled-components";
+import SignatureCanvas from "react-signature-canvas";
 
 export const ProfileContainer = styled.div`
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+`;
+
+export const Header = styled.header`
+  background-color: #6200ee;
+
+  padding: 20px 0;
+  text-align: center;
+  font-size: 1.5rem;
+
+  & h1 {
+    color: #ffffff;
+  }
+`;
+
+export const Content = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+  gap: 20px;
+  margin-top: 20px;
 `;
 
 export const SideContainer = styled.div`
@@ -15,6 +33,10 @@ export const SideContainer = styled.div`
     border-right: 1px solid #ccc;
   }
 `;
+
+export const AvatarSection = styled.section``;
+
+export const SignatureSection = styled.section``;
 
 export const Form = styled.form`
   display: flex;
@@ -76,7 +98,7 @@ export const SubmitButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #c3aff0;
   }
 
   &:focus {
@@ -94,4 +116,39 @@ export const Initials = styled.div`
   align-items: center;
   color: #7f56d8;
   font-weight: bold;
+`;
+export const SignatureField = styled.div`
+  margin: 20px 0;
+  p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  & .signatureCanvas {
+    background-color: #fff;
+  }
+`;
+
+export const SignatureCanvasStyled = styled(SignatureCanvas)`
+  border: 1px solid #000;
+  border-radius: 5px;
+`;
+
+export const Button = styled.button`
+  display: inline-block;
+  background-color: #7f56d8;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 20px;
+  margin: 10px 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #c3aff0;
+  }
 `;

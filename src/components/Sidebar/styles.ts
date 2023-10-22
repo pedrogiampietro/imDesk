@@ -5,7 +5,7 @@ import { btnReset, v } from "../../assets/styles/variables";
 
 export const Sidebar = styled.div<{ isOpen: boolean }>`
   width: ${({ isOpen }) => (!isOpen ? `auto` : v.sidebarWidth)};
-  background: ${({ theme }) => theme.bg};
+  background-color: ${({ theme }) => theme.bg2};
   height: 100vh;
   padding: ${v.lgSpacing};
 
@@ -82,18 +82,22 @@ export const SearchIcon = styled.button`
 export const Divider = styled.div`
   height: 1px;
   width: 100%;
-  background: ${({ theme }) => theme.bg3};
+  background: ${({ theme }) => theme.primary};
   margin: ${v.lgSpacing} 0;
 `;
 
-export const LinkContainer = styled.div<{ isActive?: boolean }>`
+export const LinkContainer = styled.div<{
+  isActive?: boolean;
+  isOpen: boolean;
+}>`
+  width: ${({ isOpen }) => (!isOpen ? "3.125rem" : "auto")};
   background: ${({ theme, isActive }) =>
-    !isActive ? `transparent` : theme.bg3};
+    !isActive ? `transparent` : theme.bg};
   border-radius: ${v.borderRadius};
   margin: 8px -5px;
 
   :hover {
-    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.bg3};
+    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.bg};
   }
 `;
 
@@ -141,6 +145,7 @@ export const Theme = styled.div`
 export const ThemeLabel = styled.span`
   display: block;
   flex: 1;
+  color: ${({ theme }) => theme.primary};
 `;
 export const ThemeToggler = styled.button<{ isActive?: boolean }>`
   ${btnReset};

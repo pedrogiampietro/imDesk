@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const colors = {
   primary: "#7F56D8",
-  primaryDark: "#0056b3",
+  primaryDark: "#c3aff0",
   lightGrey: "#f4f4f4",
   darkGrey: "#333",
   borderGrey: "#ccc",
@@ -16,7 +16,8 @@ export const ModalWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  /* background: rgba(0, 0, 0, 0.7); */
+  background-color: ${({ theme }) => theme.bg2};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,7 +28,7 @@ export const Modal = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  background: ${colors.white};
+  background-color: ${({ theme }) => theme.bg};
   padding: 30px 40px;
   box-shadow: 0px 10px 50px -10px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -52,7 +53,6 @@ export const LeftSide = styled.div`
     color: ${colors.primaryDark};
   }
 
-  // Seção do chat
   > div.chat {
     background: ${colors.lightGrey};
     padding: 15px;
@@ -83,6 +83,14 @@ export const WelcomeWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   margin-bottom: 25px;
+
+  & p {
+    color: ${({ theme }) => theme.primary};
+
+    & strong {
+      color: ${({ theme }) => theme.text};
+    }
+  }
 `;
 
 export const CloseButton = styled.button`
@@ -91,6 +99,13 @@ export const CloseButton = styled.button`
   top: 20px;
   background: none;
   border: none;
+
+  & > svg {
+    font-size: 22px;
+    margin-right: 0.65rem;
+    fill: ${({ theme }) => theme.text};
+  }
+
   &:hover {
     color: ${colors.red};
     cursor: pointer;
@@ -98,7 +113,7 @@ export const CloseButton = styled.button`
 `;
 
 export const Title = styled.h2`
-  color: ${colors.darkGrey};
+  color: ${({ theme }) => theme.primary};
   font-size: 24px;
 `;
 
@@ -106,11 +121,16 @@ export const InfoGroup = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
+
+  & h1 {
+    color: ${({ theme }) => theme.primary};
+    margin-bottom: 1rem;
+  }
 `;
 
 export const InfoItem = styled.div`
   flex: 1;
-  background: ${colors.lightGrey};
+  background-color: ${({ theme }) => theme.bg2};
   padding: 15px;
   border-radius: 15px;
   margin-right: 1rem;
@@ -125,19 +145,30 @@ export const IconContainer = styled.div`
   flex-direction: row;
   color: #ff6347;
   margin-bottom: 5px;
+
   & > svg {
     font-size: 22px;
     margin-right: 0.65rem;
+    fill: ${({ theme }) => theme.primary};
   }
 `;
 
 export const InfoTitle = styled.p`
   font-weight: bold;
   margin-bottom: 5px;
+  color: ${({ theme }) => theme.primary};
 `;
 
 export const InfoContent = styled.p`
-  color: #333;
+  color: ${({ theme }) => theme.text};
+
+  & strong {
+    color: ${({ theme }) => theme.text};
+  }
+`;
+
+export const RemoveAssigned = styled.button`
+  background-color: ${({ theme }) => theme.bg2};
 `;
 
 export const Dropdown = styled.div`
@@ -165,14 +196,14 @@ export const StyledInput = styled.input`
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   background-color: #fff;
-  border-radius: 8px; // Bordas mais arredondadas
+  border-radius: 8px;
 
   &:hover {
     border-color: #a0aec0;
   }
 
   &:focus {
-    border-color: #3182ce;
+    border-color: #c3aff0;
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
     outline: none;
   }
@@ -183,14 +214,15 @@ export const StyledInput = styled.input`
 `;
 
 export const StyledSelect = styled.select`
-  border: 1px solid #e2e8f0;
   padding: 8px 12px;
   border-radius: 4px;
   appearance: none;
-  background-color: #fff;
+  border: none;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
   cursor: pointer;
   transition: border-color 0.2s;
-  border-radius: 8px; // Bordas mais arredondadas
+  border-radius: 8px;
 
   &:focus {
     border-color: #a0aec0;
@@ -205,14 +237,21 @@ export const StyledSelect = styled.select`
 export const StyledTextarea = styled.textarea`
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
   border-radius: 4px;
   font-size: 16px;
-  resize: vertical; // permite o redimensionamento vertical do textarea
+  resize: vertical;
   margin-bottom: 10px;
+
   &:focus {
     border-color: #7f56d8;
     outline: none;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.text};
   }
 `;
 
@@ -227,10 +266,10 @@ export const StyledButton = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  border-radius: 8px; // Bordas mais arredondadas
+  border-radius: 8px;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #c3aff0;
   }
   &:disabled {
     background-color: #ccc;
@@ -256,11 +295,11 @@ export const Button = styled.button`
 
 export const ConversationContainer = styled.div`
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
   max-height: 340px;
   overflow-y: auto;
-  background-color: #f9f9f9;
+  background-color: ${({ theme }) => theme.bg};
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
@@ -284,7 +323,7 @@ export const Timestamp = styled.span`
   position: absolute;
   top: 27px;
   font-size: 0.7rem;
-  color: #555;
+  color: ${({ theme }) => theme.primary};
 `;
 
 export const ReplyContainer = styled.div`
@@ -322,6 +361,7 @@ export const UsedItemsHistory = styled.div`
   h2 {
     text-align: center;
     margin-bottom: 10px;
+    color: ${({ theme }) => theme.primary};
   }
 
   table {

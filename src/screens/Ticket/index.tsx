@@ -91,7 +91,6 @@ export function Ticket() {
               updateTicketsCallback={fetchTickets}
               showQuickCreateTicket={showQuickCreateTicket}
               setShowQuickCreateTicket={setShowQuickCreateTicket}
-              setTicketPriority={setTicketPriority}
               ticketPriority={ticketPriority}
               selectedTicketPriority={selectedTicketPriority}
               setSelectedTicketPriority={setSelectedTicketPriority}

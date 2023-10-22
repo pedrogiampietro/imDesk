@@ -10,7 +10,7 @@ export const KanbanContainer = styled.div`
   width: 100%;
   flex-direction: column;
   margin: 0 1rem;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.bg2};
   padding: 2rem;
   border-radius: 10px;
 `;
@@ -45,6 +45,7 @@ export const TabIconWrapper = styled.span`
 `;
 
 export const TabTitle = styled.span`
+  color: ${({ theme }) => theme.text};
   font-size: 14px;
 `;
 
@@ -52,9 +53,8 @@ export const FilterButton = styled.button<{
   theme: typeof lightTheme | typeof darkTheme;
 }>`
   padding: 8px 16px;
-  background-color: ${({ theme }) =>
-    theme.bg3}; // Usando a cor de background secundária do tema
-  color: ${({ theme }) => theme.text}; // Cor do texto do tema
+  background-color: ${({ theme }) => theme.bg3};
+  color: ${({ theme }) => theme.text};
   border: 1px solid #000;
   border-radius: 4px;
   cursor: pointer;
@@ -62,8 +62,7 @@ export const FilterButton = styled.button<{
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: ${({ theme }) =>
-      theme.primary}; // Usando a cor primária do tema no hover
+    background-color: ${({ theme }) => theme.primary};
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
@@ -87,7 +86,7 @@ export const IconButton = styled.button<{ active?: boolean }>`
   width: 40px;
   height: 40px;
   border: none;
-  background-color: ${({ active }) => (active ? "#7F56D8" : "transparent")};
+  background-color: ${({ active }) => (active ? "#7F56D8" : "#9884c48a")};
   border-radius: 8px;
   margin-right: 0.62rem;
   cursor: pointer;
@@ -106,8 +105,8 @@ export const FiltersWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px; // ou qualquer espaço que você achar apropriado
-  flex-wrap: nowrap; // Isso vai garantir que os itens não quebrem para a próxima linha.
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
 `;
 
 export const ControlsGroup = styled.div`
@@ -116,21 +115,31 @@ export const ControlsGroup = styled.div`
   width: 60%;
 
   & > *:not(:last-child) {
-    margin-right: 8px; // Espaçamento entre os controles
+    margin-right: 8px;
   }
 `;
 
 export const SearchInput = styled.input`
   padding: 14px 13px 11px 18px;
-  border: 1px solid #ccc;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
+  outline: none;
+  border: none;
   border-radius: 4px;
 `;
 
 export const Select = styled.select`
   margin-left: 8px;
   padding: 8px;
-  border: 1px solid #ccc;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
+  outline: none;
+  border: none;
   border-radius: 4px;
+
+  & option {
+    color: ${({ theme }) => theme.text};
+  }
 `;
 
 export const CreateButton = styled.button`

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  FiX,
   FiUser,
   FiClock,
   FiAlertCircle,
@@ -9,8 +8,9 @@ import {
   FiImage,
   FiBox,
 } from "react-icons/fi";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { AiFillCloseCircle, AiOutlineClose } from "react-icons/ai";
 import { MdOutlineDescription } from "react-icons/md";
+import { FaSignature } from "react-icons/fa";
 import { ITicket } from "../TicketKanban";
 
 import * as S from "./styles";
@@ -85,6 +85,9 @@ export function TicketsModal({
   const [selectedDepositItem, setSelectedDepositItem] = useState("");
   const [quantityUsed, setQuantityUsed] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [observationServiceExecuted, setObservationServiceExecuted] = useState(
+    ticketData.observationServiceExecuted
+  );
 
   const newId = ticketData.id.split("-");
 
@@ -178,7 +181,6 @@ export function TicketsModal({
           );
         });
 
-      // Update local state
       setTicketData((prevData) => ({
         ...prevData,
         [field]: newValue,
@@ -189,14 +191,11 @@ export function TicketsModal({
   };
 
   const handleAssignTo = (techId: string) => {
-    // Verifique se o técnico já foi atribuído
     if (changeAssignedTo.some((tech: any) => tech.id === techId)) return;
 
-    // Encontre o técnico pelo id
     const tech = technicians.find((tech: any) => tech.id === techId);
     if (!tech) return;
 
-    // Adicione o técnico à lista de técnicos atribuídos
     setChangeAssignedTo([...changeAssignedTo, tech]);
 
     handleDataChange("assignedTo", { id: techId, name: tech.name });
@@ -253,6 +252,19 @@ export function TicketsModal({
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
+
+  const handleChangeObservationServiceExecuted = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const value = e.target.value;
+    setObservationServiceExecuted(value);
+  };
+
+  const handlebservationServiceExecuted = (newObservation: string) => {
+    handleDataChange("observationServiceExecuted", newObservation);
+  };
+
+  useDebounce(observationServiceExecuted, 500, handlebservationServiceExecuted);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -405,7 +417,6 @@ export function TicketsModal({
     const newSLA = event.target.value;
     setSelectedSLA(newSLA);
 
-    // Agora, faça uma chamada à API para atualizar o slaDefinitionId
     try {
       await apiClient().put(`/ticket/${data.id}?userId=${loggedUser.userId}`, {
         slaDefinitionId: newSLA,
@@ -513,6 +524,37 @@ export function TicketsModal({
     }
   };
 
+  const submitSignDocument = async () => {
+    try {
+      const result = await apiClient().get(`/pdf-gen/${data.id}`, {
+        params: {
+          companyId: loggedUser?.currentLoggedCompany.currentLoggedCompanyId,
+          currentUserId: loggedUser.userId,
+        },
+        responseType: "blob",
+      });
+
+      if (result.status === 200) {
+        const contentType = result.headers["content-type"] || "application/pdf";
+
+        if (!result.data.type) {
+          result.data = new Blob([result.data], { type: contentType });
+        }
+
+        const url = window.URL.createObjectURL(result.data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `ticket-${newId[0]}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error("Erro ao assinar o documento e baixar o pdf:", error);
+    }
+  };
+
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
@@ -611,9 +653,16 @@ export function TicketsModal({
           <S.InfoGroup>
             <S.InfoItem>
               <S.IconContainer>
-                <MdOutlineDescription /> <S.InfoTitle>Imagens</S.InfoTitle>
+                <MdOutlineDescription />
+                <S.InfoTitle>Observação do serviço executado:</S.InfoTitle>
               </S.IconContainer>
-              <S.InfoContent></S.InfoContent>
+              <S.InfoContent>
+                <S.StyledTextarea
+                  value={observationServiceExecuted}
+                  onChange={handleChangeObservationServiceExecuted}
+                  rows={5}
+                />
+              </S.InfoContent>
             </S.InfoItem>
           </S.InfoGroup>
         </S.LeftSide>
@@ -624,13 +673,17 @@ export function TicketsModal({
               updateTicketsCallback();
             }}
           >
-            <FiX size="24" />
+            <AiOutlineClose size="24" />
           </S.CloseButton>
           <S.WelcomeWrapper>
             <S.Title>Ticket #{newId[0]}</S.Title>
             <p>
               Total de Tickets abertos para esse Patrimônio:{" "}
-              <strong>{ticketData.equipmentUsage[0].usageCount}</strong>
+              <strong>
+                {ticketData?.equipmentUsage.length > 0
+                  ? ticketData?.equipmentUsage[0]?.usageCount
+                  : 0}
+              </strong>
             </p>
           </S.WelcomeWrapper>
 
@@ -687,7 +740,7 @@ export function TicketsModal({
                       >
                         <span>{tech.name}</span>
                         {tech.name !== "" && (
-                          <button
+                          <S.RemoveAssigned
                             onClick={(e) => {
                               e.stopPropagation();
                               handleRemoveAssignedTo(tech.id);
@@ -703,7 +756,7 @@ export function TicketsModal({
                               size={18}
                               style={{ color: "white" }}
                             />
-                          </button>
+                          </S.RemoveAssigned>
                         )}
                       </span>
                     ))
@@ -936,7 +989,7 @@ export function TicketsModal({
         </S.RightSide>
 
         {ticketStatus === "closed" ? (
-          <S.InfoGroup>
+          <S.InfoGroup style={{ margin: "0 1rem" }}>
             <S.InfoItem>
               <S.IconContainer>
                 <FiStar /> <S.InfoTitle>Avaliação</S.InfoTitle>
@@ -960,6 +1013,19 @@ export function TicketsModal({
                   </S.StyledButton>
                 )}
               </S.InfoContent>
+
+              <S.InfoItem style={{ marginTop: "5rem" }}>
+                <S.IconContainer>
+                  <FaSignature /> <S.InfoTitle>Assinar Documento</S.InfoTitle>
+                </S.IconContainer>
+                <S.InfoContent>
+                  <div>
+                    <S.StyledButton onClick={submitSignDocument}>
+                      Assinar
+                    </S.StyledButton>
+                  </div>
+                </S.InfoContent>
+              </S.InfoItem>
             </S.InfoItem>
           </S.InfoGroup>
         ) : null}

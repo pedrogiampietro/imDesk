@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const CardContainer = styled.div`
   width: 20%;
   height: fit-content;
-  background: #fff;
+  background-color: ${({ theme }) => theme.bg2};
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -49,8 +49,8 @@ export const Label = styled.p`
   color: #333;
 `;
 
-export const Value = styled.p<{ color: string }>`
+export const Value = styled.p`
   font-size: 20px;
   font-weight: bold;
-  color: ${(props) => props.color};
+  color: ${({ theme }) => theme.primary};
 `;

@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   width: 50%;
   display: flex;
   margin: 0 auto;
-  background: #fff;
+  background-color: ${({ theme }) => theme.bg2};
   padding: 2rem;
 `;
 
@@ -21,8 +21,8 @@ export const FormGroup = styled.div`
   margin-bottom: 1rem;
 `;
 
-export const Label = styled.label<{ isActive?: boolean }>`
-  color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
+export const Label = styled.label`
+  color: ${({ theme }) => theme.text};
 `;
 
 export const Input = styled.input`
@@ -109,7 +109,7 @@ export const CreateTicketButton = styled.button<{ isActive: boolean }>`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: ${({ theme }) => theme.bg3};
+    background-color: ${({ theme }) => theme.primaryDark};
     color: #fff;
     transform: translateY(-2px);
     opacity: 0.9;

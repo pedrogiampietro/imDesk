@@ -10,19 +10,16 @@ import {
   AiOutlineSearch,
   AiOutlineSetting,
 } from "react-icons/ai";
-import {
-  MdLogout,
-  MdOutlineAnalytics,
-  MdOutlineComputer,
-  MdInventory,
-} from "react-icons/md";
-import { FaFileContract, FaWarehouse } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
+import { BsHouse } from "react-icons/bs";
+import { HiOutlineNewspaper } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
-import { MdFoodBank } from "react-icons/md";
+import { MdOutlineInventory } from "react-icons/md";
 
 import { ThemeContext } from "./../../App";
 
 import * as S from "./styles";
+import { Tooltip } from "../Tooltip";
 
 export function Sidebar() {
   const searchRef = useRef(null);
@@ -95,27 +92,31 @@ export function Sidebar() {
       </S.Search>
       <S.Divider />
       {linksArray.map(({ icon, label, notification, to }) => (
-        <S.LinkContainer key={label} isActive={pathname === to}>
-          <S.LinkStyle
-            to={to}
-            style={!sidebarOpen ? { width: `fit-content` } : {}}
-          >
-            <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-            {sidebarOpen && (
-              <>
-                <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
-                {/* if notifications are at 0 or null, do not display */}
-                {!!notification && (
-                  <S.LinkNotification>{notification}</S.LinkNotification>
-                )}
-              </>
-            )}
-          </S.LinkStyle>
+        <S.LinkContainer
+          key={label}
+          isActive={pathname === to}
+          isOpen={sidebarOpen}
+        >
+          {!sidebarOpen ? (
+            <Tooltip text={label}>
+              <S.LinkStyle to={to} style={{ width: `fit-content` }}>
+                <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+              </S.LinkStyle>
+            </Tooltip>
+          ) : (
+            <S.LinkStyle to={to}>
+              <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+              <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+              {!!notification && (
+                <S.LinkNotification>{notification}</S.LinkNotification>
+              )}
+            </S.LinkStyle>
+          )}
         </S.LinkContainer>
       ))}
       <S.Divider />
       {secondaryLinksArray.map(({ icon, label, func, to }) => (
-        <S.LinkContainer key={label}>
+        <S.LinkContainer key={label} isOpen={sidebarOpen}>
           <S.LinkStyle
             to={`${to}`}
             style={!sidebarOpen ? { width: `fit-content` } : {}}
@@ -166,19 +167,19 @@ const linksArray = [
   },
   {
     label: "Fornecedores",
-    icon: <FaFileContract />,
+    icon: <HiOutlineNewspaper />,
     to: "/providers",
     notification: 0,
   },
   {
     label: "Estoque",
-    icon: <FaWarehouse />,
+    icon: <BsHouse />,
     to: "/deposit",
     notification: 0,
   },
   {
     label: "Inventário",
-    icon: <MdInventory />,
+    icon: <MdOutlineInventory />,
     to: "/inventory",
     notification: 0,
   },

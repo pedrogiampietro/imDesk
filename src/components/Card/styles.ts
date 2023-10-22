@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const CardContainer = styled.div`
   width: 180px;
   height: 120px;
-  background: #fff;
+  background-color: ${({ theme }) => theme.bg2};
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -14,7 +14,6 @@ export const CardContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0 0 16px;
-  background-color: white;
 `;
 
 export const CardLabel = styled.div`

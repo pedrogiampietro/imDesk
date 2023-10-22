@@ -175,8 +175,6 @@ export function CreateTicket({ tickets, setTickets }: any) {
   };
 
   const handleSubmitTicket = async (values: any) => {
-    console.log("selectedPatrimonyTag", selectedPatrimonyTag);
-
     try {
       const formData = new FormData();
 
@@ -191,7 +189,9 @@ export function CreateTicket({ tickets, setTickets }: any) {
 
       formData.append(
         "equipmentTicketLocationId",
-        JSON.stringify(selectedPatrimonyTag.id)
+        JSON.stringify(
+          selectedPatrimonyTag ? selectedPatrimonyTag.id : customPatrimonyValue
+        )
       );
 
       formData.append("values", JSON.stringify(values));
@@ -271,9 +271,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
     <S.Wrapper>
       <S.Form onSubmit={handleSubmit(handleSubmitTicket)}>
         <S.FormGroup>
-          <S.Label htmlFor="ticket_type" isActive={theme === "dark"}>
-            Tipo de Chamado:*
-          </S.Label>
+          <S.Label htmlFor="ticket_type">Tipo de Chamado:*</S.Label>
           <Controller
             control={control}
             name="ticket_type"
@@ -315,9 +313,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
           </div>
         </S.FormGroup>
         <S.FormGroup>
-          <S.Label htmlFor="ticket_category" isActive={theme === "dark"}>
-            Categoria:
-          </S.Label>
+          <S.Label htmlFor="ticket_category">Categoria:</S.Label>
 
           <Controller
             control={control}
@@ -396,9 +392,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
           </div>
         </S.FormGroup>
         <S.FormGroup>
-          <S.Label htmlFor="ticket_priority" isActive={theme === "dark"}>
-            Prioridade:
-          </S.Label>
+          <S.Label htmlFor="ticket_priority">Prioridade:</S.Label>
           <Controller
             control={control}
             name="ticket_priority"
@@ -438,9 +432,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
           )}
         </S.FormGroup>
         <S.FormGroup>
-          <S.Label htmlFor="ticket_location" isActive={theme === "dark"}>
-            Localização:
-          </S.Label>
+          <S.Label htmlFor="ticket_location">Localização:</S.Label>
           <Controller
             control={control}
             name="ticket_location"
@@ -503,9 +495,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                 getOptionValue={(option) => option.id}
                 onChange={(v) => {
                   if (v.id === "custom") {
-                    // Se o usuário selecionar a opção personalizada, permitimos que ele insira um texto
                     setIsCustomPatrimony(true);
-                    // Limpa a seleção atual, pois vamos inserir um novo valor
                     setSelectedPatrimonyTag(null);
                   } else {
                     setSelectedPatrimonyTag(v);
@@ -513,7 +503,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                 }}
               />
             ) : (
-              <input
+              <S.Input
                 type="text"
                 placeholder="Insira o patrimônio"
                 value={customPatrimonyValue}
@@ -540,9 +530,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
           )}
         </S.FormGroup>
         <S.FormGroup>
-          <S.Label htmlFor="ticket_description" isActive={theme === "dark"}>
-            Descrição:
-          </S.Label>
+          <S.Label htmlFor="ticket_description">Descrição:</S.Label>
           <S.TextArea
             value={selectedDescription}
             className="basic-single"
@@ -553,9 +541,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
         </S.FormGroup>
 
         <S.FormGroup>
-          <S.Label htmlFor="ticket_images" isActive={theme === "dark"}>
-            Imagens:
-          </S.Label>
+          <S.Label htmlFor="ticket_images">Imagens:</S.Label>
           <S.FileInput>
             <S.Input
               type="file"

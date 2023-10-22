@@ -14,7 +14,7 @@ export const FlexWrapper = styled.div`
 
 export const CardContainer = styled.div<UrgencyProps>`
   margin-top: 3.5rem;
-  background-color: #fefefe;
+  background-color: ${({ theme }) => theme.bg};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   border: 1px solid #e7e7e7;
@@ -38,7 +38,7 @@ export const StatusCircle = styled.span<UrgencyProps>`
       ? "#df663d"
       : props.urgency === "Média"
       ? "#f7efa2"
-      : "#eefdec"};
+      : "#74c86b"};
 `;
 
 export const DefaultAvatar = styled.div`
@@ -68,7 +68,7 @@ export const OpenModalLink = styled.a`
 `;
 
 export const TicketId = styled.h4`
-  color: #2e2c34;
+  color: ${({ theme }) => theme.text};
   font-family: Montserrat;
   font-size: 16px;
   font-style: normal;
@@ -84,7 +84,7 @@ export const TitleOpenedWrapper = styled.div`
 
 export const Title = styled.h4`
   margin: 0;
-  color: #333;
+  color: ${({ theme }) => theme.text};
   font-weight: bold;
 `;
 
@@ -99,7 +99,7 @@ export const OpenedAt = styled.span`
 
 export const Description = styled.p`
   margin: 8px 0 2rem 0;
-  color: #84818a;
+  color: ${({ theme }) => theme.text};
   font-family: Montserrat;
   font-size: 12px;
   font-style: normal;
@@ -118,7 +118,7 @@ export const Urgency = styled.span<UrgencyProps>`
       ? "#df663d"
       : props.urgency === "Média"
       ? "#f7efa2"
-      : "#eefdec"};
+      : "#74c86b"};
   color: ${(props) =>
     props.urgency === "Alta"
       ? "#ffa07a"
