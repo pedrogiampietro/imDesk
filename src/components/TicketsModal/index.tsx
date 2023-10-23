@@ -8,7 +8,11 @@ import {
   FiImage,
   FiBox,
 } from "react-icons/fi";
-import { AiFillCloseCircle, AiOutlineClose } from "react-icons/ai";
+import {
+  AiFillCloseCircle,
+  AiOutlineClose,
+  AiOutlineDownload,
+} from "react-icons/ai";
 import { MdOutlineDescription } from "react-icons/md";
 import { FaSignature } from "react-icons/fa";
 import { ITicket } from "../TicketKanban";
@@ -524,7 +528,7 @@ export function TicketsModal({
     }
   };
 
-  const submitSignDocument = async () => {
+  const submitDownloadDocument = async () => {
     try {
       const result = await apiClient().get(`/pdf-gen/${data.id}`, {
         params: {
@@ -552,6 +556,36 @@ export function TicketsModal({
       }
     } catch (error) {
       console.error("Erro ao assinar o documento e baixar o pdf:", error);
+    }
+  };
+
+  const submitSignDocument = async () => {
+    try {
+      const response = await apiClient().get("/account/user/get-signature", {
+        params: { userId: loggedUser?.userId },
+      });
+
+      if (response.data.body) {
+        const signResponse = await apiClient().put(
+          `/ticket/sign/${ticketData.id}`,
+          {
+            userId: loggedUser?.userId,
+            signAs: loggedUser.isTechnician ? "tech" : "user",
+          }
+        );
+
+        if (signResponse.status === 200) {
+          toast.success(`Ai sim ein! seu documento foi assinado com sucesso!`);
+          console.log("Ticket assinado com sucesso:", signResponse.data);
+        } else {
+          console.error("Houve um problema ao assinar o ticket.");
+        }
+      } else {
+        toast.error(`Que pena! Parece que voce ainda não tem uma assinatura.`);
+      }
+    } catch (error) {
+      toast.error(`Que pena! Houve um erro ao buscar a assinatura do usuário.`);
+      console.error("Houve um erro ao buscar a assinatura do usuário:", error);
     }
   };
 
@@ -606,12 +640,14 @@ export function TicketsModal({
               </S.IconContainer>
               <S.ConversationContainer>
                 {conversations.map((msg: any, index: number) => (
-                  <S.Message isTech={msg?.User?.isTechnician} key={index}>
+                  <S.MessageWrapper key={index}>
+                    <S.Message isTech={msg?.User?.isTechnician}>
+                      {`${msg?.User?.name}: ${msg.content}`}
+                    </S.Message>
                     <S.Timestamp>
-                      {formatDate(new Date(msg.createdAt))}{" "}
+                      {formatDate(new Date(msg.createdAt))}
                     </S.Timestamp>
-                    {`${msg?.User?.name}: ${msg.content}`}
-                  </S.Message>
+                  </S.MessageWrapper>
                 ))}
               </S.ConversationContainer>
               <S.ReplyContainer>
@@ -680,7 +716,7 @@ export function TicketsModal({
             <p>
               Total de Tickets abertos para esse Patrimônio:{" "}
               <strong>
-                {ticketData?.equipmentUsage.length > 0
+                {ticketData?.equipmentUsage?.length > 0
                   ? ticketData?.equipmentUsage[0]?.usageCount
                   : 0}
               </strong>
@@ -738,7 +774,7 @@ export function TicketsModal({
                           justifyContent: "space-between",
                         }}
                       >
-                        <span>{tech.name}</span>
+                        <S.TechName>{tech.name}</S.TechName>
                         {tech.name !== "" && (
                           <S.RemoveAssigned
                             onClick={(e) => {
@@ -1020,8 +1056,30 @@ export function TicketsModal({
                 </S.IconContainer>
                 <S.InfoContent>
                   <div>
-                    <S.StyledButton onClick={submitSignDocument}>
+                    <S.StyledButton
+                      onClick={submitSignDocument}
+                      disabled={
+                        (loggedUser.isTechnician &&
+                          ticketData.ticketWasSignedTech) ||
+                        (!loggedUser.isTechnician &&
+                          ticketData.ticketWasSignedUser)
+                      }
+                    >
                       Assinar
+                    </S.StyledButton>
+                  </div>
+                </S.InfoContent>
+              </S.InfoItem>
+
+              <S.InfoItem style={{ marginTop: "5rem" }}>
+                <S.IconContainer>
+                  <AiOutlineDownload />{" "}
+                  <S.InfoTitle>Baixar Documento</S.InfoTitle>
+                </S.IconContainer>
+                <S.InfoContent>
+                  <div>
+                    <S.StyledButton onClick={submitDownloadDocument}>
+                      Baixar
                     </S.StyledButton>
                   </div>
                 </S.InfoContent>

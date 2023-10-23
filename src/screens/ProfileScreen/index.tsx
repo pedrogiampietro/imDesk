@@ -222,13 +222,14 @@ export function ProfileScreen() {
                     className: "signatureCanvas",
                   }}
                 />
-                {/* Você pode adicionar botões para salvar ou limpar a assinatura */}
-                <S.Button onClick={() => sigCanvas.current?.clear()}>
-                  Limpar
-                </S.Button>
-                <S.Button onClick={handleSignatureSubmit}>
-                  Salvar Assinatura
-                </S.Button>
+                <div>
+                  <S.Button onClick={() => sigCanvas.current?.clear()}>
+                    Limpar
+                  </S.Button>
+                  <S.Button onClick={handleSignatureSubmit}>
+                    Salvar Assinatura
+                  </S.Button>
+                </div>
               </S.SignatureField>
             )}
           </div>

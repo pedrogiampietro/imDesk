@@ -25,6 +25,8 @@ export interface ITicket {
   equipaments: string[];
   images: string[];
   assignedToAt: Date | null;
+  ticketWasSignedTech: boolean | false;
+  ticketWasSignedUser: boolean | false;
   closedBy: string | null;
   closedAt: Date;
   status: string;

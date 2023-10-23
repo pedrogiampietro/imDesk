@@ -56,6 +56,8 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 1rem;
+  margin-bottom: 0.375rem;
 `;
 
 export const ModalWrapper = styled.div`
@@ -97,8 +99,8 @@ export const ModalContainer = styled.div`
 `;
 
 export const NoItemsMessage = styled.div`
-  margin-top: 20px;
+  margin-top: 1.25rem;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.125rem;
   color: #333;
 `;

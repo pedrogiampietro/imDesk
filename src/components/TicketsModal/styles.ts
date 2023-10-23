@@ -167,6 +167,10 @@ export const InfoContent = styled.p`
   }
 `;
 
+export const TechName = styled.span`
+  color: ${({ theme }) => theme.text};
+`;
+
 export const RemoveAssigned = styled.button`
   background-color: ${({ theme }) => theme.bg2};
 `;
@@ -209,7 +213,7 @@ export const StyledInput = styled.input`
   }
 
   &::placeholder {
-    color: #a0aec0;
+    color: ${({ theme }) => theme.text};
   }
 `;
 
@@ -231,6 +235,10 @@ export const StyledSelect = styled.select`
 
   &:hover {
     border-color: #a0aec0;
+  }
+
+  & option {
+    color: ${({ theme }) => theme.text};
   }
 `;
 
@@ -306,24 +314,26 @@ export const ConversationContainer = styled.div`
   padding-bottom: 20px;
 `;
 
-export const Message = styled.div<{ isTech: boolean }>`
-  position: relative;
+export const MessageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: ${(props) => (props.isTech ? "flex-start" : "flex-end")};
+  max-width: 80%;
   margin-bottom: 10px;
+`;
+
+export const Message = styled.div<{ isTech: boolean }>`
   padding: 5px 10px;
   border-radius: 15px;
   background-color: ${(props) => (props.isTech ? "#dcf6c7" : "#dfd8cf")};
-  align-self: ${(props) => (props.isTech ? "flex-start" : "flex-end")};
-  max-width: 80%;
-  word-break: break-word;
-
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  word-break: break-word;
 `;
 
 export const Timestamp = styled.span`
-  position: absolute;
-  top: 27px;
   font-size: 0.7rem;
   color: ${({ theme }) => theme.primary};
+  margin-top: 4px;
 `;
 
 export const ReplyContainer = styled.div`
