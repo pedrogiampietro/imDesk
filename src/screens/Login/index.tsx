@@ -63,7 +63,9 @@ export function Login() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:3333/companies");
+        const response = await axios.get(
+          "https://imdesk-api.onrender.comcompanies/"
+        );
 
         setCompanies(response.data.companies);
       } catch (error) {
