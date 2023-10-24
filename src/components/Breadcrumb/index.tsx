@@ -5,7 +5,7 @@ import * as S from "./styles";
 export function Breadcrumb({ paths }: any) {
   return (
     <S.BreadcrumbContainer>
-      {paths.map((path, index) => (
+      {paths.map((path: any, index: number) => (
         <React.Fragment key={index}>
           <S.BreadcrumbItem>
             <Link to={path.url}>{path.name}</Link>

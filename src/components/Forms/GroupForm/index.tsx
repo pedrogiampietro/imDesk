@@ -20,9 +20,9 @@ export function GroupForm({
     companyIds: [],
   });
   const [users, setUsers] = useState([]);
-  const [groups, setGroups] = useState([]);
-  const [selectedGroups, setSelectedGroups] = useState([]);
-  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [groups, setGroups] = useState<any>([]);
+  const [selectedGroups, setSelectedGroups] = useState<any>([]);
+  const [selectedMembers, setSelectedMembers] = useState<any>([]);
 
   const { user } = useAuth();
 
@@ -156,20 +156,26 @@ export function GroupForm({
     }));
   };
 
-  const companyOptions = companies.map((company) => ({
-    value: company.id,
-    label: company.name,
-  }));
+  const companyOptions = companies
+    ? companies.map((company: any) => ({
+        value: company.id,
+        label: company.name,
+      }))
+    : [];
 
-  const groupOptions = groups.map((group: any) => ({
-    value: group.id,
-    label: group.name,
-  }));
+  const groupOptions = groups
+    ? groups.map((group: any) => ({
+        value: group.id,
+        label: group.name,
+      }))
+    : [];
 
-  const memberOptions = users.map((user: any) => ({
-    value: user.id,
-    label: user.name,
-  }));
+  const memberOptions = users
+    ? users.map((user: any) => ({
+        value: user.id,
+        label: user.name,
+      }))
+    : [];
 
   return (
     <S.Wrapper>

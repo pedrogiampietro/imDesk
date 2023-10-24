@@ -34,7 +34,7 @@ export function UserForm({ companies }: any) {
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type, checked } = event.target;
+    const { name, value, type, checked } = event.target as any;
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,

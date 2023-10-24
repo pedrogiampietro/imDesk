@@ -12,7 +12,6 @@ import { Deposit } from "../screens/Deposit";
 import { DepositView } from "../screens/DepositView";
 
 import RouteProtector from "./RouteProtector";
-import { Nutrition } from "../screens/Nutrition";
 import { Inventory } from "../screens/Inventory";
 
 export function AppRoutes() {
@@ -102,14 +101,6 @@ export function AppRoutes() {
       element: (
         <RouteProtector>
           <DepositView />
-        </RouteProtector>
-      ),
-    },
-    {
-      path: "/nutrition",
-      element: (
-        <RouteProtector>
-          <Nutrition />
         </RouteProtector>
       ),
     },
