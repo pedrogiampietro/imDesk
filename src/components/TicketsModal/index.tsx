@@ -8,7 +8,11 @@ import {
   FiImage,
   FiBox,
 } from "react-icons/fi";
-import { AiFillCloseCircle, AiOutlineClose } from "react-icons/ai";
+import {
+  AiFillCloseCircle,
+  AiOutlineClose,
+  AiOutlineDownload,
+} from "react-icons/ai";
 import { MdOutlineDescription } from "react-icons/md";
 import { FaSignature } from "react-icons/fa";
 import { ITicket } from "../TicketKanban";
@@ -76,6 +80,7 @@ export function TicketsModal({
   );
 
   const [selectedRating, setSelectedRating] = useState(0);
+  const [addedRating, setAddedRating] = useState<boolean>(false);
   const [selectedSLA, setSelectedSLA] = useState(ticketData.slaDefinitionId);
   const [slas, setSlas] = useState([]);
   const [manualResolutionDueDate, setManualResolutionDueDate] = useState("");
@@ -337,8 +342,21 @@ export function TicketsModal({
 
     try {
       const result = await apiClient().post(`/ticket/response`, payload);
+      const responseBody = result.data.body;
 
-      setConversations((prev) => [...prev, `User: ${userResponse}`]);
+      const newMessage = {
+        User: {
+          name: loggedUser.name,
+          isTechnician: loggedUser.isTechnician,
+        },
+        ...responseBody,
+      };
+
+      setConversations((prevConversations) => [
+        ...prevConversations,
+        newMessage,
+      ]);
+
       setUserResponse("");
     } catch (error) {
       console.error("Erro ao enviar a resposta do usuário:", error);
@@ -385,11 +403,15 @@ export function TicketsModal({
     if (selectedRating === null) return;
 
     try {
-      await apiClient().post(`/ticket/evaluate`, {
+      const result = await apiClient().post(`/ticket/evaluate`, {
         ticketId: ticketData.id,
         userId: loggedUser.userId,
         rating: selectedRating,
       });
+
+      if (result.data.body) {
+        setAddedRating(true);
+      }
     } catch (error) {
       console.error("Erro ao enviar avaliação:", error);
     }
@@ -524,7 +546,7 @@ export function TicketsModal({
     }
   };
 
-  const submitSignDocument = async () => {
+  const submitDownloadDocument = async () => {
     try {
       const result = await apiClient().get(`/pdf-gen/${data.id}`, {
         params: {
@@ -552,6 +574,36 @@ export function TicketsModal({
       }
     } catch (error) {
       console.error("Erro ao assinar o documento e baixar o pdf:", error);
+    }
+  };
+
+  const submitSignDocument = async () => {
+    try {
+      const response = await apiClient().get("/account/user/get-signature", {
+        params: { userId: loggedUser?.userId },
+      });
+
+      if (response.data.body) {
+        const signResponse = await apiClient().put(
+          `/ticket/sign/${ticketData.id}`,
+          {
+            userId: loggedUser?.userId,
+            signAs: loggedUser.isTechnician ? "tech" : "user",
+          }
+        );
+
+        if (signResponse.status === 200) {
+          toast.success(`Ai sim ein! seu documento foi assinado com sucesso!`);
+          console.log("Ticket assinado com sucesso:", signResponse.data);
+        } else {
+          console.error("Houve um problema ao assinar o ticket.");
+        }
+      } else {
+        toast.error(`Que pena! Parece que voce ainda não tem uma assinatura.`);
+      }
+    } catch (error) {
+      toast.error(`Que pena! Houve um erro ao buscar a assinatura do usuário.`);
+      console.error("Houve um erro ao buscar a assinatura do usuário:", error);
     }
   };
 
@@ -606,12 +658,14 @@ export function TicketsModal({
               </S.IconContainer>
               <S.ConversationContainer>
                 {conversations.map((msg: any, index: number) => (
-                  <S.Message isTech={msg?.User?.isTechnician} key={index}>
+                  <S.MessageWrapper key={index}>
+                    <S.Message isTech={msg?.User?.isTechnician}>
+                      {`${msg?.User?.name}: ${msg.content}`}
+                    </S.Message>
                     <S.Timestamp>
-                      {formatDate(new Date(msg.createdAt))}{" "}
+                      {formatDate(new Date(msg.createdAt))}
                     </S.Timestamp>
-                    {`${msg?.User?.name}: ${msg.content}`}
-                  </S.Message>
+                  </S.MessageWrapper>
                 ))}
               </S.ConversationContainer>
               <S.ReplyContainer>
@@ -642,13 +696,17 @@ export function TicketsModal({
             </S.InfoItem>
           </S.InfoGroup>
 
-          <S.InfoGroup>
-            <div>
-              <h1>Lista de Tarefas Realizadas</h1>
-              <AddTodo onAdd={handleAddTodo} />
-              <TodoList todos={todos} setTodos={setTodos} />
-            </div>
-          </S.InfoGroup>
+          {loggedUser.isTechnician ? (
+            <S.InfoGroup>
+              <div>
+                <h1>Lista de Tarefas Realizadas</h1>
+                <AddTodo onAdd={handleAddTodo} />
+                <TodoList todos={todos} setTodos={setTodos} />
+              </div>
+            </S.InfoGroup>
+          ) : (
+            ""
+          )}
 
           <S.InfoGroup>
             <S.InfoItem>
@@ -661,6 +719,7 @@ export function TicketsModal({
                   value={observationServiceExecuted}
                   onChange={handleChangeObservationServiceExecuted}
                   rows={5}
+                  disabled={!loggedUser.isTechnician}
                 />
               </S.InfoContent>
             </S.InfoItem>
@@ -680,7 +739,7 @@ export function TicketsModal({
             <p>
               Total de Tickets abertos para esse Patrimônio:{" "}
               <strong>
-                {ticketData?.equipmentUsage.length > 0
+                {ticketData?.equipmentUsage?.length > 0
                   ? ticketData?.equipmentUsage[0]?.usageCount
                   : 0}
               </strong>
@@ -696,6 +755,7 @@ export function TicketsModal({
                 <S.StyledSelect
                   value={ticketStatus}
                   onChange={handleStatusChange}
+                  disabled={!loggedUser.isTechnician}
                 >
                   <option value="new">Novo</option>
                   <option value="assigned">Atribuido</option>
@@ -725,7 +785,9 @@ export function TicketsModal({
               <S.InfoContent
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowDropdown(!showDropdown);
+                  if (loggedUser.isTechnician) {
+                    setShowDropdown(!showDropdown);
+                  }
                 }}
               >
                 {changeAssignedTo.some((tech: any) => tech.name !== "")
@@ -738,8 +800,8 @@ export function TicketsModal({
                           justifyContent: "space-between",
                         }}
                       >
-                        <span>{tech.name}</span>
-                        {tech.name !== "" && (
+                        <S.TechName>{tech.name}</S.TechName>
+                        {tech.name !== "" && loggedUser.isTechnician && (
                           <S.RemoveAssigned
                             onClick={(e) => {
                               e.stopPropagation();
@@ -794,6 +856,7 @@ export function TicketsModal({
                 <S.StyledSelect
                   value={selectedPriority}
                   onChange={handlePriorityChange}
+                  disabled={!loggedUser.isTechnician}
                 >
                   {ticketPriority.map((priority: any) => (
                     <option key={priority.id} value={priority.id}>
@@ -845,36 +908,43 @@ export function TicketsModal({
             </S.InfoItem>
           </S.InfoGroup>
 
-          <S.InfoGroup>
-            <S.InfoItem>
-              <S.IconContainer>
-                <FiClock /> <S.InfoTitle>SLA</S.InfoTitle>
-              </S.IconContainer>
-              <S.InfoContent>
-                <S.StyledSelect value={selectedSLA} onChange={handleSLAChange}>
-                  {slas.map((sla: any) => (
-                    <option key={sla.id} value={sla.id}>
-                      {`${sla.ticketPriority} - Tempo estimado: ${sla.resolutionTime}`}
-                    </option>
-                  ))}
-                </S.StyledSelect>
-              </S.InfoContent>
-            </S.InfoItem>
+          {loggedUser.isTechnician ? (
+            <S.InfoGroup>
+              <S.InfoItem>
+                <S.IconContainer>
+                  <FiClock /> <S.InfoTitle>SLA</S.InfoTitle>
+                </S.IconContainer>
+                <S.InfoContent>
+                  <S.StyledSelect
+                    value={selectedSLA}
+                    onChange={handleSLAChange}
+                  >
+                    {slas.map((sla: any) => (
+                      <option key={sla.id} value={sla.id}>
+                        {`${sla.ticketPriority} - Tempo estimado: ${sla.resolutionTime}`}
+                      </option>
+                    ))}
+                  </S.StyledSelect>
+                </S.InfoContent>
+              </S.InfoItem>
 
-            <S.InfoItem>
-              <S.IconContainer>
-                <FiClock />
-                <S.InfoTitle>Data/Hora Manual de Resolução</S.InfoTitle>
-              </S.IconContainer>
-              <S.InfoContent>
-                <S.StyledInput
-                  type="datetime-local"
-                  value={manualResolutionDueDate}
-                  onChange={handleManualResolutionDueDateChange}
-                />
-              </S.InfoContent>
-            </S.InfoItem>
-          </S.InfoGroup>
+              <S.InfoItem>
+                <S.IconContainer>
+                  <FiClock />
+                  <S.InfoTitle>Data/Hora Manual de Resolução</S.InfoTitle>
+                </S.IconContainer>
+                <S.InfoContent>
+                  <S.StyledInput
+                    type="datetime-local"
+                    value={manualResolutionDueDate}
+                    onChange={handleManualResolutionDueDateChange}
+                  />
+                </S.InfoContent>
+              </S.InfoItem>
+            </S.InfoGroup>
+          ) : (
+            ""
+          )}
           <S.InfoGroup>
             <S.InfoItem>
               <S.IconContainer>
@@ -888,140 +958,179 @@ export function TicketsModal({
               </S.InfoContent>
             </S.InfoItem>
           </S.InfoGroup>
-          <S.InfoGroup>
-            <S.InfoItem>
-              <S.IconContainer>
-                <FiBox /> <S.InfoTitle>Depósitos</S.InfoTitle>
-              </S.IconContainer>
-              <S.InfoContent>
-                <S.StyledSelect
-                  value={selectedDeposit}
-                  onChange={handleDepositChange}
-                >
-                  <option value="">Selecione um depósito</option>
-                  {deposits.map((deposito: any) => (
-                    <option key={deposito.id} value={deposito.id}>
-                      {deposito.name}
-                    </option>
-                  ))}
-                </S.StyledSelect>
-
-                {selectedDeposit && (
-                  <div style={{ display: "block", marginTop: "10px" }}>
-                    <S.StyledSelect
-                      value={selectedDepositItem}
-                      onChange={handleDepositItemChange}
-                      style={{ marginBottom: "10px" }}
-                    >
-                      <option value="">Selecione um item</option>
-                      {depositItems.map((item: any) => (
-                        <option key={item.id} value={item.id}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </S.StyledSelect>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ marginRight: "10px" }}>Quantidade:</label>
-
-                      <S.StyledInput
-                        type="number"
-                        min="1"
-                        value={quantityUsed}
-                        onChange={(e) =>
-                          setQuantityUsed(Number(e.target.value))
-                        }
-                      />
-                    </div>
-
-                    <div style={{ marginTop: "10px", textAlign: "center" }}>
-                      <S.Button onClick={handleSaveQuantityUsed}>
-                        Atualizar Deposito
-                      </S.Button>
-                    </div>
-                  </div>
-                )}
-              </S.InfoContent>
-            </S.InfoItem>
-          </S.InfoGroup>
-          <S.InfoGroup>
-            <S.InfoItem>
-              <S.UsedItemsHistory>
-                <h2>Historico de Itens Utilizados</h2>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>Quantidade</th>
-                      <th>Custo</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {ticketData?.usedItems?.map((item) => (
-                      <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.cost}</td>
-                      </tr>
+          {loggedUser.isTechnician ? (
+            <S.InfoGroup>
+              <S.InfoItem>
+                <S.IconContainer>
+                  <FiBox /> <S.InfoTitle>Depósitos</S.InfoTitle>
+                </S.IconContainer>
+                <S.InfoContent>
+                  <S.StyledSelect
+                    value={selectedDeposit}
+                    onChange={handleDepositChange}
+                  >
+                    <option value="">Selecione um depósito</option>
+                    {deposits.map((deposito: any) => (
+                      <option key={deposito.id} value={deposito.id}>
+                        {deposito.name}
+                      </option>
                     ))}
-                  </tbody>
-                </table>
-                <div
-                  style={{
-                    textAlign: "right",
-                  }}
-                >
-                  Total:{" "}
-                  {ticketData?.usedItems?.reduce(
-                    (total, item) => total + item.cost,
-                    0
+                  </S.StyledSelect>
+
+                  {selectedDeposit && (
+                    <div style={{ display: "block", marginTop: "10px" }}>
+                      <S.StyledSelect
+                        value={selectedDepositItem}
+                        onChange={handleDepositItemChange}
+                        style={{ marginBottom: "10px" }}
+                      >
+                        <option value="">Selecione um item</option>
+                        {depositItems.map((item: any) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </S.StyledSelect>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ marginRight: "10px" }}>
+                          Quantidade:
+                        </label>
+
+                        <S.StyledInput
+                          type="number"
+                          min="1"
+                          value={quantityUsed}
+                          onChange={(e) =>
+                            setQuantityUsed(Number(e.target.value))
+                          }
+                        />
+                      </div>
+
+                      <div style={{ marginTop: "10px", textAlign: "center" }}>
+                        <S.Button onClick={handleSaveQuantityUsed}>
+                          Atualizar Deposito
+                        </S.Button>
+                      </div>
+                    </div>
                   )}
-                </div>
-              </S.UsedItemsHistory>
-            </S.InfoItem>
-          </S.InfoGroup>
+                </S.InfoContent>
+              </S.InfoItem>
+            </S.InfoGroup>
+          ) : (
+            ""
+          )}
+
+          {loggedUser.isTechnician ? (
+            <S.InfoGroup>
+              <S.InfoItem>
+                <S.UsedItemsHistory>
+                  <h2>Historico de Itens Utilizados</h2>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>Quantidade</th>
+                        <th>Custo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ticketData?.usedItems?.map((item) => (
+                        <tr key={item.id}>
+                          <td>{item.name}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.cost}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div
+                    style={{
+                      textAlign: "right",
+                    }}
+                  >
+                    Total:{" "}
+                    {ticketData?.usedItems?.reduce(
+                      (total, item) => total + item.cost,
+                      0
+                    )}
+                  </div>
+                </S.UsedItemsHistory>
+              </S.InfoItem>
+            </S.InfoGroup>
+          ) : (
+            ""
+          )}
         </S.RightSide>
 
         {ticketStatus === "closed" ? (
           <S.InfoGroup style={{ margin: "0 1rem" }}>
             <S.InfoItem>
-              <S.IconContainer>
-                <FiStar /> <S.InfoTitle>Avaliação</S.InfoTitle>
-              </S.IconContainer>
-              <S.InfoContent>
-                <div>
-                  {[1, 2, 3, 4, 5].map((_, index) => (
-                    <Star
-                      key={index}
-                      index={index + 1}
-                      selectedRating={selectedRating}
-                      onClick={handleStarClick}
-                      // value={data?.TicketEvaluation[0]?.rating}
-                    />
-                  ))}
-                </div>
+              {!loggedUser.isTechnician ? (
+                <>
+                  <S.IconContainer>
+                    <FiStar /> <S.InfoTitle>Avaliação</S.InfoTitle>
+                  </S.IconContainer>
+                  <S.InfoContent>
+                    <div>
+                      {[1, 2, 3, 4, 5].map((_, index) => (
+                        <Star
+                          key={index}
+                          index={index + 1}
+                          selectedRating={selectedRating}
+                          onClick={handleStarClick}
+                        />
+                      ))}
+                    </div>
 
-                {data?.TicketEvaluation?.length > 0 ? null : (
-                  <S.StyledButton onClick={submitRating}>
-                    Enviar Avaliação
-                  </S.StyledButton>
-                )}
-              </S.InfoContent>
+                    {data?.TicketEvaluation?.length > 0 ||
+                    addedRating ? null : (
+                      <S.StyledButton onClick={submitRating}>
+                        Enviar Avaliação
+                      </S.StyledButton>
+                    )}
+                  </S.InfoContent>
+                </>
+              ) : (
+                ""
+              )}
 
-              <S.InfoItem style={{ marginTop: "5rem" }}>
+              <S.InfoItem style={{ marginTop: "3rem" }}>
                 <S.IconContainer>
                   <FaSignature /> <S.InfoTitle>Assinar Documento</S.InfoTitle>
                 </S.IconContainer>
                 <S.InfoContent>
                   <div>
-                    <S.StyledButton onClick={submitSignDocument}>
+                    <S.StyledButton
+                      onClick={submitSignDocument}
+                      disabled={
+                        (loggedUser.isTechnician &&
+                          ticketData.ticketWasSignedTech) ||
+                        (!loggedUser.isTechnician &&
+                          ticketData.ticketWasSignedUser)
+                      }
+                    >
                       Assinar
+                    </S.StyledButton>
+                  </div>
+                </S.InfoContent>
+              </S.InfoItem>
+
+              <S.InfoItem style={{ marginTop: "5rem" }}>
+                <S.IconContainer>
+                  <AiOutlineDownload />{" "}
+                  <S.InfoTitle>Baixar Documento</S.InfoTitle>
+                </S.IconContainer>
+                <S.InfoContent>
+                  <div>
+                    <S.StyledButton onClick={submitDownloadDocument}>
+                      Baixar
                     </S.StyledButton>
                   </div>
                 </S.InfoContent>

@@ -16,7 +16,6 @@ export const ModalWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  /* background: rgba(0, 0, 0, 0.7); */
   background-color: ${({ theme }) => theme.bg2};
   display: flex;
   justify-content: center;
@@ -102,7 +101,7 @@ export const CloseButton = styled.button`
 
   & > svg {
     font-size: 22px;
-    margin-right: 0.65rem;
+    margin-right: 2.65rem;
     fill: ${({ theme }) => theme.text};
   }
 
@@ -120,7 +119,7 @@ export const Title = styled.h2`
 export const InfoGroup = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 25px;
+  margin-bottom: 1.5625rem;
 
   & h1 {
     color: ${({ theme }) => theme.primary};
@@ -167,6 +166,10 @@ export const InfoContent = styled.p`
   }
 `;
 
+export const TechName = styled.span`
+  color: ${({ theme }) => theme.text};
+`;
+
 export const RemoveAssigned = styled.button`
   background-color: ${({ theme }) => theme.bg2};
 `;
@@ -209,7 +212,7 @@ export const StyledInput = styled.input`
   }
 
   &::placeholder {
-    color: #a0aec0;
+    color: ${({ theme }) => theme.text};
   }
 `;
 
@@ -232,6 +235,15 @@ export const StyledSelect = styled.select`
   &:hover {
     border-color: #a0aec0;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  & option,
+  optgroup {
+    color: ${({ theme }) => theme.text};
+  }
 `;
 
 export const StyledTextarea = styled.textarea`
@@ -252,6 +264,10 @@ export const StyledTextarea = styled.textarea`
 
   &::placeholder {
     color: ${({ theme }) => theme.text};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 `;
 
@@ -306,24 +322,26 @@ export const ConversationContainer = styled.div`
   padding-bottom: 20px;
 `;
 
-export const Message = styled.div<{ isTech: boolean }>`
-  position: relative;
+export const MessageWrapper = styled.div<{ isTech?: string }>`
+  display: flex;
+  flex-direction: column;
+  align-items: ${(props) => (props.isTech ? "flex-start" : "flex-end")};
+  max-width: 80%;
   margin-bottom: 10px;
+`;
+
+export const Message = styled.div<{ isTech: boolean }>`
   padding: 5px 10px;
   border-radius: 15px;
   background-color: ${(props) => (props.isTech ? "#dcf6c7" : "#dfd8cf")};
-  align-self: ${(props) => (props.isTech ? "flex-start" : "flex-end")};
-  max-width: 80%;
-  word-break: break-word;
-
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  word-break: break-word;
 `;
 
 export const Timestamp = styled.span`
-  position: absolute;
-  top: 27px;
   font-size: 0.7rem;
   color: ${({ theme }) => theme.primary};
+  margin-top: 4px;
 `;
 
 export const ReplyContainer = styled.div`

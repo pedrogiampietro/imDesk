@@ -8,7 +8,7 @@ export const ProfileContainer = styled.div`
 `;
 
 export const Header = styled.header`
-  background-color: #6200ee;
+  background-color: #7f56d8;
 
   padding: 20px 0;
   text-align: center;
