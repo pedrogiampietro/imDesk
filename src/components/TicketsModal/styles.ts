@@ -16,7 +16,6 @@ export const ModalWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  /* background: rgba(0, 0, 0, 0.7); */
   background-color: ${({ theme }) => theme.bg2};
   display: flex;
   justify-content: center;
@@ -102,7 +101,7 @@ export const CloseButton = styled.button`
 
   & > svg {
     font-size: 22px;
-    margin-right: 0.65rem;
+    margin-right: 2.65rem;
     fill: ${({ theme }) => theme.text};
   }
 
@@ -120,7 +119,7 @@ export const Title = styled.h2`
 export const InfoGroup = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 25px;
+  margin-bottom: 1.5625rem;
 
   & h1 {
     color: ${({ theme }) => theme.primary};
@@ -237,7 +236,12 @@ export const StyledSelect = styled.select`
     border-color: #a0aec0;
   }
 
-  & option {
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  & option,
+  optgroup {
     color: ${({ theme }) => theme.text};
   }
 `;
@@ -260,6 +264,10 @@ export const StyledTextarea = styled.textarea`
 
   &::placeholder {
     color: ${({ theme }) => theme.text};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 `;
 
@@ -314,7 +322,7 @@ export const ConversationContainer = styled.div`
   padding-bottom: 20px;
 `;
 
-export const MessageWrapper = styled.div`
+export const MessageWrapper = styled.div<{ isTech?: string }>`
   display: flex;
   flex-direction: column;
   align-items: ${(props) => (props.isTech ? "flex-start" : "flex-end")};
