@@ -64,7 +64,7 @@ export function Login() {
     const fetchCompanies = async () => {
       try {
         const response = await axios.get(
-          "https://imdesk-api.onrender.comcompanies/"
+          "https://imdesk-api.onrender.com/companies/"
         );
 
         setCompanies(response.data.companies);

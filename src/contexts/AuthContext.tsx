@@ -68,7 +68,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   async function signIn(login: User) {
     try {
       const response = await axios.post(
-        "https://imdesk-api.onrender.comauthenticate/sign-in/",
+        "https://imdesk-api.onrender.com/authenticate/sign-in/",
         login
       );
 
