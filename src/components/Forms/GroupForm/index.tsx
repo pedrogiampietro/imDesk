@@ -14,9 +14,11 @@ export function GroupForm({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<{
     name: string;
+    email: string;
     companyIds: string[];
   }>({
     name: "",
+    email: "",
     companyIds: [],
   });
   const [users, setUsers] = useState([]);
@@ -100,6 +102,7 @@ export function GroupForm({
 
       setFormData({
         name: "",
+        email: "",
         companyIds: [],
       });
 
@@ -114,21 +117,17 @@ export function GroupForm({
     event.preventDefault();
     setLoading(true);
 
-    // Construa a lógica para enviar a adição de membros aos grupos selecionados
     try {
-      // Precisamos verificar se algum grupo foi selecionado
       if (selectedGroups.length === 0) {
         toast.error("Por favor, selecione pelo menos um grupo.");
         return;
       }
 
-      // Aqui, você enviaria a solicitação para adicionar os membros aos grupos.
-      // Este é um exemplo e depende de como sua API está estruturada.
       await Promise.all(
         selectedGroups.map((group: any) =>
           apiClient().post("/group/add-user", {
-            groupId: group.value, // assumindo que é assim que sua API recebe esses valores
-            userIds: selectedMembers.map((member: any) => member.value), // os IDs dos usuários selecionados
+            groupId: group.value,
+            userIds: selectedMembers.map((member: any) => member.value),
           })
         )
       );
@@ -136,8 +135,8 @@ export function GroupForm({
       toast.success(
         "Usuários adicionados com sucesso aos grupos selecionados!"
       );
-      setSelectedGroups([]); // Limpar os grupos selecionados
-      setSelectedMembers([]); // Limpar os membros selecionados
+      setSelectedGroups([]);
+      setSelectedMembers([]);
     } catch (err) {
       toast.error("Houve um problema ao adicionar usuários ao grupo.");
       console.warn("err", err);
@@ -188,6 +187,16 @@ export function GroupForm({
             name="name"
             value={formData.name}
             placeholder="Exemplo: TI"
+            onChange={handleChange}
+          />
+        </S.InputGroup>
+        <S.InputGroup>
+          <S.InputLabel>E-mail</S.InputLabel>
+          <S.Input
+            type="text"
+            name="email"
+            value={formData.name}
+            placeholder="Exemplo: melhoremail@dev.com"
             onChange={handleChange}
           />
         </S.InputGroup>
