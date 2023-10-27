@@ -88,6 +88,7 @@ export function GroupForm({
       await apiClient().post("/group", {
         companyIds: formData.companyIds,
         name: formData.name,
+        email: formData.email,
       });
 
       toast.success("Sucesso! Sua categoria foi adicionada com sucesso!", {
@@ -135,6 +136,7 @@ export function GroupForm({
       toast.success(
         "Usuários adicionados com sucesso aos grupos selecionados!"
       );
+
       setSelectedGroups([]);
       setSelectedMembers([]);
     } catch (err) {
@@ -195,7 +197,7 @@ export function GroupForm({
           <S.Input
             type="text"
             name="email"
-            value={formData.name}
+            value={formData.email}
             placeholder="Exemplo: melhoremail@dev.com"
             onChange={handleChange}
           />
