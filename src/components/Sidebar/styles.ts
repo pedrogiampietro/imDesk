@@ -97,7 +97,7 @@ export const LinkContainer = styled.div<{
   margin: 8px -5px;
 
   :hover {
-    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.bg};
+    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.primary};
   }
 `;
 

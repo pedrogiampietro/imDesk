@@ -2,7 +2,7 @@ import { useContext, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import imDeskLogo from "../../assets/img/logo.jpg";
+import imDeskLogo from "../../assets/img/imdesk-logo.png";
 
 import {
   AiOutlineHome,

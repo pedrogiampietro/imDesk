@@ -345,6 +345,7 @@ export const Timestamp = styled.span`
 `;
 
 export const ReplyContainer = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -405,4 +406,85 @@ export const UsedItemsHistory = styled.div`
   tr:hover {
     background-color: #f1f1f1;
   }
+`;
+
+export const MessagesContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  padding: 1rem 1rem 0 1rem;
+  overflow-y: auto;
+  flex-wrap: wrap;
+`;
+
+export const SubmitContainer = styled.div`
+  position: absolute;
+  bottom: 10px;
+  width: 97%;
+  left: 1.5%;
+  height: 120px;
+  background: #fff;
+  border: 1px solid #a7a7a7;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  & textarea {
+    outline: none;
+    resize: none;
+    height: 100%;
+    width: 80%;
+    border: 0px;
+    border-bottom: 1px dashed #a7a7a7;
+    padding: 0.2rem;
+    overflow-y: auto;
+    font-family: Poppins;
+    color: var(--secondary-color);
+    font-weight: 500;
+  }
+`;
+
+export const SubmitButtonsContainer = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  display: flex;
+  width: 20%;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+export const ImagesPreviewContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+export const ImagePreview = styled.div`
+  position: relative;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 5px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+export const RemoveImageButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
 `;

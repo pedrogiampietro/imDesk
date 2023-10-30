@@ -7,6 +7,8 @@ import {
   FiStar,
   FiImage,
   FiBox,
+  FiPaperclip,
+  FiX,
 } from "react-icons/fi";
 import {
   AiFillCloseCircle,
@@ -93,6 +95,8 @@ export function TicketsModal({
   const [observationServiceExecuted, setObservationServiceExecuted] = useState(
     ticketData.observationServiceExecuted
   );
+  const [attachs, setAttachs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const newId = ticketData.id.split("-");
 
@@ -297,15 +301,23 @@ export function TicketsModal({
   const submitTechnicianResponse = async () => {
     if (technicianResponse.trim() === "") return;
 
-    const payload = {
-      ticketId: ticketData.id,
-      type: "technician",
-      content: technicianResponse,
-      userId: loggedUser.userId,
-    };
+    const formData = new FormData();
+    formData.append("ticketId", ticketData.id);
+    formData.append("type", "technician");
+    formData.append("content", technicianResponse);
+    formData.append("userId", loggedUser.userId);
+
+    attachs.forEach((file) => {
+      formData.append("images", file);
+    });
 
     try {
-      const result = await apiClient().post(`/ticket/response`, payload);
+      setLoading(true);
+      const result = await apiClient().post(`/ticket/response`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (result.status === 200 && result.data) {
         const responseBody = result.data.body;
@@ -326,7 +338,10 @@ export function TicketsModal({
         setTechnicianResponse("");
       }
     } catch (error) {
+      setLoading(false);
       console.error("Erro ao enviar a resposta do técnico:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -341,6 +356,8 @@ export function TicketsModal({
     };
 
     try {
+      setLoading(true);
+
       const result = await apiClient().post(`/ticket/response`, payload);
       const responseBody = result.data.body;
 
@@ -359,7 +376,10 @@ export function TicketsModal({
 
       setUserResponse("");
     } catch (error) {
+      setLoading(false);
       console.error("Erro ao enviar a resposta do usuário:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -607,6 +627,17 @@ export function TicketsModal({
     }
   };
 
+  const onAttachChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files!);
+    setAttachs(files);
+  };
+
+  const removeImage = (index: number) => {
+    const newAttachs = [...attachs];
+    newAttachs.splice(index, 1);
+    setAttachs(newAttachs);
+  };
+
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
@@ -669,18 +700,49 @@ export function TicketsModal({
                 ))}
               </S.ConversationContainer>
               <S.ReplyContainer>
+                <S.SubmitButtonsContainer>
+                  {attachs.length === 0 ? (
+                    <S.StyledButton
+                      onClick={() =>
+                        document
+                          .getElementById("admin-support-file-picker")!
+                          .click()
+                      }
+                    >
+                      <FiPaperclip size="16" />
+                    </S.StyledButton>
+                  ) : (
+                    <S.StyledButton onClick={() => setAttachs([])}>
+                      <FiX size="16" />
+                    </S.StyledButton>
+                  )}
+
+                  <input
+                    type="file"
+                    multiple
+                    id="admin-support-file-picker"
+                    onChange={onAttachChange}
+                    style={{ display: "none" }}
+                  />
+                </S.SubmitButtonsContainer>
+
                 <S.StyledTextarea
+                  placeholder={
+                    loading
+                      ? "Estamos enviando sua mensagem..."
+                      : `Digite sua resposta como ${
+                          loggedUser.isTechnician ? "Técnico" : "Usuário"
+                        }...`
+                  }
                   value={
                     loggedUser.isTechnician ? technicianResponse : userResponse
                   }
+                  disabled={loading}
                   onChange={
                     loggedUser.isTechnician
                       ? handleTechnicianResponseChange
                       : handleUserResponseChange
                   }
-                  placeholder={`Digite sua resposta como ${
-                    loggedUser.isTechnician ? "Técnico" : "Usuário"
-                  }...`}
                 />
 
                 <S.StyledButton
@@ -692,6 +754,17 @@ export function TicketsModal({
                 >
                   Enviar
                 </S.StyledButton>
+
+                <S.ImagesPreviewContainer>
+                  {attachs.map((image, index) => (
+                    <S.ImagePreview key={index}>
+                      <img src={URL.createObjectURL(image)} alt="Preview" />
+                      <S.RemoveImageButton onClick={() => removeImage(index)}>
+                        <FiX size="16" />
+                      </S.RemoveImageButton>
+                    </S.ImagePreview>
+                  ))}
+                </S.ImagesPreviewContainer>
               </S.ReplyContainer>
             </S.InfoItem>
           </S.InfoGroup>

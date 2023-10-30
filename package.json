@@ -11,7 +11,7 @@
   "dependencies": {
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^2.9.10",
-    "@tinymce/tinymce-react": "^4.2.0",
+    "@tinymce/tinymce-react": "^4.3.0",
     "@types/react-beautiful-dnd": "^13.1.4",
     "axios": "^1.2.0",
     "date-fns": "^2.29.3",
