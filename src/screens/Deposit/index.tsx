@@ -13,6 +13,7 @@ interface Deposit {
   id: string;
   name: string;
   location: string;
+  locationName: string;
   createdAt: string;
   Company: {
     name: string;
@@ -106,7 +107,7 @@ export function Deposit() {
               <S.TableRow key={deposit.id}>
                 <S.TableCell>{index + 1}</S.TableCell>
                 <S.TableCell>{deposit.name}</S.TableCell>
-                <S.TableCell>{deposit.location}</S.TableCell>
+                <S.TableCell>{deposit.locationName}</S.TableCell>
                 <S.TableCell>
                   {new Date(deposit.createdAt).toLocaleDateString()}
                 </S.TableCell>

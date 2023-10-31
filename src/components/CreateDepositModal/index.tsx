@@ -30,6 +30,7 @@ export function CreateDepositModal({
       : [],
   });
   const [companies, setCompanies] = useState<any>([]);
+  const [locations, setLocations] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -66,10 +67,23 @@ export function CreateDepositModal({
     fetchUsers();
   }, []);
 
-  const companyOptions = companies.map((company: any) => ({
-    value: company.id,
-    label: company.name,
-  }));
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const { data } = await apiClient().get("/location", {
+          params: {
+            companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          },
+        });
+
+        setLocations(data.body);
+      } catch (error) {
+        console.error("Error fetching locations", error);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -136,10 +150,29 @@ export function CreateDepositModal({
     }));
   };
 
+  const handleLocationSelectChange = (selectedOption: any) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      location: selectedOption ? selectedOption.value : "",
+    }));
+  };
+
+  const companyOptions = companies.map((company: any) => ({
+    value: company.id,
+    label: company.name,
+  }));
+
   const userOptions = users
     ? users.map((user: any) => ({
         value: user.id,
         label: user.name,
+      }))
+    : [];
+
+  const locationOptions = locations
+    ? locations.map((location: any) => ({
+        value: location.id,
+        label: location.name,
       }))
     : [];
 
@@ -164,22 +197,23 @@ export function CreateDepositModal({
           }
         />
       </S.FormGroup>
-      <S.FormGroup>
-        <S.Label htmlFor="location">Localização</S.Label>
-        <S.Input
-          type="text"
-          name="location"
-          id="location"
-          placeholder="Localização do equipamento"
-          value={formData.location}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              location: e.target.value,
-            }))
+
+      <S.InputGroup>
+        <S.InputLabel>Localização</S.InputLabel>
+        <Select
+          options={locationOptions}
+          value={
+            editingDeposit
+              ? locationOptions.find(
+                  (option: any) => option.value === editingDeposit.location
+                )
+              : locationOptions.find(
+                  (option: any) => option.value === locations.id
+                )
           }
+          onChange={handleLocationSelectChange}
         />
-      </S.FormGroup>
+      </S.InputGroup>
 
       <S.InputGroup>
         <S.InputLabel>Empresa</S.InputLabel>

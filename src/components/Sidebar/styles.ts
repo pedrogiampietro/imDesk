@@ -6,7 +6,7 @@ import { btnReset, v } from "../../assets/styles/variables";
 export const Sidebar = styled.div<{ isOpen: boolean }>`
   width: ${({ isOpen }) => (!isOpen ? `auto` : v.sidebarWidth)};
   background-color: ${({ theme }) => theme.bg2};
-  height: 100vh;
+  /* height: 100vh; */
   padding: ${v.lgSpacing};
 
   position: relative;

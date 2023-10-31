@@ -74,6 +74,7 @@ export interface ITicket {
 type equipment = {
   equipmentId: string;
   usageCount: number;
+  equipmentPatrimony: string;
 };
 
 type usedItems = {
@@ -120,19 +121,40 @@ export function TicketKanban({
 
   const { user } = useAuth();
 
-  const isTermIncluded = (term: any, ticket: any) => {
-    return (
-      ticket.description.toLowerCase().includes(term) ||
-      ticket.ticketType.name.toLowerCase().includes(term) ||
-      ticket.ticketCategory.name.toLowerCase().includes(term)
-    );
+  const isTermIncluded = (term: string, ticket: any) => {
+    const cleanedTerm = term.trim().toLowerCase().replace(/\s+/g, "");
+
+    if (ticket.id.replace(/\s+/g, "").toLowerCase().includes(cleanedTerm)) {
+      // console.log("UUID Match Found for:", ticket.id);
+      return true;
+    }
+
+    const descriptionMatch = ticket.description
+      .toLowerCase()
+      .includes(cleanedTerm);
+    const typeMatch = ticket.ticketType.name
+      .toLowerCase()
+      .includes(cleanedTerm);
+    const categoryMatch = ticket.ticketCategory.name
+      .toLowerCase()
+      .includes(cleanedTerm);
+    const childrenNameMatch = ticket.ticketCategory.childrenName
+      .toLowerCase()
+      .includes(cleanedTerm);
+
+    // console.log(
+    //   `For ticket ID: ${ticket.id}, Matches found - Description: ${descriptionMatch}, Type: ${typeMatch}, Category: ${categoryMatch}, Children Name: ${childrenNameMatch}`
+    // );
+
+    return descriptionMatch || typeMatch || categoryMatch || childrenNameMatch;
   };
 
   const searchedData = data.filter((ticket) => {
     const term = searchTerm.toLowerCase();
-    const included = isTermIncluded(term, ticket);
 
-    return included;
+    // console.log("Filtering for term:", term); // Log para verificar o termo durante a filtragem
+
+    return isTermIncluded(term, ticket);
   });
 
   const filteredData = searchedData.filter((ticket) => {

@@ -77,7 +77,7 @@ export function Sidebar() {
       <S.Logo>
         <img src={imDeskLogo} alt="logo" />
       </S.Logo>
-      <S.Search
+      {/* <S.Search
         onClick={searchClickHandler}
         style={!sidebarOpen ? { width: `fit-content` } : {}}
       >
@@ -89,7 +89,7 @@ export function Sidebar() {
           placeholder="Search"
           style={!sidebarOpen ? { width: 0, padding: 0 } : {}}
         />
-      </S.Search>
+      </S.Search> */}
       <S.Divider />
       {linksArray.map(({ icon, label, notification, to }) => (
         <S.LinkContainer

@@ -38,44 +38,48 @@ export function TicketCard({
       urgency={data.ticketPriority.name}
       onClick={toggleTicketModal}
     >
-      <S.FlexWrapper>
+      <S.InnerBackground>
         <S.FlexWrapper>
-          <S.StatusCircle urgency={data.ticketPriority.name} />
-          <S.TicketId>ID: #{newId[0]}</S.TicketId>
+          <S.FlexWrapper>
+            <S.StatusCircle urgency={data.ticketPriority.name} />
+            <S.TicketId>ID: #{newId[0]}</S.TicketId>
+          </S.FlexWrapper>
+
+          <S.OpenedAt>
+            Criado em {formatarData(data.createdAt as any)}
+          </S.OpenedAt>
         </S.FlexWrapper>
 
-        <S.OpenedAt>Criado em {formatarData(data.createdAt as any)}</S.OpenedAt>
-      </S.FlexWrapper>
+        <S.Title>{data.ticketCategory.childrenName}</S.Title>
 
-      <S.Title>{data.ticketCategory.childrenName}</S.Title>
+        <S.Description>{data.description}</S.Description>
 
-      <S.Description>{data.description}</S.Description>
+        <S.TopLine></S.TopLine>
 
-      <S.TopLine></S.TopLine>
+        <S.Info>
+          <S.FlexWrapper>
+            {data.User.avatarUrl ? (
+              <S.Avatar src={data.User.avatarUrl} alt={data.User.name} />
+            ) : (
+              <S.DefaultAvatar>{getInitials(data.User.name)}</S.DefaultAvatar>
+            )}
+            <S.OpenedBy>Aberto por {data.User.name}</S.OpenedBy>
+          </S.FlexWrapper>
+          <S.OpenModalLink onClick={() => setShowTicketModal(true)}>
+            Abrir modal
+          </S.OpenModalLink>
+        </S.Info>
 
-      <S.Info>
-        <S.FlexWrapper>
-          {data.User.avatarUrl ? (
-            <S.Avatar src={data.User.avatarUrl} alt={data.User.name} />
-          ) : (
-            <S.DefaultAvatar>{getInitials(data.User.name)}</S.DefaultAvatar>
-          )}
-          <S.OpenedBy>Aberto por {data.User.name}</S.OpenedBy>
-        </S.FlexWrapper>
-        <S.OpenModalLink onClick={() => setShowTicketModal(true)}>
-          Abrir modal
-        </S.OpenModalLink>
-      </S.Info>
-
-      {showTicketModal && (
-        <TicketsModal
-          data={data}
-          onClose={setShowTicketModal}
-          technicians={technicians}
-          loggedUser={loggedUser}
-          updateTicketsCallback={updateTicketsCallback}
-        />
-      )}
+        {showTicketModal && (
+          <TicketsModal
+            data={data}
+            onClose={setShowTicketModal}
+            technicians={technicians}
+            loggedUser={loggedUser}
+            updateTicketsCallback={updateTicketsCallback}
+          />
+        )}
+      </S.InnerBackground>
     </S.CardContainer>
   );
 }

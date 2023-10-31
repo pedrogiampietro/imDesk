@@ -98,15 +98,17 @@ export const CloseButton = styled.button`
   top: 20px;
   background: none;
   border: none;
+  color: #fff;
 
   & > svg {
     font-size: 22px;
     margin-right: 2.65rem;
-    fill: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.primary};
+    fill: ${({ theme }) => theme.primary};
   }
 
   &:hover {
-    color: ${colors.red};
+    color: ${({ theme }) => theme.primaryDark};
     cursor: pointer;
   }
 `;
@@ -487,4 +489,38 @@ export const RemoveImageButton = styled.button`
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   cursor: pointer;
+`;
+
+export const ImageContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+`;
+
+export const ThumbnailImage = styled.img`
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 4px;
+`;
+
+export const ExpandedImageModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+export const ExpandedImage = styled.img`
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  border-radius: 8px;
 `;

@@ -97,6 +97,10 @@ export function TicketsModal({
   );
   const [attachs, setAttachs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  const [patrimony, setPatrimony] = useState<string>(
+    ticketData?.equipmentUsage[0]?.equipmentPatrimony || ""
+  );
 
   const newId = ticketData.id.split("-");
 
@@ -269,11 +273,15 @@ export function TicketsModal({
     setObservationServiceExecuted(value);
   };
 
-  const handlebservationServiceExecuted = (newObservation: string) => {
+  const handleObservationServiceExecuted = (newObservation: string) => {
     handleDataChange("observationServiceExecuted", newObservation);
   };
 
-  useDebounce(observationServiceExecuted, 500, handlebservationServiceExecuted);
+  useDebounce(
+    observationServiceExecuted,
+    500,
+    handleObservationServiceExecuted
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -285,6 +293,12 @@ export function TicketsModal({
   };
 
   useDebounce(description, 500, handleDescriptionChange);
+
+  const handlePatrimony = (newPatrimony: string) => {
+    handleDataChange("patrimonyTag", newPatrimony);
+  };
+
+  useDebounce(patrimony, 500, handlePatrimony);
 
   const handleTechnicianResponseChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -638,6 +652,10 @@ export function TicketsModal({
     setAttachs(newAttachs);
   };
 
+  const handleExpandImage = (path: string) => {
+    setExpandedImage(path);
+  };
+
   return (
     <S.ModalWrapper onClick={handleClickOutsideModal}>
       <S.Modal onClick={stopPropagation}>
@@ -693,6 +711,21 @@ export function TicketsModal({
                     <S.Message isTech={msg?.User?.isTechnician}>
                       {`${msg?.User?.name}: ${msg.content}`}
                     </S.Message>
+
+                    {msg.ticketImages && msg.ticketImages.length > 0 && (
+                      <S.ImageContainer>
+                        {msg.ticketImages.map((image: any) => (
+                          <S.ThumbnailImage
+                            src={image.path}
+                            alt="Ticket Image"
+                            onClick={() => {
+                              handleExpandImage(image.path);
+                            }}
+                          />
+                        ))}
+                      </S.ImageContainer>
+                    )}
+
                     <S.Timestamp>
                       {formatDate(new Date(msg.createdAt))}
                     </S.Timestamp>
@@ -1022,6 +1055,19 @@ export function TicketsModal({
             <S.InfoItem>
               <S.IconContainer>
                 <FiClock />
+                <S.InfoTitle>Patrimônio:</S.InfoTitle>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledInput
+                  type="text"
+                  value={patrimony}
+                  onChange={(e) => setPatrimony(e.target.value)}
+                />
+              </S.InfoContent>
+            </S.InfoItem>
+            <S.InfoItem>
+              <S.IconContainer>
+                <FiClock />
                 <S.InfoTitle>Tempo estimado para solução:</S.InfoTitle>
               </S.IconContainer>
               <S.InfoContent>
@@ -1212,6 +1258,15 @@ export function TicketsModal({
           </S.InfoGroup>
         ) : null}
       </S.Modal>
+      {expandedImage && (
+        <S.ExpandedImageModal>
+          <S.ExpandedImage src={expandedImage} alt="Expanded Image" />
+          <S.CloseButton onClick={() => setExpandedImage(null)}>
+            <AiOutlineClose size="24" />
+            {/* Fechar */}
+          </S.CloseButton>
+        </S.ExpandedImageModal>
+      )}
     </S.ModalWrapper>
   );
 }

@@ -17,14 +17,21 @@ export const CardContainer = styled.div<UrgencyProps>`
   background-color: ${({ theme }) => theme.bg};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  border: 1px solid #e7e7e7;
+  /* border: 1px solid #e7e7e7; */
   padding: 1.75rem;
+
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
+`;
+
+export const InnerBackground = styled.div`
+  background-color: ${({ theme }) => theme.bg2};
+  border-radius: 3px;
+  padding: 1.75rem;
 `;
 
 export const StatusCircle = styled.span<UrgencyProps>`
