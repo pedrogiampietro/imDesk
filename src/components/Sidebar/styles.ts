@@ -6,10 +6,9 @@ import { btnReset, v } from "../../assets/styles/variables";
 export const Sidebar = styled.div<{ isOpen: boolean }>`
   width: ${({ isOpen }) => (!isOpen ? `auto` : v.sidebarWidth)};
   background-color: ${({ theme }) => theme.bg2};
-  /* height: 100vh; */
   padding: ${v.lgSpacing};
-
   position: relative;
+  border-radius: 10px;
 `;
 
 export const SidebarButton = styled.button<{
@@ -108,6 +107,16 @@ export const LinkStyle = styled(Link)`
   color: inherit;
   font-size: 16px;
   padding: calc(${v.smSpacing} - 2px) 0;
+`;
+
+export const DropdownLinkStyle = styled(Link)`
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  font-size: 16px;
+  padding: calc(${v.smSpacing} - 2px) 0;
+  margin-left: 2rem;
 `;
 
 export const LinkIcon = styled.div<{ isActive: boolean }>`

@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useState, useContext, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -10,7 +10,7 @@ import {
   AiOutlineSearch,
   AiOutlineSetting,
 } from "react-icons/ai";
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdOutlineAnalytics } from "react-icons/md";
 import { BsHouse } from "react-icons/bs";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
@@ -23,8 +23,8 @@ import { Tooltip } from "../Tooltip";
 
 export function Sidebar() {
   const searchRef = useRef(null);
-  const { signOut } = useAuth();
-
+  const { signOut, user } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { setTheme, theme } = useContext(ThemeContext);
   const [sidebarOpen, setSidebarOpen] = useLocalStorage(
     "imDesk@Sidebar",
@@ -54,14 +54,38 @@ export function Sidebar() {
       label: "Settings",
       icon: <AiOutlineSetting />,
       to: "/settings",
+      requiresTech: true,
     },
     {
       label: "Logout",
       icon: <MdLogout />,
       to: "/login",
       func: signOut,
+      requiresTech: true,
     },
   ];
+
+  function DropdownMenu({ icon, label, to, subLinks }: any) {
+    const { pathname } = useLocation();
+    return (
+      <S.LinkContainer
+        key={label}
+        isActive={pathname === to}
+        isOpen={sidebarOpen}
+      >
+        <S.LinkStyle to="" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+          <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+        </S.LinkStyle>
+        {isDropdownOpen &&
+          subLinks.map((subLink: any) => (
+            <S.DropdownLinkStyle key={subLink.label} to={subLink.to}>
+              {subLink.label}
+            </S.DropdownLinkStyle>
+          ))}
+      </S.LinkContainer>
+    );
+  }
 
   return (
     <S.Sidebar isOpen={sidebarOpen}>
@@ -91,44 +115,60 @@ export function Sidebar() {
         />
       </S.Search> */}
       <S.Divider />
-      {linksArray.map(({ icon, label, notification, to }) => (
-        <S.LinkContainer
-          key={label}
-          isActive={pathname === to}
-          isOpen={sidebarOpen}
-        >
-          {!sidebarOpen ? (
-            <Tooltip text={label}>
-              <S.LinkStyle to={to} style={{ width: `fit-content` }}>
-                <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-              </S.LinkStyle>
-            </Tooltip>
+      {linksArray.map(
+        ({ icon, label, notification, to, requiresTech, subLinks }) =>
+          (!requiresTech || (requiresTech && user?.isTechnician)) &&
+          (subLinks ? (
+            <DropdownMenu
+              key={label}
+              label={label}
+              subLinks={subLinks}
+              to={to}
+              icon={icon}
+            />
           ) : (
-            <S.LinkStyle to={to}>
-              <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-              <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
-              {!!notification && (
-                <S.LinkNotification>{notification}</S.LinkNotification>
+            <S.LinkContainer
+              key={label}
+              isActive={pathname === to}
+              isOpen={sidebarOpen}
+            >
+              {!sidebarOpen ? (
+                <Tooltip text={label}>
+                  <S.LinkStyle to={to} style={{ width: `fit-content` }}>
+                    <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+                  </S.LinkStyle>
+                </Tooltip>
+              ) : (
+                <S.LinkStyle to={to}>
+                  <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+                  <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+                  {!!notification && (
+                    <S.LinkNotification>{notification}</S.LinkNotification>
+                  )}
+                </S.LinkStyle>
               )}
-            </S.LinkStyle>
-          )}
-        </S.LinkContainer>
-      ))}
+            </S.LinkContainer>
+          ))
+      )}
       <S.Divider />
-      {secondaryLinksArray.map(({ icon, label, func, to }) => (
-        <S.LinkContainer key={label} isOpen={sidebarOpen}>
-          <S.LinkStyle
-            to={`${to}`}
-            style={!sidebarOpen ? { width: `fit-content` } : {}}
-            onClick={func}
-          >
-            <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-            {sidebarOpen && (
-              <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
-            )}
-          </S.LinkStyle>
-        </S.LinkContainer>
-      ))}
+      {secondaryLinksArray.map(
+        ({ icon, label, func, to, requiresTech }) =>
+          (!requiresTech || (requiresTech && user?.isTechnician)) && (
+            <S.LinkContainer key={label} isOpen={sidebarOpen}>
+              <S.LinkStyle
+                to={`${to}`}
+                style={!sidebarOpen ? { width: `fit-content` } : {}}
+                onClick={func}
+              >
+                <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+                {sidebarOpen && (
+                  <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+                )}
+              </S.LinkStyle>
+            </S.LinkContainer>
+          )
+      )}
+
       <S.Divider />
       <S.Theme>
         {sidebarOpen && <S.ThemeLabel>Dark Mode</S.ThemeLabel>}
@@ -147,12 +187,22 @@ const linksArray = [
     to: "/dashboard",
     notification: 0,
   },
-  // {
-  //   label: "Estatisticas",
-  //   icon: <MdOutlineAnalytics />,
-  //   to: "/statistics",
-  //   notification: 0,
-  // },
+  {
+    label: "Estatisticas",
+    icon: <MdOutlineAnalytics />,
+    to: "/statistics",
+    notification: 0,
+    subLinks: [
+      {
+        label: "Relátorio OS",
+        to: "/statistics/os",
+      },
+      {
+        label: "Sub Item 2",
+        to: "/sub-item-2",
+      },
+    ],
+  },
   // {
   //   label: "Manutenção",
   //   icon: <MdOutlineComputer />,
@@ -170,17 +220,20 @@ const linksArray = [
     icon: <HiOutlineNewspaper />,
     to: "/providers",
     notification: 0,
+    requiresTech: true,
   },
   {
     label: "Estoque",
     icon: <BsHouse />,
     to: "/deposit",
     notification: 0,
+    requiresTech: true,
   },
   {
     label: "Inventário",
     icon: <MdOutlineInventory />,
     to: "/inventory",
     notification: 0,
+    requiresTech: true,
   },
 ];

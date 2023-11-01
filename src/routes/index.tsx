@@ -13,6 +13,7 @@ import { DepositView } from "../screens/DepositView";
 
 import RouteProtector from "./RouteProtector";
 import { Inventory } from "../screens/Inventory";
+import { StatisticOS } from "../screens/Statistic/StatisticOS";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -43,7 +44,7 @@ export function AppRoutes() {
     {
       path: "/maintenance",
       element: (
-        <RouteProtector>
+        <RouteProtector requiresTech>
           <Maintenance />
         </RouteProtector>
       ),
@@ -51,15 +52,23 @@ export function AppRoutes() {
     {
       path: "/statistics",
       element: (
-        <RouteProtector>
+        <RouteProtector requiresTech>
           <Statistic />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/statistics/os",
+      element: (
+        <RouteProtector requiresTech>
+          <StatisticOS />
         </RouteProtector>
       ),
     },
     {
       path: "/settings",
       element: (
-        <RouteProtector>
+        <RouteProtector requiresTech>
           <Settings />
         </RouteProtector>
       ),
@@ -67,7 +76,7 @@ export function AppRoutes() {
     {
       path: "/providers",
       element: (
-        <RouteProtector>
+        <RouteProtector requiresTech>
           <Provider />
         </RouteProtector>
       ),
@@ -83,7 +92,7 @@ export function AppRoutes() {
     {
       path: "/deposit",
       element: (
-        <RouteProtector>
+        <RouteProtector requiresTech>
           <Deposit />
         </RouteProtector>
       ),
@@ -91,7 +100,7 @@ export function AppRoutes() {
     {
       path: "/inventory",
       element: (
-        <RouteProtector>
+        <RouteProtector requiresTech>
           <Inventory />
         </RouteProtector>
       ),
@@ -99,7 +108,7 @@ export function AppRoutes() {
     {
       path: "/deposit/:id",
       element: (
-        <RouteProtector>
+        <RouteProtector requiresTech>
           <DepositView />
         </RouteProtector>
       ),

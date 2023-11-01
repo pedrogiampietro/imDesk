@@ -10,6 +10,6 @@ export const Title = styled.h1``;
 export const TicketsWrapper = styled.div`
   display: flex;
   margin: 0 auto;
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
   border-radius: 10px;
 `;

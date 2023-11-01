@@ -212,7 +212,11 @@ export function TicketKanban({
           >
             <option value="">Filtrar por prioridade</option>
             {ticketPriority.map((priority: any) => {
-              return <option value={priority.id}>{priority.name}</option>;
+              return (
+                <option value={priority.id} key={priority.id}>
+                  {priority.name}
+                </option>
+              );
             })}
           </S.Select>
 
