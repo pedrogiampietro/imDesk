@@ -94,11 +94,6 @@ export const LinkContainer = styled.div<{
     !isActive ? `transparent` : theme.bg};
   border-radius: ${v.borderRadius};
   margin: 8px -5px;
-
-  :hover {
-    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.primary};
-    cursor: pointer;
-  }
 `;
 
 export const LinkStyle = styled(Link)`
@@ -108,11 +103,15 @@ export const LinkStyle = styled(Link)`
   color: inherit;
   font-size: 16px;
   padding: calc(${v.smSpacing} - 2px);
+
+  &:hover {
+    background-color: ${({ theme }) => theme.bg};
+    color: #fff;
+  }
 `;
 
 export const DropdownLinkStyle = styled(Link)<{
   isActive?: boolean;
-  isOpen: boolean;
 }>`
   display: flex;
   align-items: center;
@@ -125,6 +124,18 @@ export const DropdownLinkStyle = styled(Link)<{
   padding: calc(${v.smSpacing} - 2px) 10px;
   margin: 0 10px;
   border-radius: ${v.borderRadius};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.primary};
+    color: #fff;
+  }
+`;
+
+export const LinkLabel = styled.span<{ isActive: boolean }>`
+  color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
+  display: block;
+  flex: 1;
+  /* margin-left: ${v.smSpacing}; */
 `;
 
 export const LinkIcon = styled.div<{ isActive: boolean }>`
@@ -135,13 +146,6 @@ export const LinkIcon = styled.div<{ isActive: boolean }>`
     font-size: 20px;
     fill: ${({ isActive }) => (!isActive ? "#000" : "#fff")};
   }
-`;
-
-export const LinkLabel = styled.span<{ isActive: boolean }>`
-  color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
-  display: block;
-  flex: 1;
-  /* margin-left: ${v.smSpacing}; */
 `;
 
 export const LinkNotification = styled.div`

@@ -193,6 +193,18 @@ const linksArray = [
     to: "/dashboard",
     notification: 0,
   },
+  // {
+  //   label: "Manutenção",
+  //   icon: <MdOutlineComputer />,
+  //   to: "/maintenance",
+  //   notification: 0,
+  // },
+  {
+    label: "Tickets",
+    icon: <BsPeople />,
+    to: "/tickets",
+    notification: 0,
+  },
   {
     label: "Estatisticas",
     icon: <MdOutlineAnalytics />,
@@ -208,18 +220,6 @@ const linksArray = [
         to: "/sub-item-2",
       },
     ],
-  },
-  // {
-  //   label: "Manutenção",
-  //   icon: <MdOutlineComputer />,
-  //   to: "/maintenance",
-  //   notification: 0,
-  // },
-  {
-    label: "Tickets",
-    icon: <BsPeople />,
-    to: "/tickets",
-    notification: 0,
   },
   {
     label: "Fornecedores",

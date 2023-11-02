@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Sidebar } from "../Sidebar/";
 import { useAuth } from "../../hooks/useAuth";
@@ -29,8 +29,33 @@ export function Layout({ children }: LayoutProps) {
     })),
   ];
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      // Aqui você pode usar uma referência ao elemento do dropdown, se preferir,
+      // ou usar um seletor para identificar se o clique foi fora
+      const dropdown = document.getElementById("dropdownMenu");
+      if (dropdown && !dropdown.contains(event.target as Node)) {
+        closeDropdown(); // Fecha o dropdown se clicar fora
+      }
+    }
+
+    // Adiciona o ouvinte quando o dropdown estiver aberto
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    // Remove o ouvinte quando o componente desmontar ou o dropdown estiver fechado
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   const openChangeCompanyModal = () => setChangeCompanyModalOpen(true);
   const closeChangeCompanyModal = () => setChangeCompanyModalOpen(false);
+
+  function closeDropdown() {
+    setDropdownOpen(false);
+  }
 
   // Função que lida com a troca de empresa
   const handleCompanyChange = async (companyId: string) => {
@@ -64,7 +89,7 @@ export function Layout({ children }: LayoutProps) {
             </S.AvatarButton>
 
             {isDropdownOpen && (
-              <S.DropdownMenu>
+              <S.DropdownMenu id="dropdownMenu">
                 <Link to="/profile">Perfil</Link>
                 <Link to="/" onClick={signOut}>
                   Sair
