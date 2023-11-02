@@ -4,6 +4,7 @@ import { Sidebar } from "../Sidebar/";
 import { useAuth } from "../../hooks/useAuth";
 import { Breadcrumb } from "../../components/Breadcrumb";
 import { IoBusinessOutline } from "react-icons/io5";
+import { ChangeCompanyModal } from "../ChangeCompanyModal";
 
 import * as S from "./styles";
 
@@ -13,6 +14,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isChangeCompanyModalOpen, setChangeCompanyModalOpen] = useState(false);
 
   const { user, signOut } = useAuth();
 
@@ -27,6 +29,14 @@ export function Layout({ children }: LayoutProps) {
     })),
   ];
 
+  const openChangeCompanyModal = () => setChangeCompanyModalOpen(true);
+  const closeChangeCompanyModal = () => setChangeCompanyModalOpen(false);
+
+  // Função que lida com a troca de empresa
+  const handleCompanyChange = async (companyId: string) => {
+    // ...implementação da função
+  };
+
   return (
     <S.Layout>
       <Sidebar />
@@ -35,7 +45,7 @@ export function Layout({ children }: LayoutProps) {
           <Breadcrumb paths={paths} />
 
           <S.CompanyProfileContainer>
-            <S.CompanyInfo>
+            <S.CompanyInfo onClick={openChangeCompanyModal}>
               <IoBusinessOutline size={20} />
               <span>{user?.currentLoggedCompany.currentLoggedCompanyName}</span>
             </S.CompanyInfo>
@@ -65,6 +75,11 @@ export function Layout({ children }: LayoutProps) {
         </S.TopBar>
 
         {children}
+        <ChangeCompanyModal
+          isOpen={isChangeCompanyModalOpen}
+          onClose={closeChangeCompanyModal}
+          onCompanyChange={handleCompanyChange}
+        />
       </S.Main>
     </S.Layout>
   );

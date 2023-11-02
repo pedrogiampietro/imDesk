@@ -68,7 +68,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   async function signIn(login: User) {
     try {
       const response = await axios.post(
-        "http://10.0.101.70:3333/authenticate/sign-in",
+        "http://192.168.1.5:3333/authenticate/sign-in",
         login
       );
 

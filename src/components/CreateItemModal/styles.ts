@@ -52,15 +52,15 @@ export const ModalHeader = styled.header`
 `;
 
 export const StartPreventiveButton = styled.button<{ isActive: boolean }>`
-  background: ${({ theme, isActive }) =>
+  background-color: ${({ theme, isActive }) =>
     !isActive ? theme.bg3 : theme.primary};
+  color: ${({ isActive }) => (isActive ? "#FFF" : "#000")};
   border: 1px solid #000;
   border-radius: 10px;
   outline: none;
   font-family: Poppins;
   font-weight: 700;
   text-transform: uppercase;
-  color: ${({ isActive }) => (isActive ? "#FFF" : "#000")};
   padding: 0.3rem 1rem;
   cursor: pointer;
   font-size: 0.7rem;

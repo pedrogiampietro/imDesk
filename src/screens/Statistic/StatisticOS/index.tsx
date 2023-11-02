@@ -17,6 +17,9 @@ export function StatisticOS() {
   const [reportData, setReportData] = useState({ openedOS: 0, closedOS: 0 });
   const [technicians, setTechnicians] = useState([]);
   const [selectedTech, setSelectedTech] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [tickets, setTickets] = useState([]);
 
   const getTechnicians = async () => {
     if (
@@ -28,6 +31,9 @@ export function StatisticOS() {
     }
 
     try {
+      setIsLoading(true);
+      setError("");
+
       const { data } = await apiClient().get("/account/technicians", {
         params: {
           companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
@@ -35,7 +41,11 @@ export function StatisticOS() {
       });
       setTechnicians(data);
     } catch (err) {
+      setIsLoading(false);
       console.error(err);
+      setError("Erro ao buscar técnicos");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -43,15 +53,25 @@ export function StatisticOS() {
     getTechnicians();
   }, [user]);
 
-  async function fetchReport() {
-    const { data } = await apiClient().post("/report/os", {
-      userId: selectedTech,
-      startDate,
-      endDate,
-    });
+  const fetchReport = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const { data } = await apiClient().post("/report/os", {
+        userId: selectedTech,
+        startDate,
+        endDate,
+      });
 
-    setReportData(data);
-  }
+      setReportData(data);
+      setTickets(data.tickets);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao gerar relatório");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const techOptions = technicians
     ? technicians.map((user: any) => ({
@@ -63,34 +83,78 @@ export function StatisticOS() {
   return (
     <Layout>
       <S.Container>
-        <S.InputGroup>
-          <S.InputLabel>Usuário</S.InputLabel>
+        {isLoading && <S.Loading>Carregando...</S.Loading>}
+        {error && <S.Error>{error}</S.Error>}
+        <S.FormGroup>
+          <S.Label>Usuário</S.Label>
           <Select
             options={techOptions}
             onChange={(e: any) => setSelectedTech(e.value)}
+            isClearable={true}
+            isLoading={isLoading}
           />
-        </S.InputGroup>
-        <label>
-          Data de Início:
-          <input
+        </S.FormGroup>
+        <S.FormGroup>
+          <S.Label>Data de Início:</S.Label>
+          <S.Input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-        </label>
-        <label>
-          Data de Fim:
-          <input
+        </S.FormGroup>
+        <S.FormGroup>
+          <S.Label>Data de Fim:</S.Label>
+          <S.Input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-        </label>
-        <button onClick={fetchReport}>Gerar Relatório</button>
-        <div>
-          <p>OS Abertas no período: {reportData.openedOS}</p>
-          <p>OS Fechadas no período: {reportData.closedOS}</p>
-        </div>
+        </S.FormGroup>
+        <S.Button onClick={fetchReport} disabled={isLoading}>
+          Gerar Relatório
+        </S.Button>
+        {reportData && (
+          <S.ReportResult>
+            <p>OS Abertas no período: {reportData.openedOS}</p>
+            <p>OS Fechadas no período: {reportData.closedOS}</p>
+          </S.ReportResult>
+        )}
+
+        {tickets.length > 0 && (
+          <S.TableContainer>
+            <S.Table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Created At</th>
+                  <th>Closed At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tickets.map((ticket: any) => (
+                  <tr key={ticket.id}>
+                    <td>{ticket.id}</td>
+                    <td>
+                      {ticket.ticketCategory.name} -{" "}
+                      {ticket.ticketCategory.childrenName}
+                    </td>
+                    <td>{ticket.description}</td>
+                    <td>{ticket.status}</td>
+                    <td>{new Date(ticket.createdAt).toLocaleString()}</td>
+                    <td>
+                      {ticket.closedAt
+                        ? new Date(ticket.closedAt).toLocaleString()
+                        : "N/A"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </S.Table>
+          </S.TableContainer>
+        )}
       </S.Container>
     </Layout>
   );

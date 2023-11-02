@@ -22,9 +22,8 @@ import * as S from "./styles";
 import { Tooltip } from "../Tooltip";
 
 export function Sidebar() {
-  const searchRef = useRef(null);
   const { signOut, user } = useAuth();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const { setTheme, theme } = useContext(ThemeContext);
   const [sidebarOpen, setSidebarOpen] = useLocalStorage(
     "imDesk@Sidebar",
@@ -32,21 +31,16 @@ export function Sidebar() {
   );
   const { pathname } = useLocation();
 
-  const searchClickHandler = () => {
-    // if (!sidebarOpen) {
-    // 	setSidebarOpen(true)
-    // 	// searchRef.current.focus();
-    // } else {
-    // 	// search functionality
-    // }
-  };
-
   const toggleTheme = () => {
-    setTheme((p) => (p === "light" ? "dark" : "light"));
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
   const handleToggleSidebar = () => {
-    setSidebarOpen((p: any) => !p);
+    setSidebarOpen((prev: any) => !prev);
+  };
+
+  const handleDropdown = (label: any) => {
+    setActiveDropdown((prev) => (prev === label ? null : label));
   };
 
   const secondaryLinksArray = [
@@ -66,20 +60,32 @@ export function Sidebar() {
   ];
 
   function DropdownMenu({ icon, label, to, subLinks }: any) {
-    const { pathname } = useLocation();
+    const isActiveDropdownItem = (subLinkTo: any) => pathname === subLinkTo;
+    const isDropdownActive = activeDropdown === label;
+
+    const handleDropdownClick = (e: any) => {
+      e.stopPropagation();
+      handleDropdown(label);
+    };
+
     return (
-      <S.LinkContainer
-        key={label}
-        isActive={pathname === to}
-        isOpen={sidebarOpen}
-      >
-        <S.LinkStyle to="" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+      <S.LinkContainer isOpen={sidebarOpen}>
+        <S.LinkStyle
+          onClick={handleDropdownClick}
+          isActive={pathname.includes(to)}
+        >
           <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
           <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
         </S.LinkStyle>
-        {isDropdownOpen &&
+        {isDropdownActive &&
+          sidebarOpen &&
           subLinks.map((subLink: any) => (
-            <S.DropdownLinkStyle key={subLink.label} to={subLink.to}>
+            <S.DropdownLinkStyle
+              key={subLink.label}
+              to={subLink.to}
+              onClick={(e) => e.stopPropagation()} // Prevent the dropdown from closing
+              isActive={isActiveDropdownItem(subLink.to)} // Apply active style only to the active item
+            >
               {subLink.label}
             </S.DropdownLinkStyle>
           ))}

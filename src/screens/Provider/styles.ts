@@ -79,16 +79,18 @@ export const TableHead = styled.thead`
 
 export const TableBody = styled.tbody``;
 
-export const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+export const TableHeader = styled.th`
+  padding: 10px;
+  text-align: left;
+  background-color: ${(props) => props.theme.primary};
+  color: white;
+  border: 1px solid ${(props) => props.theme.border};
 `;
 
-export const TableHeader = styled.th`
-  padding: 15px;
-  border: 1px solid #ddd;
-  text-align: left;
+export const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: ${(props) => props.theme.bg2};
+  }
 `;
 
 export const TableCell = styled.td`

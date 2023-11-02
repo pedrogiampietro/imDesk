@@ -8,7 +8,7 @@ export const Sidebar = styled.div<{ isOpen: boolean }>`
   background-color: ${({ theme }) => theme.bg2};
   padding: ${v.lgSpacing};
   position: relative;
-  border-radius: 10px;
+  border-end-end-radius: 0.65rem;
 `;
 
 export const SidebarButton = styled.button<{
@@ -97,6 +97,7 @@ export const LinkContainer = styled.div<{
 
   :hover {
     box-shadow: inset 0 0 0 1px ${({ theme }) => theme.primary};
+    cursor: pointer;
   }
 `;
 
@@ -106,17 +107,24 @@ export const LinkStyle = styled(Link)`
   text-decoration: none;
   color: inherit;
   font-size: 16px;
-  padding: calc(${v.smSpacing} - 2px) 0;
+  padding: calc(${v.smSpacing} - 2px);
 `;
 
-export const DropdownLinkStyle = styled(Link)`
+export const DropdownLinkStyle = styled(Link)<{
+  isActive?: boolean;
+  isOpen: boolean;
+}>`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: inherit;
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.bg : "inherit"};
+  color: ${({ theme, isActive }) =>
+    !isActive ? theme.text : theme.textSecondary};
   font-size: 16px;
-  padding: calc(${v.smSpacing} - 2px) 0;
-  margin-left: 2rem;
+  padding: calc(${v.smSpacing} - 2px) 10px;
+  margin: 0 10px;
+  border-radius: ${v.borderRadius};
 `;
 
 export const LinkIcon = styled.div<{ isActive: boolean }>`

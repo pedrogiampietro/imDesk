@@ -99,7 +99,7 @@ export function TicketsModal({
   const [loading, setLoading] = useState(false);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [patrimony, setPatrimony] = useState<string>(
-    ticketData?.equipmentUsage[0]?.equipmentPatrimony || ""
+    data?.equipmentUsage[0]?.equipmentPatrimony || ""
   );
 
   const newId = ticketData.id.split("-");
@@ -841,9 +841,9 @@ export function TicketsModal({
             <AiOutlineClose size="24" />
           </S.CloseButton>
           <S.WelcomeWrapper>
-            <S.Title>Ticket #{newId[0]}</S.Title>
+            <S.Title>Chamado #{newId[0]}</S.Title>
             <p>
-              Total de Tickets abertos para esse Patrimônio:{" "}
+              Total de Chamados abertos para esse Patrimônio:{" "}
               <strong>
                 {ticketData?.equipmentUsage?.length > 0
                   ? ticketData?.equipmentUsage[0]?.usageCount
