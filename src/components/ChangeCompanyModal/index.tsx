@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import * as S from "./styles";
+import { apiClient } from "../../services/api";
 
 interface Company {
   id: string;
@@ -20,10 +22,35 @@ export const ChangeCompanyModal: React.FC<ChangeCompanyModalProps> = ({
   const [selectedCompany, setSelectedCompany] = useState<string>("");
   const [companies, setCompanies] = useState<Company[]>([]);
 
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await apiClient().get("/companies");
+
+        setCompanies(response.data.companies);
+      } catch (error) {
+        console.error("Error fetching companies", error);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
   const handleCompanyChange = () => {
     onCompanyChange(selectedCompany);
     onClose();
   };
+
+  const handleCompanySelectChange = (selectedOption: any) => {
+    setSelectedCompany(selectedOption.value);
+  };
+
+  const companiesOptions = companies
+    ? companies.map((companie: any) => ({
+        value: companie.id,
+        label: companie.name,
+      }))
+    : [];
 
   if (!isOpen) return null;
 
@@ -35,19 +62,13 @@ export const ChangeCompanyModal: React.FC<ChangeCompanyModalProps> = ({
           <button onClick={onClose}>X</button>
         </S.ModalHeader>
         <S.ModalContent>
-          {companies.map((company) => (
-            <div key={company.id}>
-              <input
-                type="radio"
-                id={company.id}
-                name="company"
-                value={company.id}
-                checked={selectedCompany === company.id}
-                onChange={() => setSelectedCompany(company.id)}
-              />
-              <label htmlFor={company.id}>{company.name}</label>
-            </div>
-          ))}
+          <S.InputGroup>
+            <S.InputLabel>Empresas</S.InputLabel>
+            <Select
+              options={companiesOptions}
+              onChange={handleCompanySelectChange}
+            />
+          </S.InputGroup>
         </S.ModalContent>
         <S.ModalFooter>
           <button onClick={handleCompanyChange}>Confirmar</button>

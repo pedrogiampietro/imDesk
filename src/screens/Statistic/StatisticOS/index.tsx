@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Layout } from "../../../components/Layout";
 import { apiClient } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
+import { toast } from "react-toastify";
 import Select from "react-select";
 import * as S from "./styles";
 
@@ -54,10 +55,14 @@ export function StatisticOS() {
   }, [user]);
 
   const fetchReport = async () => {
+    if (!selectedTech) {
+      toast.warning(`Você precisa selecionar um usuário para continuar.`);
+      return;
+    }
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await apiClient().post("/report/os", {
+      const { data } = await apiClient().get("/report/os", {
         userId: selectedTech,
         startDate,
         endDate,

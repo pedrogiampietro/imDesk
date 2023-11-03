@@ -4,12 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import imDeskLogo from "../../assets/img/imdesk-logo.png";
 
-import {
-  AiOutlineHome,
-  AiOutlineLeft,
-  AiOutlineSearch,
-  AiOutlineSetting,
-} from "react-icons/ai";
+import { AiOutlineHome, AiOutlineLeft, AiOutlineSetting } from "react-icons/ai";
 import { MdLogout, MdOutlineAnalytics } from "react-icons/md";
 import { BsHouse } from "react-icons/bs";
 import { HiOutlineNewspaper } from "react-icons/hi";
@@ -70,25 +65,37 @@ export function Sidebar() {
 
     return (
       <S.LinkContainer isOpen={sidebarOpen}>
-        <S.LinkStyle
-          onClick={handleDropdownClick}
-          isActive={pathname.includes(to)}
-        >
-          <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-          <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
-        </S.LinkStyle>
-        {isDropdownActive &&
-          sidebarOpen &&
-          subLinks.map((subLink: any) => (
-            <S.DropdownLinkStyle
-              key={subLink.label}
-              to={subLink.to}
-              onClick={(e) => e.stopPropagation()} // Prevent the dropdown from closing
-              isActive={isActiveDropdownItem(subLink.to)} // Apply active style only to the active item
+        {!sidebarOpen ? (
+          <Tooltip text={label}>
+            <S.LinkStyle
+              onClick={handleDropdownClick}
+              style={{ width: `fit-content` }}
             >
-              {subLink.label}
-            </S.DropdownLinkStyle>
-          ))}
+              <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+            </S.LinkStyle>
+          </Tooltip>
+        ) : (
+          <>
+            <S.LinkStyle
+              onClick={handleDropdownClick}
+              isActive={pathname.includes(to)}
+            >
+              <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+              <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+            </S.LinkStyle>
+            {isDropdownActive &&
+              subLinks.map((subLink: any) => (
+                <S.DropdownLinkStyle
+                  key={subLink.label}
+                  to={subLink.to}
+                  onClick={(e) => e.stopPropagation()}
+                  isActive={isActiveDropdownItem(subLink.to)}
+                >
+                  {subLink.label}
+                </S.DropdownLinkStyle>
+              ))}
+          </>
+        )}
       </S.LinkContainer>
     );
   }
@@ -107,19 +114,7 @@ export function Sidebar() {
       <S.Logo>
         <img src={imDeskLogo} alt="logo" />
       </S.Logo>
-      {/* <S.Search
-        onClick={searchClickHandler}
-        style={!sidebarOpen ? { width: `fit-content` } : {}}
-      >
-        <S.SearchIcon>
-          <AiOutlineSearch />
-        </S.SearchIcon>
-        <input
-          ref={searchRef}
-          placeholder="Search"
-          style={!sidebarOpen ? { width: 0, padding: 0 } : {}}
-        />
-      </S.Search> */}
+
       <S.Divider />
       {linksArray.map(
         ({ icon, label, notification, to, requiresTech, subLinks }) =>
@@ -212,12 +207,12 @@ const linksArray = [
     notification: 0,
     subLinks: [
       {
-        label: "Relátorio OS",
-        to: "/statistics/os",
+        label: "Reports",
+        to: "/statistics",
       },
       {
-        label: "Sub Item 2",
-        to: "/sub-item-2",
+        label: "Relátorio OS",
+        to: "/statistics/os",
       },
     ],
   },

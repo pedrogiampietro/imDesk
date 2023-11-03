@@ -26,6 +26,7 @@ export const CompanyInfo = styled.div`
   display: flex;
   align-items: center;
   margin-right: 20px;
+  cursor: pointer;
 
   span {
     font-size: 18px;

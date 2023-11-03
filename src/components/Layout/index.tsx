@@ -31,20 +31,16 @@ export function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      // Aqui você pode usar uma referência ao elemento do dropdown, se preferir,
-      // ou usar um seletor para identificar se o clique foi fora
       const dropdown = document.getElementById("dropdownMenu");
       if (dropdown && !dropdown.contains(event.target as Node)) {
-        closeDropdown(); // Fecha o dropdown se clicar fora
+        closeDropdown();
       }
     }
 
-    // Adiciona o ouvinte quando o dropdown estiver aberto
     if (isDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
-    // Remove o ouvinte quando o componente desmontar ou o dropdown estiver fechado
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };

@@ -667,7 +667,7 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledTextarea
-                  value={description}
+                  value={description || ""}
                   onChange={handleChange}
                   rows={5}
                 />
@@ -822,7 +822,7 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledTextarea
-                  value={observationServiceExecuted}
+                  value={observationServiceExecuted || ""}
                   onChange={handleChangeObservationServiceExecuted}
                   rows={5}
                   disabled={!loggedUser.isTechnician}
@@ -859,7 +859,7 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledSelect
-                  value={ticketStatus}
+                  value={ticketStatus || ""}
                   onChange={handleStatusChange}
                   disabled={!loggedUser.isTechnician}
                 >
@@ -960,7 +960,7 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledSelect
-                  value={selectedPriority}
+                  value={selectedPriority || ""}
                   onChange={handlePriorityChange}
                   disabled={!loggedUser.isTechnician}
                 >
@@ -980,7 +980,7 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledSelect
-                  value={selectedCategory}
+                  value={selectedCategory || ""}
                   onChange={handleCategoryChange}
                 >
                   {ticketCategory.map((group: any) => (
@@ -1001,7 +1001,7 @@ export function TicketsModal({
               </S.IconContainer>
               <S.InfoContent>
                 <S.StyledSelect
-                  value={selectedLocation}
+                  value={selectedLocation || ""}
                   onChange={handleLocationChange}
                 >
                   {ticketLocation.map((location: any) => (
@@ -1022,7 +1022,7 @@ export function TicketsModal({
                 </S.IconContainer>
                 <S.InfoContent>
                   <S.StyledSelect
-                    value={selectedSLA}
+                    value={selectedSLA || ""}
                     onChange={handleSLAChange}
                   >
                     {slas.map((sla: any) => (
@@ -1085,7 +1085,7 @@ export function TicketsModal({
                 </S.IconContainer>
                 <S.InfoContent>
                   <S.StyledSelect
-                    value={selectedDeposit}
+                    value={selectedDeposit || ""}
                     onChange={handleDepositChange}
                   >
                     <option value="">Selecione um depósito</option>
@@ -1099,7 +1099,7 @@ export function TicketsModal({
                   {selectedDeposit && (
                     <div style={{ display: "block", marginTop: "10px" }}>
                       <S.StyledSelect
-                        value={selectedDepositItem}
+                        value={selectedDepositItem || ""}
                         onChange={handleDepositItemChange}
                         style={{ marginBottom: "10px" }}
                       >
@@ -1224,8 +1224,8 @@ export function TicketsModal({
                 <S.IconContainer>
                   <FaSignature /> <S.InfoTitle>Assinar Documento</S.InfoTitle>
                 </S.IconContainer>
-                <S.InfoContent>
-                  <div>
+                <div>
+                  <S.InfoContent>
                     <S.StyledButton
                       onClick={submitSignDocument}
                       disabled={
@@ -1237,8 +1237,8 @@ export function TicketsModal({
                     >
                       Assinar
                     </S.StyledButton>
-                  </div>
-                </S.InfoContent>
+                  </S.InfoContent>
+                </div>
               </S.InfoItem>
 
               <S.InfoItem style={{ marginTop: "5rem" }}>
@@ -1246,13 +1246,13 @@ export function TicketsModal({
                   <AiOutlineDownload />{" "}
                   <S.InfoTitle>Baixar Documento</S.InfoTitle>
                 </S.IconContainer>
-                <S.InfoContent>
-                  <div>
+                <div>
+                  <S.InfoContent>
                     <S.StyledButton onClick={submitDownloadDocument}>
                       Baixar
                     </S.StyledButton>
-                  </div>
-                </S.InfoContent>
+                  </S.InfoContent>
+                </div>
               </S.InfoItem>
             </S.InfoItem>
           </S.InfoGroup>
