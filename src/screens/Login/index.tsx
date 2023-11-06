@@ -64,7 +64,7 @@ export function Login() {
     const fetchCompanies = async () => {
       try {
         const response = await axios.get(
-          "http://imdesk-api.railway.internal/companies"
+          "http://imdesk-api-production.up.railway.app/companies"
         );
 
         setCompanies(response.data.companies);

@@ -68,7 +68,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   async function signIn(login: User) {
     try {
       const response = await axios.post(
-        "http://imdesk-api.railway.internal/authenticate/sign-in",
+        "http://imdesk-api-production.up.railway.app/authenticate/sign-in",
         login
       );
 
