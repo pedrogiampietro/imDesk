@@ -84,7 +84,6 @@ export function Inventory() {
   const renderInventoryContent = () => {
     const filteredItems = filteredInventory();
 
-    console.log("filteredItems", filteredItems);
     let content = filteredItems.length ? (
       filteredItems.map((item, index) => (
         <S.TableRow key={item.id}>
@@ -141,16 +140,16 @@ export function Inventory() {
                 </option>
               ))}
             </select>
-          </div>
 
-          <S.Button
-            onClick={() => {
-              setShowModal(true);
-              setEditingInventoryItem(null);
-            }}
-          >
-            Adicionar Item
-          </S.Button>
+            <S.Button
+              onClick={() => {
+                setShowModal(true);
+                setEditingInventoryItem(null);
+              }}
+            >
+              Adicionar Item
+            </S.Button>
+          </div>
         </S.Header>
         {loading ? <LottieLoad /> : renderInventoryContent()}
       </S.Container>

@@ -1,6 +1,12 @@
 import styled from "styled-components";
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  width: 98%;
+  height: 100%;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 10px;
+`;
 
 export const Button = styled.button`
   padding: 8px 12px;
@@ -53,11 +59,20 @@ export const CloseButtonModal = styled.button`
 `;
 
 export const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
-  margin-bottom: 0.375rem;
+  width: 100%;
+
+  & div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    margin: 0.375rem;
+
+    & select {
+      width: auto;
+      margin: 1rem;
+    }
+  }
 `;
 
 export const ModalWrapper = styled.div`
@@ -98,7 +113,7 @@ export const ModalContainer = styled.div`
   }
 `;
 
-export const NoItemsMessage = styled.div`
+export const NoItemsMessage = styled.span`
   margin-top: 1.25rem;
   text-align: center;
   font-size: 1.125rem;
