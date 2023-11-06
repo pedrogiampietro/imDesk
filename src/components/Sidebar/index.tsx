@@ -68,6 +68,7 @@ export function Sidebar() {
         {!sidebarOpen ? (
           <Tooltip text={label}>
             <S.LinkStyle
+              to="#"
               onClick={handleDropdownClick}
               style={{ width: `fit-content` }}
             >
@@ -76,10 +77,7 @@ export function Sidebar() {
           </Tooltip>
         ) : (
           <>
-            <S.LinkStyle
-              onClick={handleDropdownClick}
-              isActive={pathname.includes(to)}
-            >
+            <S.LinkStyle to="#" onClick={handleDropdownClick}>
               <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
               <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
             </S.LinkStyle>

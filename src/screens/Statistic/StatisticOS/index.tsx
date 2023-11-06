@@ -63,9 +63,11 @@ export function StatisticOS() {
     setError("");
     try {
       const { data } = await apiClient().get("/report/os", {
-        userId: selectedTech,
-        startDate,
-        endDate,
+        data: {
+          userId: selectedTech,
+          startDate,
+          endDate,
+        },
       });
 
       setReportData(data);
