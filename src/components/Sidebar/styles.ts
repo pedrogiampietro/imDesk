@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { AiOutlineArrowDown } from "react-icons/ai";
 
 import { btnReset, v } from "../../assets/styles/variables";
 
@@ -9,6 +10,7 @@ export const Sidebar = styled.div<{ isOpen: boolean }>`
   padding: ${v.lgSpacing};
   position: relative;
   border-end-end-radius: 0.65rem;
+  flex-shrink: 0;
 `;
 
 export const SidebarButton = styled.button<{
@@ -110,6 +112,19 @@ export const LinkStyle = styled(Link)`
   }
 `;
 
+export const DropdownContent = styled.div<{ isOpen: boolean }>`
+  max-height: ${({ isOpen }) => (isOpen ? "auto" : "0")};
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
+  opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
+`;
+
+export const ArrowIcon = styled(AiOutlineArrowDown)<{ isOpen: boolean }>`
+  transition: transform 0.5s ease-in-out;
+  transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+  font-size: 16px;
+`;
+
 export const DropdownLinkStyle = styled(Link)<{
   isActive?: boolean;
 }>`
@@ -131,15 +146,14 @@ export const DropdownLinkStyle = styled(Link)<{
   }
 `;
 
-export const LinkLabel = styled.span<{ isActive: boolean }>`
-  color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
-  display: block;
+export const LinkLabel = styled.span<{ isActive: boolean; isOpen?: boolean }>`
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  color: ${({ isActive }) => (!isActive ? "#000" : "#fff")};
   flex: 1;
-  /* margin-left: ${v.smSpacing}; */
 `;
 
 export const LinkIcon = styled.div<{ isActive: boolean }>`
-  padding: ${v.smSpacing} ${v.mdSpacing};
+  padding: ${v.smSpacing} ${v.smSpacing};
   display: flex;
 
   svg {

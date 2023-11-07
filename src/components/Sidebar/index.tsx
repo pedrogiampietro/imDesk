@@ -40,21 +40,15 @@ export function Sidebar() {
 
   const secondaryLinksArray = [
     {
-      label: "Settings",
-      icon: <AiOutlineSetting />,
-      to: "/settings",
-      requiresTech: true,
-    },
-    {
       label: "Logout",
       icon: <MdLogout />,
       to: "/login",
       func: signOut,
-      requiresTech: true,
+      requiresTech: false,
     },
   ];
 
-  function DropdownMenu({ icon, label, to, subLinks }: any) {
+  function DropdownMenu({ icon, label, to, subLinks, sidebarOpen }: any) {
     const isActiveDropdownItem = (subLinkTo: any) => pathname === subLinkTo;
     const isDropdownActive = activeDropdown === label;
 
@@ -67,33 +61,31 @@ export function Sidebar() {
       <S.LinkContainer isOpen={sidebarOpen}>
         {!sidebarOpen ? (
           <Tooltip text={label}>
-            <S.LinkStyle
-              to="#"
-              onClick={handleDropdownClick}
-              style={{ width: `fit-content` }}
-            >
+            <S.LinkStyle to={to} style={{ width: `fit-content` }}>
               <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
             </S.LinkStyle>
           </Tooltip>
         ) : (
-          <>
-            <S.LinkStyle to="#" onClick={handleDropdownClick}>
-              <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-              <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
-            </S.LinkStyle>
-            {isDropdownActive &&
-              subLinks.map((subLink: any) => (
-                <S.DropdownLinkStyle
-                  key={subLink.label}
-                  to={subLink.to}
-                  onClick={(e) => e.stopPropagation()}
-                  isActive={isActiveDropdownItem(subLink.to)}
-                >
-                  {subLink.label}
-                </S.DropdownLinkStyle>
-              ))}
-          </>
+          <S.LinkStyle to="#" onClick={handleDropdownClick}>
+            <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+            <S.LinkLabel isActive={theme === "dark"} isOpen={sidebarOpen}>
+              {label}
+            </S.LinkLabel>
+            <S.ArrowIcon isOpen={isDropdownActive} />
+          </S.LinkStyle>
         )}
+        <S.DropdownContent isOpen={isDropdownActive}>
+          {subLinks.map((subLink: any) => (
+            <S.DropdownLinkStyle
+              key={subLink.label}
+              to={subLink.to}
+              onClick={(e) => e.stopPropagation()}
+              isActive={isActiveDropdownItem(subLink.to)}
+            >
+              {subLink.label}
+            </S.DropdownLinkStyle>
+          ))}
+        </S.DropdownContent>
       </S.LinkContainer>
     );
   }
@@ -124,6 +116,7 @@ export function Sidebar() {
               subLinks={subLinks}
               to={to}
               icon={icon}
+              sidebarOpen={sidebarOpen}
             />
           ) : (
             <S.LinkContainer
@@ -140,7 +133,9 @@ export function Sidebar() {
               ) : (
                 <S.LinkStyle to={to}>
                   <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-                  <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+                  <S.LinkLabel isActive={theme === "dark"} isOpen={sidebarOpen}>
+                    {label}
+                  </S.LinkLabel>
                   {!!notification && (
                     <S.LinkNotification>{notification}</S.LinkNotification>
                   )}
@@ -161,7 +156,9 @@ export function Sidebar() {
               >
                 <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
                 {sidebarOpen && (
-                  <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+                  <S.LinkLabel isActive={theme === "dark"} isOpen={sidebarOpen}>
+                    {label}
+                  </S.LinkLabel>
                 )}
               </S.LinkStyle>
             </S.LinkContainer>
@@ -234,5 +231,22 @@ const linksArray = [
     to: "/inventory",
     notification: 0,
     requiresTech: true,
+  },
+  {
+    label: "Configurações",
+    icon: <AiOutlineSetting />,
+    to: "/settings",
+    notification: 0,
+    requiresTech: true,
+    subLinks: [
+      {
+        label: "Criação de Usuário",
+        to: "/settings/create-user",
+      },
+      {
+        label: "Relátorio OS",
+        to: "/statistics/os",
+      },
+    ],
   },
 ];

@@ -14,6 +14,7 @@ import { DepositView } from "../screens/DepositView";
 import RouteProtector from "./RouteProtector";
 import { Inventory } from "../screens/Inventory";
 import { StatisticOS } from "../screens/Statistic/StatisticOS";
+import { CreateUser } from "../screens/Settings/CreateUser";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -68,8 +69,16 @@ export function AppRoutes() {
     {
       path: "/settings",
       element: (
-        <RouteProtector requiresTech>
+        <RouteProtector>
           <Settings />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-user",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateUser />
         </RouteProtector>
       ),
     },

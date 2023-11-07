@@ -5,7 +5,7 @@ export const Layout = styled.div`
 `;
 
 export const Main = styled.main`
-  width: 100%;
+  flex: 1;
 
   h1 {
     font-size: 14px;
