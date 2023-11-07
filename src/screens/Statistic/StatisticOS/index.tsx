@@ -62,12 +62,10 @@ export function StatisticOS() {
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await apiClient().get("/report/os", {
-        data: {
-          userId: selectedTech,
-          startDate,
-          endDate,
-        },
+      const { data } = await apiClient().post("/report/os", {
+        userId: selectedTech,
+        startDate,
+        endDate,
       });
 
       setReportData(data);

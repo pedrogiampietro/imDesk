@@ -313,7 +313,10 @@ export function TicketsModal({
   };
 
   const submitTechnicianResponse = async () => {
-    if (technicianResponse.trim() === "") return;
+    if (technicianResponse.trim() === "" && attachs.length === 0) {
+      console.log("Nenhuma mensagem ou anexo para enviar.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("ticketId", ticketData.id);
@@ -349,6 +352,7 @@ export function TicketsModal({
           newMessage,
         ]);
 
+        setAttachs([]);
         setTechnicianResponse("");
       }
     } catch (error) {
