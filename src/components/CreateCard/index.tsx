@@ -1,28 +1,42 @@
-import { useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import { ThemeContext } from "../../App";
-import { toast } from "react-toastify";
 import * as S from "./styles";
 
-export function CreateCard({ formFields, formSelectOptions }: any) {
+export function CreateCard({
+  formFields,
+  formSelectOptions,
+  handleCreate,
+  isEditMode,
+}: any) {
   const {
+    register,
+    setValue,
+    getValues,
+    watch,
     handleSubmit,
     control,
-    register,
     formState: { errors },
-  } = useForm({
-    // resolver: yupResolver(newUserSchema),
-  });
+  } = useForm();
+
   const { theme } = useContext(ThemeContext);
 
+  useEffect(() => {
+    if (isEditMode) {
+      Object.keys(isEditMode).forEach((key) => {
+        setValue(key, isEditMode[key]);
+      });
+    }
+  }, [isEditMode, setValue]);
+
   const onSubmit = async (formData: any) => {
-    console.log(formData);
-    toast.success("Usuário criado com sucesso!");
-    // Implementação após o usuário ser criado
+    handleCreate(formData);
   };
 
-  console.log("formFields", formFields);
+  function ErrorMessage({ error }: { error?: any | undefined }) {
+    return error ? <span>{error.message}</span> : null;
+  }
 
   return (
     <S.Wrapper>
@@ -31,24 +45,31 @@ export function CreateCard({ formFields, formSelectOptions }: any) {
           <S.FormGroup key={field.name}>
             <S.Label htmlFor={field.name}>{field.label}</S.Label>
             <S.Input type={field.type} {...register(field.name)} />
-            {errors[field.name] && <span>{errors[field.name].message}</span>}
+            <ErrorMessage error={errors[field.name]} />
           </S.FormGroup>
         ))}
 
         {formFields.checkboxes.map((checkbox: any) => (
-          <S.FormGroup key={checkbox.name}>
-            <S.Label htmlFor={checkbox.name}>
-              <S.Input
-                type="checkbox"
-                {...register(checkbox.name)}
-                id={checkbox.name}
-              />
-              {checkbox.label}
-            </S.Label>
-            {errors[checkbox.name] && (
-              <span>{errors[checkbox.name].message}</span>
-            )}
-          </S.FormGroup>
+          <S.CheckboxContainer key={checkbox.name}>
+            <S.HiddenCheckbox
+              {...register(checkbox.name)}
+              id={checkbox.name}
+              type="checkbox"
+              checked={watch(checkbox.name)}
+              onChange={() => {}}
+            />
+
+            <S.StyledCheckbox
+              isChecked={!!watch(checkbox.name)}
+              onClick={() => setValue(checkbox.name, !getValues(checkbox.name))}
+            >
+              <S.CheckboxIcon viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12" />
+              </S.CheckboxIcon>
+            </S.StyledCheckbox>
+            <S.Label htmlFor={checkbox.name}>{checkbox.label}</S.Label>
+            <ErrorMessage error={errors[checkbox.name]} />
+          </S.CheckboxContainer>
         ))}
 
         <S.FormGroup>
@@ -69,11 +90,10 @@ export function CreateCard({ formFields, formSelectOptions }: any) {
               />
             )}
           />
-          {/* {errors[select.name] && <span>{errors[select.name].message}</span>} */}
         </S.FormGroup>
 
         <S.CreateButton type="submit" isActive={theme === "dark"}>
-          {formFields.button.text}
+          {isEditMode ? formFields.button.saveText : formFields.button.text}
         </S.CreateButton>
       </S.Form>
     </S.Wrapper>

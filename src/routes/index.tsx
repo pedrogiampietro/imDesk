@@ -15,6 +15,7 @@ import RouteProtector from "./RouteProtector";
 import { Inventory } from "../screens/Inventory";
 import { StatisticOS } from "../screens/Statistic/StatisticOS";
 import { CreateUser } from "../screens/Settings/CreateUser";
+import { CreateLocation } from "../screens/Settings/CreateLocation";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -79,6 +80,14 @@ export function AppRoutes() {
       element: (
         <RouteProtector requiresTech>
           <CreateUser />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-location",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateLocation />
         </RouteProtector>
       ),
     },

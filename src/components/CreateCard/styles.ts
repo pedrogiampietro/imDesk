@@ -1,15 +1,17 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  width: 50%;
+  width: 80%;
   display: flex;
   margin: 0 auto;
+  padding: 0.65rem 1rem;
+  border: 1px dashed ${({ theme }) => theme.primary};
   background-color: ${({ theme }) => theme.bg2};
-  padding: 2rem;
 `;
 
 export const Form = styled.form`
-  width: 500px;
+  width: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
 `;
@@ -193,5 +195,48 @@ export const FileLabel = styled.label`
 
   &:hover {
     background-color: rgba(84, 105, 212, 0.1);
+  }
+`;
+
+export const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  cursor: pointer;
+`;
+
+export const CheckboxIcon = styled.svg`
+  visibility: hidden;
+`;
+
+export const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+`;
+
+export const StyledCheckbox = styled.div<{ isChecked: boolean }>`
+  width: 20px;
+  height: 20px;
+  background-color: ${(props) =>
+    props.isChecked ? props.theme.primary : "transparent"};
+  border-radius: 3px;
+  transition: all 150ms;
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+  border: 1px solid ${({ theme }) => theme.text};
+
+  &:after {
+    content: "${(props) => (props.isChecked ? "✓" : "")}";
+    color: #fff;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+      scale(${(props) => (props.isChecked ? 1 : 0)});
+    transition: transform 150ms ease-in-out;
+    font-size: 16px;
   }
 `;

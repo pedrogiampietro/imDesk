@@ -94,7 +94,7 @@ export const TableRow = styled.tr`
 `;
 
 export const TableCell = styled.td`
-  padding: 15px;
+  padding: 0 15px;
   border: 1px solid #ddd;
   text-align: left;
 `;

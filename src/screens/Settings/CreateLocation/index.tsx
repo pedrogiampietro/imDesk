@@ -5,28 +5,13 @@ import { apiClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
 
-type User = {
+type Location = {
   id: string;
-  username: string;
   name: string;
-  email: string;
-  password: string;
-  phone: string;
-  ramal: string;
-  sector: string;
-  currentLoggedCompanyId: string | null;
-  currentLoggedCompanyName: string | null;
-  isTechnician: boolean;
-  createdAt: string;
-  updatedAt: string;
-  avatarUrl: string | null;
-  hourlyRate: string | null;
-  groupId: string | null;
-  signatureUrl: string | null;
 };
 
-export function CreateUser() {
-  const [users, setUsers] = useState<User[]>([]);
+export function CreateLocation() {
+  const [locations, setLocations] = useState<Location[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [showCreateCard, setShowCreateCard] = useState(false);
   const [companies, setCompanies] = useState([]);
@@ -43,20 +28,21 @@ export function CreateUser() {
       return;
     }
 
-    const fetchUsers = async () => {
+    const fetchLocations = async () => {
       try {
-        const response = await apiClient().get("/account/users", {
+        const { data } = await apiClient().get("/location", {
           params: {
             companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
           },
         });
-        setUsers(response.data);
+
+        setLocations(data.body);
       } catch (error) {
-        console.error("Não foi possível buscar os usuários", error);
+        console.error("Error fetching locations", error);
       }
     };
 
-    fetchUsers();
+    fetchLocations();
   }, []);
 
   useEffect(() => {
@@ -71,7 +57,7 @@ export function CreateUser() {
     })();
   }, []);
 
-  const pageTitle = "Criação de Usuário";
+  const pageTitle = "Criação de Localização";
 
   const tableHeader = [
     {
@@ -80,14 +66,10 @@ export function CreateUser() {
     },
     {
       id: 2,
-      name: "E-mail",
-    },
-    {
-      id: 3,
       name: "Criado em",
     },
     {
-      id: 4,
+      id: 3,
       name: "Ações",
     },
   ];
@@ -99,91 +81,55 @@ export function CreateUser() {
   };
 
   const formFields = {
-    title: "Criar Usuário",
+    title: "Criar Localização",
     fields: [
       {
-        label: "Nome de Usuário",
-        type: "text",
-        name: "username",
-      },
-      {
-        label: "Nome",
+        label: "Nome da Localização",
         type: "text",
         name: "name",
       },
-      {
-        label: "Email",
-        type: "email",
-        name: "email",
-      },
-      {
-        label: "Senha",
-        type: "password",
-        name: "password",
-      },
-      {
-        label: "Telefone",
-        type: "text",
-        name: "phone",
-      },
-      {
-        label: "Ramal",
-        type: "text",
-        name: "ramal",
-      },
-      {
-        label: "Setor",
-        type: "text",
-        name: "sector",
-      },
     ],
-    checkboxes: [
-      {
-        label: "É Técnico?",
-        type: "checkbox",
-        name: "isTechnician",
-      },
-    ],
+    checkboxes: [],
     button: {
-      text: "Criar Usuário",
-      saveText: "Salvar Usuário",
+      text: "Criar Localização",
+      saveText: "Salvar Localização",
       loadingText: "Carregando...",
     },
   };
 
-  const handleEdit = async (user: any) => {
+  const handleEdit = async (locationId: any) => {
     setShowCreateCard(true);
 
     try {
-      const response = await apiClient().get(`/account/user`, {
+      const response = await apiClient().get(`/location/find-by-id`, {
         params: {
-          id: user,
+          id: locationId,
         },
       });
 
-      setIsEditMode(response.data);
+      setIsEditMode(response.data.body);
     } catch (error) {
       console.error("Erro ao excluir fornecedor:", error);
     }
   };
 
-  const handleView = (user: any) => {
-    console.log("user", user);
+  const handleView = (locationId: any) => {
+    console.log("user", locationId);
   };
 
-  const handleDelete = async (user: any) => {
-    console.log("Excluir fornecedor:", user);
+  const handleDelete = async (location: any) => {
+    console.log("Excluir fornecedor:", location);
 
     try {
       const response = await apiClient().delete(
-        `/providers/provider/${user.id}`
+        `/providers/provider/${location.id}`
       );
 
-      setUsers((prevProviders: any) =>
-        prevProviders.filter((p: any) => p.id !== user.id)
+      setLocations((prevLocations: any) =>
+        prevLocations.filter((p: any) => p.id !== location.id)
       );
     } catch (error) {
-      console.error("Erro ao excluir fornecedor:", error);
+      console.error("Erro ao excluir uma localização:", error);
     }
   };
 
@@ -193,26 +139,19 @@ export function CreateUser() {
 
   const handleCreate = async (formData: any) => {
     let method: "post" | "patch" = "post";
-    let url = "/authenticate/sign-up";
-    let successMessage = "Sucesso! Seu usuário foi criado com sucesso!";
+    let url = "/location";
+    let successMessage = "Sucesso! Sua localização foi criada com sucesso!";
 
     if (isEditMode) {
       method = "patch";
-      url = `/account/update-user/${formData.id}`;
-      successMessage = "Sucesso! Seu usuário foi atualizado com sucesso!";
+      url = `/location/update-location/${formData.id}`;
+      successMessage = "Sucesso! Sua localização foi atualizada com sucesso!";
     }
 
     setLoading(true);
 
     const adjustedObject = {
-      username: formData.username,
       name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      phone: formData.phone,
-      ramal: formData.ramal,
-      sector: formData.sector,
-      isTechnician: formData.isTechnician,
       companyIds: formData?.company?.map((c: any) => c.id),
     };
 
@@ -230,8 +169,8 @@ export function CreateUser() {
       });
 
       if (isEditMode) {
-        setUsers((prevUsers) => {
-          return prevUsers.map((user) => {
+        setLocations((prevLocations) => {
+          return prevLocations.map((user) => {
             if (user.id === formData.id) {
               return { ...user, ...response.data.body };
             }
@@ -239,9 +178,10 @@ export function CreateUser() {
           });
         });
       } else {
-        setUsers((prevUsers) => [...prevUsers, response.data.body]);
+        setLocations((prevLocations) => [...prevLocations, response.data.body]);
       }
 
+      setShowCreateCard(false);
       setLoading(false);
     } catch (err: any) {
       setLoading(false);
@@ -261,7 +201,7 @@ export function CreateUser() {
   return (
     <Layout>
       <LayoutForm
-        data={users}
+        data={locations}
         formFields={formFields}
         headerToDataKeyMap={headerToDataKeyMap}
         formSelectOptions={companies}

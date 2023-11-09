@@ -117,6 +117,7 @@ export const DropdownContent = styled.div<{ isOpen: boolean }>`
   overflow: hidden;
   transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
   opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
+  margin: 5px;
 `;
 
 export const ArrowIcon = styled(AiOutlineArrowDown)<{ isOpen: boolean }>`
@@ -137,7 +138,7 @@ export const DropdownLinkStyle = styled(Link)<{
     !isActive ? theme.text : theme.textSecondary};
   font-size: 16px;
   padding: calc(${v.smSpacing} - 2px) 10px;
-  margin: 0 10px;
+  margin: 5px 10px;
   border-radius: ${v.borderRadius};
 
   &:hover {

@@ -244,8 +244,8 @@ const linksArray = [
         to: "/settings/create-user",
       },
       {
-        label: "Relátorio OS",
-        to: "/statistics/os",
+        label: "Criação de Localização",
+        to: "/settings/create-location",
       },
     ],
   },

@@ -6,17 +6,30 @@ interface ActionButtonProps {
 
 export const Container = styled.div`
   width: 98%;
-  height: 100%;
+  min-height: 100vh;
   background-color: #fff;
   margin: 0 auto;
   border-radius: 10px;
+  overflow: hidden;
 `;
 
 export const Wrapper = styled.div`
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  height: 100vh;
   margin: 0 auto;
-
   border-radius: 10px;
+`;
+
+export const TableContainer = styled.div`
+  flex: 1;
+  min-width: 0;
+`;
+
+export const CreateCardContainer = styled.div`
+  width: 400px;
 `;
 
 export const PageHeader = styled.header`
@@ -42,7 +55,7 @@ export const TableBody = styled.tbody``;
 
 export const TableHeader = styled.th`
   padding: 10px;
-  text-align: left;
+  text-align: center;
   background-color: ${(props) => props.theme.primary};
   color: white;
   border: 1px solid ${(props) => props.theme.border};
@@ -55,9 +68,9 @@ export const TableRow = styled.tr`
 `;
 
 export const TableCell = styled.td`
-  padding: 15px;
+  padding: 0 15px;
   border: 1px solid #ddd;
-  text-align: left;
+  text-align: center;
 `;
 
 export const ActionButton = styled.button<ActionButtonProps>`
