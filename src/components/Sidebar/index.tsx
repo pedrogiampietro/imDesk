@@ -247,6 +247,18 @@ const linksArray = [
         label: "Criação de Localização",
         to: "/settings/create-location",
       },
+      {
+        label: "Criação de Prioridade",
+        to: "/settings/create-priority",
+      },
+      {
+        label: "Criação de Tipo",
+        to: "/settings/create-type",
+      },
+      {
+        label: "Criação de Categoria",
+        to: "/settings/create-category",
+      },
     ],
   },
 ];

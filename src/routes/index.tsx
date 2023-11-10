@@ -16,6 +16,9 @@ import { Inventory } from "../screens/Inventory";
 import { StatisticOS } from "../screens/Statistic/StatisticOS";
 import { CreateUser } from "../screens/Settings/CreateUser";
 import { CreateLocation } from "../screens/Settings/CreateLocation";
+import { CreatePriority } from "../screens/Settings/CreatePriority";
+import { CreateType } from "../screens/Settings/CreateType";
+import { CreateCategory } from "../screens/Settings/CreateCategory";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -88,6 +91,30 @@ export function AppRoutes() {
       element: (
         <RouteProtector requiresTech>
           <CreateLocation />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-priority",
+      element: (
+        <RouteProtector requiresTech>
+          <CreatePriority />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-type",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateType />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-category",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateCategory />
         </RouteProtector>
       ),
     },
