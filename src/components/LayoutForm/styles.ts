@@ -11,6 +11,10 @@ export const Container = styled.div`
   margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
+
+  background-color: ${({ theme }) => theme.bg2};
+  padding: 2rem;
+  border-radius: 10px;
 `;
 
 export const Wrapper = styled.div`
@@ -34,7 +38,7 @@ export const CreateCardContainer = styled.div`
 
 export const PageHeader = styled.header`
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: ${({ theme }) => theme.bg2};
   text-align: center;
   border-radius: 10px 10px 0 0;
   font-size: 24px;
@@ -57,7 +61,8 @@ export const TableHeader = styled.th`
   padding: 10px;
   text-align: center;
   background-color: ${(props) => props.theme.primary};
-  color: white;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
   border: 1px solid ${(props) => props.theme.border};
 `;
 
@@ -71,6 +76,8 @@ export const TableCell = styled.td`
   padding: 0 15px;
   border: 1px solid #ddd;
   text-align: center;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
 `;
 
 export const ActionButton = styled.button<ActionButtonProps>`
