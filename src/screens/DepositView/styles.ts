@@ -1,5 +1,18 @@
 import styled from "styled-components";
 
+export const Container = styled.div`
+  width: 98%;
+  min-height: 100vh;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+
+  background: ${({ theme }) => theme.bgLinear};
+  padding: 2rem;
+  border-radius: 10px;
+`;
+
 export const ModalWrapper = styled.div`
   background: rgba(242, 243, 245, 0.8);
   position: fixed;
@@ -64,6 +77,7 @@ export const TableCell = styled.td`
   border: 1px solid #ddd;
   text-align: center;
   vertical-align: middle;
+  color: ${({ theme }) => theme.text};
 `;
 
 export const Button = styled.button`
@@ -138,6 +152,10 @@ export const WelcomeButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  & h2 {
+    color: ${({ theme }) => theme.text};
+  }
 `;
 
 export const NoItemsMessage = styled.p`

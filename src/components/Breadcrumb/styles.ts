@@ -9,6 +9,10 @@ export const BreadcrumbContainer = styled.div`
 
 export const BreadcrumbItem = styled.div`
   margin: 0 5px;
+
+  & a {
+    color: ${({ theme }) => theme.text};
+  }
 `;
 
 export const Divider = styled.div`

@@ -12,7 +12,7 @@ export const Container = styled.div`
   border-radius: 10px;
   overflow: hidden;
 
-  background-color: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
   border-radius: 10px;
 `;
@@ -38,7 +38,7 @@ export const CreateCardContainer = styled.div`
 
 export const PageHeader = styled.header`
   padding: 20px;
-  background-color: ${({ theme }) => theme.bg2};
+  background: transparent;
   text-align: center;
   border-radius: 10px 10px 0 0;
   font-size: 24px;
@@ -46,8 +46,7 @@ export const PageHeader = styled.header`
 `;
 
 export const Table = styled.table`
-  width: 98%;
-  margin: 0 auto;
+  width: 100%;
   border-collapse: collapse;
 `;
 
@@ -68,7 +67,7 @@ export const TableHeader = styled.th`
 
 export const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: ${(props) => props.theme.bg2};
+    background-color: ${(props) => props.theme.bgAlpha};
   }
 `;
 

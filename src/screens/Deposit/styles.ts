@@ -1,5 +1,18 @@
 import styled from "styled-components";
 
+export const Container = styled.div`
+  width: 98%;
+  min-height: 100vh;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+
+  background: ${({ theme }) => theme.bgLinear};
+  padding: 2rem;
+  border-radius: 10px;
+`;
+
 export const ModalWrapper = styled.div`
   background: rgba(242, 243, 245, 0.8);
   position: fixed;
@@ -58,11 +71,18 @@ export const Table = styled.table`
   border-collapse: collapse;
 `;
 
+export const TableHead = styled.thead`
+  background-color: #f8f9fa;
+`;
+
+export const TableBody = styled.tbody``;
+
 export const TableHeader = styled.th`
   padding: 10px;
-  text-align: left;
+  text-align: center;
   background-color: ${(props) => props.theme.primary};
-  color: white;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
   border: 1px solid ${(props) => props.theme.border};
 `;
 
@@ -73,10 +93,11 @@ export const TableRow = styled.tr`
 `;
 
 export const TableCell = styled.td`
-  padding: 10px;
-  border: 1px solid #c3aff0;
+  padding: 0 15px;
+  border: 1px solid #ddd;
   text-align: center;
-  vertical-align: middle;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
 `;
 
 export const CloseButtonModal = styled.button`

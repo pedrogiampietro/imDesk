@@ -10,7 +10,7 @@ export const KanbanContainer = styled.div`
   width: 100%;
   flex-direction: column;
   margin: 0 1rem;
-  background-color: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
   border-radius: 10px;
 `;

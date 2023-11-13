@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Sidebar } from "../Sidebar/";
 import { useAuth } from "../../hooks/useAuth";
 import { Breadcrumb } from "../../components/Breadcrumb";
-import { IoBusinessOutline } from "react-icons/io5";
+import { RiSettings2Line } from "react-icons/ri";
 import { ChangeCompanyModal } from "../ChangeCompanyModal";
 
 import * as S from "./styles";
@@ -67,7 +67,7 @@ export function Layout({ children }: LayoutProps) {
 
           <S.CompanyProfileContainer>
             <S.CompanyInfo onClick={openChangeCompanyModal}>
-              <IoBusinessOutline size={20} />
+              <RiSettings2Line size={30} />
               <span>{user?.currentLoggedCompany.currentLoggedCompanyName}</span>
             </S.CompanyInfo>
             <S.AvatarButton onClick={() => setDropdownOpen(!isDropdownOpen)}>

@@ -17,8 +17,8 @@ export const TopBar = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0.7rem 20px;
-  background-color: ${({ theme }) => theme.bg2};
-  border-bottom: 1px solid #ddd;
+  background: ${({ theme }) => theme.bgLinear};
+  /* border-bottom: 1px solid #ddd; */
   margin-bottom: 1rem;
 `;
 
@@ -31,8 +31,12 @@ export const CompanyInfo = styled.div`
   span {
     font-size: 18px;
     font-weight: bold;
-    color: #7f56d8;
+    color: ${({ theme }) => theme.text};
     margin-left: 10px;
+  }
+  svg {
+    font-size: 20px;
+    fill: ${({ theme }) => theme.primary};
   }
 `;
 

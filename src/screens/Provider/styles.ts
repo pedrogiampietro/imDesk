@@ -8,6 +8,19 @@ interface ModalBackdropProps {
   show: boolean;
 }
 
+export const Container = styled.div`
+  width: 98%;
+  min-height: 100vh;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+
+  background: ${({ theme }) => theme.bgLinear};
+  padding: 2rem;
+  border-radius: 10px;
+`;
+
 export const AdminContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -81,9 +94,10 @@ export const TableBody = styled.tbody``;
 
 export const TableHeader = styled.th`
   padding: 10px;
-  text-align: left;
+  text-align: center;
   background-color: ${(props) => props.theme.primary};
-  color: white;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
   border: 1px solid ${(props) => props.theme.border};
 `;
 
@@ -96,7 +110,9 @@ export const TableRow = styled.tr`
 export const TableCell = styled.td`
   padding: 0 15px;
   border: 1px solid #ddd;
-  text-align: left;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
 `;
 
 export const ActionButton = styled.button<ActionButtonProps>`
