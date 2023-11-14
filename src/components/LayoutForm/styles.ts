@@ -9,7 +9,7 @@ export const Container = styled.div`
   background-color: #fff;
   margin: 0 auto;
   border-radius: 10px;
-  /* overflow: hidden; */
+  overflow: hidden;
 
   background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
@@ -21,17 +21,22 @@ export const Wrapper = styled.div`
   flex-direction: row;
   align-items: flex-start;
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0 auto;
   border-radius: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const TableContainer = styled.div`
   flex: 1;
-  min-width: 0;
-  overflow-x: auto;
+  height: auto;
+  /* min-width: 0; */
+  /* overflow-x: auto; */
   /* overflow-y: auto; */
-  max-height: 800px;
+  /* max-height: 800px; */
 `;
 
 export const CreateCardContainer = styled.div`
@@ -76,7 +81,6 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
   padding: 1rem 15px;
-  border: 1px solid #ddd;
   text-align: center;
   color: ${({ theme }) => theme.text};
   font-size: 14px;
@@ -126,4 +130,8 @@ export const PaginationWrapper = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
   margin-top: 20px;
+
+  & span {
+    color: ${({ theme }) => theme.text};
+  }
 `;

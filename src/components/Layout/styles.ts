@@ -18,7 +18,6 @@ export const TopBar = styled.div`
   align-items: center;
   padding: 0.7rem 20px;
   background: ${({ theme }) => theme.bgLinear};
-  /* border-bottom: 1px solid #ddd; */
   margin-bottom: 1rem;
 `;
 

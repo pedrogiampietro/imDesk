@@ -1,13 +1,5 @@
 import styled from "styled-components";
 
-function generatePagesArray(from: number, to: number): number[] {
-  return [...new Array(to - from)]
-    .map((_, index) => {
-      return from + index + 1;
-    })
-    .filter((page) => page > 0);
-}
-
 const PaginationContainer = styled.nav``;
 
 const PaginationList = styled.ul`
@@ -21,6 +13,7 @@ const PaginationButton = styled.button`
   padding: 0.5rem 1rem;
   background-color: transparent;
   border: 1px solid #ccc;
+  color: ${({ theme }) => theme.text};
 `;
 
 export function Pagination({

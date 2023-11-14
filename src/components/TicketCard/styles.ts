@@ -13,12 +13,11 @@ export const FlexWrapper = styled.div`
 `;
 
 export const CardContainer = styled.div<UrgencyProps>`
-  margin-top: 3.5rem;
+  margin-top: 1.5rem;
   background-color: ${({ theme }) => theme.bg};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  /* border: 1px solid #e7e7e7; */
-  padding: 1.75rem;
+  padding: 1.25rem;
 
   cursor: pointer;
   transition: all 0.2s;
@@ -31,7 +30,7 @@ export const CardContainer = styled.div<UrgencyProps>`
 export const InnerBackground = styled.div`
   background-color: ${({ theme }) => theme.bg2};
   border-radius: 3px;
-  padding: 1.75rem;
+  padding: 1rem;
 `;
 
 export const StatusCircle = styled.span<UrgencyProps>`
@@ -42,10 +41,10 @@ export const StatusCircle = styled.span<UrgencyProps>`
   margin-right: 8px;
   background-color: ${(props) =>
     props.urgency === "Alta"
-      ? "#df663d"
+      ? "#ff6a6a8c"
       : props.urgency === "Média"
-      ? "#f7efa2"
-      : "#74c86b"};
+      ? "#d7d70cb8"
+      : "#8bd58b"};
 `;
 
 export const DefaultAvatar = styled.div`
@@ -105,7 +104,7 @@ export const OpenedAt = styled.span`
 `;
 
 export const Description = styled.p`
-  margin: 8px 0 2rem 0;
+  margin: 8px 0 1rem 0;
   color: ${({ theme }) => theme.text};
   font-family: Montserrat;
   font-size: 12px;
@@ -122,23 +121,23 @@ export const Info = styled.div`
 export const Urgency = styled.span<UrgencyProps>`
   background-color: ${(props) =>
     props.urgency === "Alta"
-      ? "#df663d"
+      ? "#ff6a6a8c"
       : props.urgency === "Média"
-      ? "#f7efa2"
-      : "#74c86b"};
+      ? "#d7d70cb8"
+      : "#8bd58b"};
   color: ${(props) =>
     props.urgency === "Alta"
-      ? "#ffa07a"
+      ? "#ff6a6a8c"
       : props.urgency === "Média"
-      ? "#d6cf8f"
-      : "#74c86b"};
+      ? "#d7d70cb8"
+      : "#8bd58b"};
   padding: 0 2rem;
   border-color: ${(props) =>
     props.urgency === "Alta"
-      ? "#ffa07a"
+      ? "#ff6a6a8c"
       : props.urgency === "Média"
-      ? "yellow"
-      : "#74c86b"};
+      ? "#d7d70cb8"
+      : "#8bd58b"};
   border: 1px solid;
   border-radius: 50px;
   font-weight: bold;

@@ -4,6 +4,7 @@ import { LayoutForm } from "../../../../components/LayoutForm";
 import { apiClient } from "../../../../services/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../../hooks/useAuth";
+import { ChangeFilterModal } from "../../../../components/ChangeFilterModal";
 
 type Location = {
   id: string;
@@ -19,8 +20,13 @@ export function ServicesByLocation() {
   const [totalCount, setTotalCount] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
   const { user } = useAuth();
+
+  useEffect(() => {
+    setShowFilterModal(true);
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -55,23 +61,23 @@ export function ServicesByLocation() {
     },
     {
       id: 2,
-      name: "Estado",
+      name: "Municipio",
     },
     {
       id: 3,
-      name: "Quantidade Atendida",
+      name: "Bairro",
     },
     {
       id: 4,
-      name: "Bairro",
+      name: "Quantidade Atendida",
     },
   ];
 
   const headerToDataKeyMap = {
     Data: 0,
-    Estado: 2,
-    "Quantidade Atendida": 3,
+    Municipio: 2,
     Bairro: 4,
+    "Quantidade Atendida": 3,
   };
 
   const handleView = (locationId: any) => {
@@ -79,27 +85,30 @@ export function ServicesByLocation() {
   };
 
   return (
-    <Layout>
-      <LayoutForm
-        data={servicesList}
-        formFields={{}}
-        headerToDataKeyMap={headerToDataKeyMap}
-        formSelectOptions={[]}
-        tableHeader={tableHeader}
-        pageTitle={pageTitle}
-        showCreateCard={showCreateCard}
-        handleShowCreateModal={() => {}}
-        handleCreate={() => {}}
-        handleView={handleView}
-        handleEdit={() => {}}
-        handleDelete={() => ""}
-        isEditMode={false}
-        totalCount={totalCount}
-        page={page}
-        setPage={setPage}
-        perPage={perPage}
-        setPerPage={setPerPage}
-      />
-    </Layout>
+    <>
+      <Layout>
+        {showFilterModal ? <ChangeFilterModal /> : null}
+        <LayoutForm
+          data={servicesList}
+          formFields={{}}
+          headerToDataKeyMap={headerToDataKeyMap}
+          formSelectOptions={[]}
+          tableHeader={tableHeader}
+          pageTitle={pageTitle}
+          showCreateCard={showCreateCard}
+          handleShowCreateModal={() => {}}
+          handleCreate={() => {}}
+          handleView={handleView}
+          handleEdit={() => {}}
+          handleDelete={() => ""}
+          isEditMode={false}
+          totalCount={totalCount}
+          page={page}
+          setPage={setPage}
+          perPage={perPage}
+          setPerPage={setPerPage}
+        />
+      </Layout>
+    </>
   );
 }

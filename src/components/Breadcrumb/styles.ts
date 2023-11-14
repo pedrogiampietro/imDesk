@@ -11,10 +11,15 @@ export const BreadcrumbItem = styled.div`
   margin: 0 5px;
 
   & a {
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.primary};
+
+    &:hover {
+      filter: brightness(1.8);
+    }
   }
 `;
 
 export const Divider = styled.div`
   margin: 0 5px;
+  color: ${({ theme }) => theme.primary};
 `;

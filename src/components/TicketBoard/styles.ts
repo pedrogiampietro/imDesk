@@ -53,11 +53,11 @@ export const TaskInformation = styled.div<{ priority: string }>`
     background-color: ${(props) => {
       switch (props.priority) {
         case "Baixa":
-          return "green";
+          return "#8bd58b";
         case "Média":
-          return "yellow";
+          return "#d7d70cb8";
         case "Alta":
-          return "red";
+          return "#ff6a6a8c";
         default:
           return "transparent";
       }
@@ -128,11 +128,11 @@ export const Status = styled.span<{ level: string }>`
   background-color: ${(props) => {
     switch (props.level) {
       case "Baixa":
-        return "green";
+        return "#8bd58b";
       case "Média":
-        return "yellow";
+        return "#d7d70cb8";
       case "Alta":
-        return "red";
+        return "#ff6a6a8c";
       default:
         return "transparent";
     }

@@ -46,7 +46,7 @@ export const Icon = styled.div`
 
 export const Label = styled.p`
   font-size: 16px;
-  color: #333;
+  color: ${({ theme }) => theme.primary};
 `;
 
 export const Value = styled.p`
