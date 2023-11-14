@@ -1,6 +1,8 @@
 import { formatarData } from "../../utils/dateTime";
 import { CreateCard } from "../CreateCard";
 import { DropdownMenuComponent } from "../DropdownMenu";
+import { Pagination } from "../Pagination";
+import Select from "react-select";
 import * as S from "./styles";
 
 export function LayoutForm({
@@ -17,19 +19,72 @@ export function LayoutForm({
   handleCreate,
   headerToDataKeyMap,
   isEditMode,
+  page,
+  setPage,
+  perPage,
+  setPerPage,
+  totalCount,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
 }: any) {
+  const perPageOptions = [
+    { value: 10, label: "15 itens por página" },
+    { value: 25, label: "25 itens por página" },
+    { value: 50, label: "50 itens por página" },
+  ];
+
   const isCategoryResponse = (data: any) => {
     return data.some((item: any) => item.hasOwnProperty("options"));
+  };
+
+  const handlePerPageChange = (selectedOption: any) => {
+    setPerPage(selectedOption.value);
+    setPage(1);
+  };
+
+  const handleDateFilterChange = () => {
+    // Aqui você pode chamar a API para atualizar a lista baseada nas datas
+    // Exemplo: fetchData(startDate, endDate);
   };
 
   return (
     <S.Container>
       <S.HeaderActions>
         <S.PageHeader>{pageTitle}</S.PageHeader>
-        <S.CreateButton onClick={handleShowCreateModal}>
-          {showCreateCard ? "Fechar" : `Criar ${pageTitle}`}
-        </S.CreateButton>
+        {formFields.button ? (
+          <S.CreateButton onClick={handleShowCreateModal}>
+            {showCreateCard ? "Fechar" : `Criar ${pageTitle}`}
+          </S.CreateButton>
+        ) : null}
+
+        <Select
+          options={perPageOptions}
+          onChange={handlePerPageChange}
+          defaultValue={perPageOptions[0]}
+        />
+        <div>
+          <label htmlFor="start-date">Data Inicial:</label>
+          <input
+            type="date"
+            id="start-date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+
+          <label htmlFor="end-date">Data Final:</label>
+          <input
+            type="date"
+            id="end-date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+
+          <button onClick={handleDateFilterChange}>Filtrar</button>
+        </div>
       </S.HeaderActions>
+
       <S.Wrapper>
         <S.TableContainer>
           <S.Table>
@@ -40,6 +95,7 @@ export function LayoutForm({
                 ))}
               </S.TableRow>
             </S.TableHead>
+
             <S.TableBody>
               {isCategoryResponse(data)
                 ? data.map((category: any) =>
@@ -119,6 +175,26 @@ export function LayoutForm({
           </S.CreateCardContainer>
         )}
       </S.Wrapper>
+
+      {totalCount > 0 ? (
+        <>
+          <S.PaginationWrapper>
+            <span>
+              {page * perPage - perPage + 1} de {totalCount} registros
+            </span>
+          </S.PaginationWrapper>
+          {perPage >= totalCount ? null : (
+            <S.PaginationWrapper>
+              <Pagination
+                totalCountOfRegisters={totalCount}
+                currentPage={page}
+                onPageChange={setPage}
+                registersPerPage={perPage}
+              />
+            </S.PaginationWrapper>
+          )}
+        </>
+      ) : null}
     </S.Container>
   );
 }

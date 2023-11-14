@@ -6,11 +6,10 @@ interface ActionButtonProps {
 
 export const Container = styled.div`
   width: 98%;
-  min-height: 100vh;
   background-color: #fff;
   margin: 0 auto;
   border-radius: 10px;
-  overflow: hidden;
+  /* overflow: hidden; */
 
   background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
@@ -30,6 +29,9 @@ export const Wrapper = styled.div`
 export const TableContainer = styled.div`
   flex: 1;
   min-width: 0;
+  overflow-x: auto;
+  /* overflow-y: auto; */
+  max-height: 800px;
 `;
 
 export const CreateCardContainer = styled.div`
@@ -69,10 +71,11 @@ export const TableRow = styled.tr`
   &:nth-child(even) {
     background-color: ${(props) => props.theme.bgAlpha};
   }
+  height: 50px; /* Altura fixa para cada linha, ajuste conforme necessário */
 `;
 
 export const TableCell = styled.td`
-  padding: 0 15px;
+  padding: 1rem 15px;
   border: 1px solid #ddd;
   text-align: center;
   color: ${({ theme }) => theme.text};
@@ -116,4 +119,11 @@ export const CreateButton = styled.button`
   &:hover {
     background-color: #6654a3;
   }
+`;
+
+export const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: 20px;
 `;

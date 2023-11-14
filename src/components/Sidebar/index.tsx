@@ -9,7 +9,10 @@ import { MdLogout, MdOutlineAnalytics } from "react-icons/md";
 import { BsHouse } from "react-icons/bs";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
-import { MdOutlineInventory } from "react-icons/md";
+import {
+  MdOutlineInventory,
+  MdOutlineIntegrationInstructions,
+} from "react-icons/md";
 
 import { ThemeContext } from "./../../App";
 
@@ -258,6 +261,23 @@ const linksArray = [
       {
         label: "Criação de Categoria",
         to: "/settings/create-category",
+      },
+    ],
+  },
+  {
+    label: "Integração - MV",
+    icon: <MdOutlineIntegrationInstructions />,
+    to: "/mv",
+    notification: 0,
+    requiresTech: true,
+    subLinks: [
+      {
+        label: "Atendimentos por Localidade",
+        to: "/mv/services-by-locations",
+      },
+      {
+        label: "Consumo de Medicamentos (HMMR)",
+        to: "/mv/consumed-medicaments-hmmr",
       },
     ],
   },
