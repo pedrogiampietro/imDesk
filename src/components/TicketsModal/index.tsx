@@ -869,6 +869,8 @@ export function TicketsModal({
                 >
                   <option value="new">Novo</option>
                   <option value="assigned">Atribuido</option>
+                  <option value="planned">Planejado</option>
+                  <option value="pending">Pendente</option>
                   <option value="closed">Fechado</option>
                 </S.StyledSelect>
               </S.InfoContent>

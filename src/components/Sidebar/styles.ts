@@ -95,7 +95,7 @@ export const LinkContainer = styled.div<{
   background: ${({ theme, isActive }) =>
     !isActive ? `transparent` : theme.bg};
   border-radius: ${v.borderRadius};
-  margin: 8px -5px;
+  margin: 8px;
 `;
 
 export const LinkStyle = styled(Link)`

@@ -21,6 +21,7 @@ import { CreateType } from "../screens/Settings/CreateType";
 import { CreateCategory } from "../screens/Settings/CreateCategory";
 import { ServicesByLocation } from "../screens/Integrations/MV/ServicesByLocation";
 import { MedicamentsConsumedHmmr } from "../screens/Integrations/MV/MedicamentsConsumedHmmr";
+import { ShiftChange } from "../screens/ShiftChange";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -149,6 +150,14 @@ export function AppRoutes() {
       element: (
         <RouteProtector requiresTech>
           <Inventory />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/shift-change",
+      element: (
+        <RouteProtector requiresTech>
+          <ShiftChange />
         </RouteProtector>
       ),
     },

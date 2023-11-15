@@ -7,6 +7,8 @@ import {
   MdOutlineMarkEmailUnread,
   MdOutlineMarkEmailRead,
   MdOutlineLock,
+  MdOutlinePending,
+  MdOutlineAccessTime,
 } from "react-icons/md";
 
 import { TicketCard } from "../TicketCard";
@@ -161,6 +163,8 @@ export function TicketKanban({
     const statusMatch =
       (activeTab === "new" && ticket.status === "new") ||
       (activeTab === "assigned" && ticket.status === "assigned") ||
+      (activeTab === "planned" && ticket.status === "planned") ||
+      (activeTab === "pending" && ticket.status === "pending") ||
       (activeTab === "closed" && ticket.status === "closed");
 
     return statusMatch;
@@ -275,6 +279,24 @@ export function TicketKanban({
                 <MdOutlineMarkEmailRead />
               </S.TabIconWrapper>
               <S.TabTitle>Atribuído</S.TabTitle>
+            </S.Tab>
+            <S.Tab
+              active={activeTab === "planned"}
+              onClick={() => setActiveTab("planned")}
+            >
+              <S.TabIconWrapper>
+                <MdOutlineAccessTime />
+              </S.TabIconWrapper>
+              <S.TabTitle>Planejado</S.TabTitle>
+            </S.Tab>
+            <S.Tab
+              active={activeTab === "pending"}
+              onClick={() => setActiveTab("pending")}
+            >
+              <S.TabIconWrapper>
+                <MdOutlinePending />
+              </S.TabIconWrapper>
+              <S.TabTitle>Pendente</S.TabTitle>
             </S.Tab>
             <S.Tab
               active={activeTab === "closed"}

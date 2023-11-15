@@ -32,6 +32,7 @@ export const Tab = styled.div<TabProps>`
   padding: 8px 16px;
   margin-right: 8px;
   margin-right: 9.375rem;
+  text-wrap: nowrap;
   cursor: pointer;
   font-weight: ${(props) => (props.active ? "bold" : "normal")};
   color: ${(props) => (props.active ? "#7F56D8" : "#000")};

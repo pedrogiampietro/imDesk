@@ -5,10 +5,15 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import imDeskLogo from "../../assets/img/imdesk-logo.png";
 
 import { AiOutlineHome, AiOutlineLeft, AiOutlineSetting } from "react-icons/ai";
-import { MdLogout, MdOutlineAnalytics } from "react-icons/md";
+import {
+  MdLogout,
+  MdOutlineAnalytics,
+  MdOutlineFilterTiltShift,
+} from "react-icons/md";
 import { BsHouse } from "react-icons/bs";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
+
 import {
   MdOutlineInventory,
   MdOutlineIntegrationInstructions,
@@ -232,6 +237,13 @@ const linksArray = [
     label: "Inventário",
     icon: <MdOutlineInventory />,
     to: "/inventory",
+    notification: 0,
+    requiresTech: true,
+  },
+  {
+    label: "Passagem de Plantão",
+    icon: <MdOutlineFilterTiltShift />,
+    to: "/shift-change",
     notification: 0,
     requiresTech: true,
   },
