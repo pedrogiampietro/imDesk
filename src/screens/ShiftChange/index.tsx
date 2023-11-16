@@ -12,21 +12,10 @@ interface Ticket {
   description: string;
 }
 
-interface ShiftChange {
-  id: string;
-  date: string;
-  ResponsibleUser: {
-    name: string;
-  };
-  AssignedTickets: Ticket[];
-  PlannedTickets: Ticket[];
-  PendingTickets: Ticket[];
-}
-
 export const ShiftChange: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tickets, setTickets] = useState([]);
-  const [shiftChanges, setShiftChanges] = useState<ShiftChange[]>([]);
+  const [shiftChanges, setShiftChanges] = useState<any>([]);
   const [formState, setFormState] = useState<any>({
     atribuidos: [{ id: "", description: "" }],
     planejados: [{ id: "", description: "" }],
@@ -211,8 +200,8 @@ export const ShiftChange: React.FC = () => {
   return (
     <Layout>
       <S.Container>
-        {shiftChanges?.map((shiftChange) => (
-          <div key={shiftChange.id}>
+        {shiftChanges?.map((shiftChange: any) => (
+          <S.ShiftChangeListContainer key={shiftChange.id}>
             <S.CollapseHeader onClick={toggleCollapse}>
               {formatarData(shiftChange.date)} -{" "}
               {shiftChange.ResponsibleUser.name}
@@ -221,31 +210,44 @@ export const ShiftChange: React.FC = () => {
               <>
                 <S.Section>
                   <S.SectionTitle>Chamados Atribuídos</S.SectionTitle>
-                  {shiftChange.AssignedTickets.map((ticket) => (
-                    <S.ChamadoItem key={ticket.id}>
-                      {ticket.id.split("-")[0]} - {ticket.description}
-                    </S.ChamadoItem>
-                  ))}
+                  {shiftChange.ShiftChangeAssignedTicket.map(
+                    (assignedTicket: any) => (
+                      <S.ChamadoItem key={assignedTicket.ticketId}>
+                        #{assignedTicket.Ticket.id.split("-")[0]} -{" "}
+                        {assignedTicket.Ticket.description}
+                      </S.ChamadoItem>
+                    )
+                  )}
                 </S.Section>
                 <S.Section>
                   <S.SectionTitle>Chamados Planejados</S.SectionTitle>
-                  {shiftChange.PlannedTickets.map((ticket) => (
-                    <S.ChamadoItem key={ticket.id}>
-                      {ticket.id.split("-")[0]} - {ticket.description}
-                    </S.ChamadoItem>
-                  ))}
+                  {shiftChange.ShiftChangePlannedTicket.map(
+                    (plannedTicket: any) => (
+                      <S.ChamadoItem key={plannedTicket.ticketId}>
+                        #{plannedTicket.Ticket.id.split("-")[0]} -{" "}
+                        {plannedTicket.Ticket.description}
+                      </S.ChamadoItem>
+                    )
+                  )}
                 </S.Section>
                 <S.Section>
                   <S.SectionTitle>Chamados Pendentes</S.SectionTitle>
-                  {shiftChange.PendingTickets.map((ticket) => (
-                    <S.ChamadoItem key={ticket.id}>
-                      {ticket.id.split("-")[0]} - {ticket.description}
-                    </S.ChamadoItem>
-                  ))}
+                  {shiftChange.ShiftChangePendingTicket.map(
+                    (pendingTicket: any) => (
+                      <S.ChamadoItem key={pendingTicket.ticketId}>
+                        #{pendingTicket.Ticket.id.split("-")[0]} -{" "}
+                        {pendingTicket.Ticket.description}
+                      </S.ChamadoItem>
+                    )
+                  )}
                 </S.Section>
+
+                <S.Notas>
+                  Controle de temperatura diário devidamente preenchido.
+                </S.Notas>
               </>
             )}
-          </div>
+          </S.ShiftChangeListContainer>
         ))}
 
         <S.Form>

@@ -36,6 +36,16 @@ export const Table = styled.table`
   }
 `;
 
+export const ShiftChangeListContainer = styled.div`
+  background: #fff;
+  width: 100%;
+  margin: 2rem 0;
+  border-radius: 10px;
+  font-size: 0.9em;
+  padding: 10px;
+  color: #856404;
+`;
+
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
