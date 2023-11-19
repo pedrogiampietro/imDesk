@@ -5,10 +5,12 @@ import { ServiceCard } from "../../components/ServiceCard";
 import { UnansweredTicketsCard } from "../../components/UnansweredTicketsCard";
 import { apiClient } from "../../services/api";
 import { LottieLoad } from "../../components/LottieLoading";
+import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
 
 export function Dashboard() {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState<any | null>({
     categoryCounts: [],

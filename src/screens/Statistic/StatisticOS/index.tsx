@@ -3,6 +3,8 @@ import { Layout } from "../../../components/Layout";
 import { apiClient } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { ExportDropdown } from "../../../components/ExportDropdown";
+
 import Select from "react-select";
 import * as S from "./styles";
 
@@ -114,15 +116,19 @@ export function StatisticOS() {
     }
   };
 
+  const handleExport = (format: any) => {
+    exportReport(format);
+  };
+
   return (
     <Layout>
       <S.Container>
         {isLoading && <S.Loading>Carregando...</S.Loading>}
         {error && <S.Error>{error}</S.Error>}
 
-        <S.Button onClick={() => exportReport("csv")} disabled={isLoading}>
-          Exportar Relatório (CSV)
-        </S.Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <ExportDropdown onExport={handleExport} />
+        </div>
         <S.FormGroup>
           <S.Label>Usuário</S.Label>
           <Select

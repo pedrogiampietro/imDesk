@@ -59,6 +59,7 @@ export const Button = styled.button`
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
+  margin-bottom: 1rem;
   transition: background-color 0.2s;
 
   &:hover {
@@ -114,5 +115,5 @@ export const NoItemsMessage = styled.div`
   margin-top: 20px;
   text-align: center;
   font-size: 18px;
-  color: #333;
+  color: ${({ theme }) => theme.text};
 `;

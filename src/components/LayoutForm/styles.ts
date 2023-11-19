@@ -6,11 +6,13 @@ interface ActionButtonProps {
 
 export const Container = styled.div`
   width: 98%;
-  height: 100vh;
+  height: 100%;
+  /* max-height: 100vh; */
   background-color: #fff;
   margin: 0 auto;
   border-radius: 10px;
-  overflow: hidden;
+
+  overflow: auto;
 
   background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
@@ -22,7 +24,7 @@ export const Wrapper = styled.div`
   flex-direction: row;
   align-items: flex-start;
   width: 100%;
-  /* height: 100vh; */
+  overflow: auto;
   margin: 0 auto;
   border-radius: 10px;
 
@@ -34,14 +36,12 @@ export const Wrapper = styled.div`
 export const TableContainer = styled.div`
   flex: 1;
   height: auto;
-  /* min-width: 0; */
-  /* overflow-x: auto; */
-  /* overflow-y: auto; */
-  /* max-height: 800px; */
 `;
 
 export const CreateCardContainer = styled.div`
   width: 400px;
+  max-width: 100%;
+  overflow: auto;
 `;
 
 export const PageHeader = styled.header`

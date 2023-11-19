@@ -90,14 +90,14 @@ export const ShiftChange: React.FC = () => {
 
   const handleChange = (event: any) => {
     const { name, value, type, checked } = event.target;
-    const [tipo, index, campo] = name.split("-");
 
     if (type === "checkbox") {
       setFormState((prevState: any) => ({
         ...prevState,
-        [campo]: checked,
+        [name]: checked,
       }));
     } else {
+      const [tipo, index, campo] = name.split("-");
       setFormState((prevState: any) => ({
         ...prevState,
         [tipo]: prevState[tipo].map((item: any, idx: any) => {
@@ -250,7 +250,7 @@ export const ShiftChange: React.FC = () => {
           </S.ShiftChangeListContainer>
         ))}
 
-        <S.Form>
+        <S.Wrapper>
           <h1>Nova Passagem de Plantão</h1>
           <S.FormGroup>
             <S.Label>Chamados Atribuídos:</S.Label>
@@ -300,7 +300,7 @@ export const ShiftChange: React.FC = () => {
           <S.Button type="button" onClick={handleSubmit}>
             Salvar Passagem de Plantão
           </S.Button>
-        </S.Form>
+        </S.Wrapper>
       </S.Container>
     </Layout>
   );

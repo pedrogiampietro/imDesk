@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -24,7 +24,7 @@ import { ThemeContext } from "./../../App";
 import * as S from "./styles";
 import { Tooltip } from "../Tooltip";
 
-export function Sidebar() {
+export function Sidebar({ notifyList }: any) {
   const { signOut, user } = useAuth();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const { setTheme, theme } = useContext(ThemeContext);
@@ -46,6 +46,10 @@ export function Sidebar() {
     setActiveDropdown((prev) => (prev === label ? null : label));
   };
 
+  const unreadNotificationsCount = notifyList.filter(
+    (notification: any) => !notification.isRead
+  ).length;
+
   const secondaryLinksArray = [
     {
       label: "Logout",
@@ -53,6 +57,121 @@ export function Sidebar() {
       to: "/login",
       func: signOut,
       requiresTech: false,
+    },
+  ];
+
+  const linksArray = [
+    {
+      label: "Inicio",
+      icon: <AiOutlineHome />,
+      to: "/dashboard",
+      notification: 0,
+    },
+    // {
+    //   label: "Manutenção",
+    //   icon: <MdOutlineComputer />,
+    //   to: "/maintenance",
+    //   notification: 0,
+    // },
+    {
+      label: "Tickets",
+      icon: <BsPeople />,
+      to: "/tickets",
+      notification: unreadNotificationsCount,
+    },
+    {
+      label: "Estatisticas",
+      icon: <MdOutlineAnalytics />,
+      to: "/statistics",
+      notification: 0,
+      subLinks: [
+        {
+          label: "Reports",
+          to: "/statistics",
+        },
+        {
+          label: "Relátorio OS",
+          to: "/statistics/os",
+        },
+      ],
+    },
+    {
+      label: "Fornecedores",
+      icon: <HiOutlineNewspaper />,
+      to: "/providers",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Estoque",
+      icon: <BsHouse />,
+      to: "/deposit",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Inventário",
+      icon: <MdOutlineInventory />,
+      to: "/inventory",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Passagem de Plantão",
+      icon: <MdOutlineFilterTiltShift />,
+      to: "/shift-change",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Configurações",
+      icon: <AiOutlineSetting />,
+      to: "/settings",
+      notification: 0,
+      requiresTech: true,
+      subLinks: [
+        {
+          label: "Criação de Usuário",
+          to: "/settings/create-user",
+        },
+        {
+          label: "Criação de Localização",
+          to: "/settings/create-location",
+        },
+        {
+          label: "Criação de Prioridade",
+          to: "/settings/create-priority",
+        },
+        {
+          label: "Criação de Tipo",
+          to: "/settings/create-type",
+        },
+        {
+          label: "Criação de Categoria",
+          to: "/settings/create-category",
+        },
+        {
+          label: "Outros",
+          to: "/settings",
+        },
+      ],
+    },
+    {
+      label: "Integração - MV",
+      icon: <MdOutlineIntegrationInstructions />,
+      to: "/mv",
+      notification: 0,
+      requiresTech: true,
+      subLinks: [
+        {
+          label: "Atendimentos por Localidade",
+          to: "/mv/services-by-locations",
+        },
+        {
+          label: "Consumo de Medicamentos (HMMR)",
+          to: "/mv/consumed-medicaments-hmmr",
+        },
+      ],
     },
   ];
 
@@ -183,114 +302,3 @@ export function Sidebar() {
     </S.Sidebar>
   );
 }
-
-const linksArray = [
-  {
-    label: "Inicio",
-    icon: <AiOutlineHome />,
-    to: "/dashboard",
-    notification: 0,
-  },
-  // {
-  //   label: "Manutenção",
-  //   icon: <MdOutlineComputer />,
-  //   to: "/maintenance",
-  //   notification: 0,
-  // },
-  {
-    label: "Tickets",
-    icon: <BsPeople />,
-    to: "/tickets",
-    notification: 0,
-  },
-  {
-    label: "Estatisticas",
-    icon: <MdOutlineAnalytics />,
-    to: "/statistics",
-    notification: 0,
-    subLinks: [
-      {
-        label: "Reports",
-        to: "/statistics",
-      },
-      {
-        label: "Relátorio OS",
-        to: "/statistics/os",
-      },
-    ],
-  },
-  {
-    label: "Fornecedores",
-    icon: <HiOutlineNewspaper />,
-    to: "/providers",
-    notification: 0,
-    requiresTech: true,
-  },
-  {
-    label: "Estoque",
-    icon: <BsHouse />,
-    to: "/deposit",
-    notification: 0,
-    requiresTech: true,
-  },
-  {
-    label: "Inventário",
-    icon: <MdOutlineInventory />,
-    to: "/inventory",
-    notification: 0,
-    requiresTech: true,
-  },
-  {
-    label: "Passagem de Plantão",
-    icon: <MdOutlineFilterTiltShift />,
-    to: "/shift-change",
-    notification: 0,
-    requiresTech: true,
-  },
-  {
-    label: "Configurações",
-    icon: <AiOutlineSetting />,
-    to: "/settings",
-    notification: 0,
-    requiresTech: true,
-    subLinks: [
-      {
-        label: "Criação de Usuário",
-        to: "/settings/create-user",
-      },
-      {
-        label: "Criação de Localização",
-        to: "/settings/create-location",
-      },
-      {
-        label: "Criação de Prioridade",
-        to: "/settings/create-priority",
-      },
-      {
-        label: "Criação de Tipo",
-        to: "/settings/create-type",
-      },
-      {
-        label: "Criação de Categoria",
-        to: "/settings/create-category",
-      },
-    ],
-  },
-  {
-    label: "Integração - MV",
-    icon: <MdOutlineIntegrationInstructions />,
-    to: "/mv",
-    notification: 0,
-    requiresTech: true,
-    subLinks: [
-      {
-        label: "Atendimentos por Localidade",
-        to: "/mv/services-by-locations",
-      },
-      {
-        label: "Consumo de Medicamentos (HMMR)",
-        to: "/mv/consumed-medicaments-hmmr",
-      },
-    ],
-  },
-];

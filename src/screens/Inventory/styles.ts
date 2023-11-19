@@ -22,6 +22,7 @@ export const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-bottom: 1rem;
 
   &:hover {
     background-color: #c3aff0;
@@ -80,11 +81,10 @@ export const Header = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0 1rem;
-    margin: 0.375rem;
 
     & select {
       width: auto;
-      margin: 1rem;
+      margin-bottom: 1rem;
     }
   }
 `;

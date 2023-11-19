@@ -1,9 +1,12 @@
 import styled from "styled-components";
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 1rem;
-  background-color: #fff;
+  width: 98%;
+  height: 100vh;
+  margin: 0 auto;
+  background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -28,14 +31,13 @@ export const Input = styled.input`
 
 export const Label = styled.label`
   font-size: 16px;
-  color: #333;
+  color: ${({ theme }) => theme.text};
   font-weight: 500;
 `;
 
 export const Button = styled.button<{ isActive?: boolean }>`
-  background-color: ${({ theme, isActive }) =>
-    !isActive ? theme.bg3 : theme.primary};
-  color: ${({ isActive }) => (isActive ? "#000" : "#FFF")};
+  background: ${({ theme }) => theme.primary};
+  color: #fff;
   font-size: 16px;
   font-weight: bold;
   padding: 0.5rem 1rem;

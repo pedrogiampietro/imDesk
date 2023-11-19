@@ -121,6 +121,7 @@ export const DropdownContent = styled.div<{ isOpen: boolean }>`
 `;
 
 export const ArrowIcon = styled(AiOutlineArrowDown)<{ isOpen: boolean }>`
+  fill: ${({ theme }) => theme.primary};
   transition: transform 0.5s ease-in-out;
   transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
   font-size: 16px;
