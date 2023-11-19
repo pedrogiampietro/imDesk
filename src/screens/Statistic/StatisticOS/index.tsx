@@ -85,11 +85,44 @@ export function StatisticOS() {
       }))
     : [];
 
+  const exportReport = async (format: any) => {
+    try {
+      setIsLoading(true);
+
+      const response = await apiClient().get(`/report/os/export`, {
+        params: {
+          userId: selectedTech,
+          startDate,
+          endDate,
+          format,
+        },
+        responseType: "blob", // Importante para arquivos
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a") as any;
+      link.href = url;
+      link.setAttribute("download", `report.${format}`); // Nome do arquivo com extensão
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao exportar relatório");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <S.Container>
         {isLoading && <S.Loading>Carregando...</S.Loading>}
         {error && <S.Error>{error}</S.Error>}
+
+        <S.Button onClick={() => exportReport("csv")} disabled={isLoading}>
+          Exportar Relatório (CSV)
+        </S.Button>
         <S.FormGroup>
           <S.Label>Usuário</S.Label>
           <Select
