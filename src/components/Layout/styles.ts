@@ -62,7 +62,7 @@ export const DropdownMenu = styled.div`
   a {
     display: block;
     padding: 10px 20px;
-    color: #333;
+    color: ${({ theme }) => theme.text};
     text-decoration: none;
 
     &:hover {
@@ -155,13 +155,13 @@ export const NotificationDescription = styled.div`
 
 export const NotificationDate = styled.div`
   font-size: 0.8rem;
-  color: grey;
+  color: ${({ theme }) => theme.text};
 `;
 
 export const MarkAsReadButton = styled.button`
   background: none;
   border: none;
-  color: blue;
+  color: ${({ theme }) => theme.text};
   cursor: pointer;
   padding: 5px;
   margin-left: 10px;
@@ -174,13 +174,13 @@ export const MarkAllAsReadButton = styled.button`
   padding: 10px 0;
   background: none;
   border: none;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid ${({ theme }) => theme.primary};
   cursor: pointer;
-  color: blue;
+  color: ${({ theme }) => theme.text};
 `;
 
 export const NoNotificationsMessage = styled.div`
   padding: 10px;
   text-align: center;
-  color: gray;
+  color: ${({ theme }) => theme.text};
 `;

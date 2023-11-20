@@ -111,7 +111,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
       const timeOutRedirect = setTimeout(() => {
         window.location.href = "/dashboard";
-      }, 1000);
+      }, 1);
 
       return () => clearTimeout(timeOutRedirect);
     } catch (err: any) {

@@ -58,7 +58,7 @@ export function Login() {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
-  });
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const fetchCompanies = async () => {

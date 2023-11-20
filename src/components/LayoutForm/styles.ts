@@ -6,51 +6,22 @@ interface ActionButtonProps {
 
 export const Container = styled.div`
   width: 98%;
-  height: 100%;
-  /* max-height: 100vh; */
+  height: 100vh;
+
   background-color: #fff;
   margin: 0 auto;
   border-radius: 10px;
-
-  overflow: auto;
 
   background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
   border-radius: 10px;
 `;
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  width: 100%;
-  overflow: auto;
-  margin: 0 auto;
-  border-radius: 10px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
 export const TableContainer = styled.div`
   flex: 1;
-  height: auto;
-`;
-
-export const CreateCardContainer = styled.div`
-  width: 400px;
-  max-width: 100%;
-  overflow: auto;
-`;
-
-export const PageHeader = styled.header`
-  padding: 20px;
-  background: transparent;
-  text-align: center;
-  border-radius: 10px 10px 0 0;
-  font-size: 24px;
-  color: ${(props) => props.theme.primary};
+  height: 100vh;
+  max-height: 800px;
+  overflow-x: auto;
 `;
 
 export const Table = styled.table`
@@ -77,14 +48,48 @@ export const TableRow = styled.tr`
   &:nth-child(even) {
     background-color: ${(props) => props.theme.bgAlpha};
   }
-  height: 50px; /* Altura fixa para cada linha, ajuste conforme necessário */
+  height: 50px;
 `;
 
 export const TableCell = styled.td`
   padding: 1rem 15px;
+  border: 1px solid #ddd;
   text-align: center;
   color: ${({ theme }) => theme.text};
   font-size: 14px;
+`;
+
+export const CreateCardContainer = styled.div`
+  position: fixed;
+  right: -100%;
+  top: 0;
+  width: 35vw;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  &.active {
+    right: 0;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+export const PageHeader = styled.header`
+  padding: 20px;
+  background: transparent;
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+  font-size: 24px;
+  color: ${(props) => props.theme.primary};
 `;
 
 export const ActionButton = styled.button<ActionButtonProps>`
@@ -95,6 +100,9 @@ export const ActionButton = styled.button<ActionButtonProps>`
   border-radius: 5px;
   background-color: ${(props) => (props.danger ? "#dc3545" : "#7F56D8")};
   color: #fff;
+  z-index: 100;
+  top: 100%;
+  right: 0;
   transition: background-color 0.3s;
 
   &:hover {
@@ -129,10 +137,26 @@ export const CreateButton = styled.button`
 export const PaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: center;
   margin-top: 20px;
 
   & span {
     color: ${({ theme }) => theme.text};
+    font-size: 14px;
+  }
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: ${({ theme }) => theme.text};
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
   }
 `;

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { formatarData } from "../../utils/dateTime";
 import { CreateCard } from "../CreateCard";
 import { DropdownMenuComponent } from "../DropdownMenu";
@@ -49,6 +50,18 @@ export function LayoutForm({
     // Exemplo: fetchData(startDate, endDate);
   };
 
+  useEffect(() => {
+    if (showCreateCard) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showCreateCard]);
+
   return (
     <S.Container>
       <S.HeaderActions>
@@ -85,96 +98,96 @@ export function LayoutForm({
         </div>
       </S.HeaderActions>
 
-      <S.Wrapper>
-        <S.TableContainer>
-          <S.Table>
-            <S.TableHead>
-              <S.TableRow>
-                {tableHeader.map((header: any) => (
-                  <S.TableHeader key={header.id}>{header.name}</S.TableHeader>
-                ))}
-              </S.TableRow>
-            </S.TableHead>
+      <S.TableContainer>
+        <S.Table>
+          <S.TableHead>
+            <S.TableRow>
+              {tableHeader.map((header: any) => (
+                <S.TableHeader key={header.id}>{header.name}</S.TableHeader>
+              ))}
+            </S.TableRow>
+          </S.TableHead>
 
-            <S.TableBody>
-              {isCategoryResponse(data)
-                ? data.map((category: any) =>
-                    category.options.map((option: any) => (
-                      <S.TableRow key={option.id}>
-                        {tableHeader.map((header: any) => {
-                          if (header.name === "Ações") {
-                            return (
-                              <S.TableCell key={header.id}>
-                                <DropdownMenuComponent
-                                  onEdit={() => handleEdit(option.id)}
-                                  onDelete={() => handleDelete(option.id)}
-                                  onView={() => handleView(option.id)}
-                                />
-                              </S.TableCell>
-                            );
-                          } else if (header.name === "Criado em") {
-                            const dataKey = headerToDataKeyMap[header.name];
-                            return (
-                              <S.TableCell key={header.id}>
-                                {formatarData(option[dataKey])}
-                              </S.TableCell>
-                            );
-                          } else {
-                            const dataKey = headerToDataKeyMap[header.name];
-                            return (
-                              <S.TableCell key={header.id}>
-                                {option[dataKey]}
-                              </S.TableCell>
-                            );
-                          }
-                        })}
-                      </S.TableRow>
-                    ))
-                  )
-                : data.map((item: any) => (
-                    <S.TableRow key={item.id}>
+          <S.TableBody>
+            {isCategoryResponse(data)
+              ? data.map((category: any) =>
+                  category.options.map((option: any) => (
+                    <S.TableRow key={option.id}>
                       {tableHeader.map((header: any) => {
-                        const dataKey = headerToDataKeyMap[header.name];
                         if (header.name === "Ações") {
                           return (
                             <S.TableCell key={header.id}>
                               <DropdownMenuComponent
-                                onEdit={() => handleEdit(item.id)}
-                                onDelete={() => handleDelete(item.id)}
-                                onView={() => handleView(item.id)}
+                                onEdit={() => handleEdit(option.id)}
+                                onDelete={() => handleDelete(option.id)}
+                                onView={() => handleView(option.id)}
                               />
                             </S.TableCell>
                           );
                         } else if (header.name === "Criado em") {
+                          const dataKey = headerToDataKeyMap[header.name];
                           return (
                             <S.TableCell key={header.id}>
-                              {formatarData(item[dataKey])}
+                              {formatarData(option[dataKey])}
                             </S.TableCell>
                           );
                         } else {
+                          const dataKey = headerToDataKeyMap[header.name];
                           return (
                             <S.TableCell key={header.id}>
-                              {item[dataKey]}
+                              {option[dataKey]}
                             </S.TableCell>
                           );
                         }
                       })}
                     </S.TableRow>
-                  ))}
-            </S.TableBody>
-          </S.Table>
-        </S.TableContainer>
-        {showCreateCard && (
-          <S.CreateCardContainer>
-            <CreateCard
-              formFields={formFields}
-              formSelectOptions={formSelectOptions}
-              handleCreate={handleCreate}
-              isEditMode={isEditMode}
-            />
-          </S.CreateCardContainer>
-        )}
-      </S.Wrapper>
+                  ))
+                )
+              : data.map((item: any) => (
+                  <S.TableRow key={item.id}>
+                    {tableHeader.map((header: any) => {
+                      const dataKey = headerToDataKeyMap[header.name];
+                      if (header.name === "Ações") {
+                        return (
+                          <S.TableCell key={header.id}>
+                            <DropdownMenuComponent
+                              onEdit={() => handleEdit(item.id)}
+                              onDelete={() => handleDelete(item.id)}
+                              onView={() => handleView(item.id)}
+                            />
+                          </S.TableCell>
+                        );
+                      } else if (header.name === "Criado em") {
+                        return (
+                          <S.TableCell key={header.id}>
+                            {formatarData(item[dataKey])}
+                          </S.TableCell>
+                        );
+                      } else {
+                        return (
+                          <S.TableCell key={header.id}>
+                            {item[dataKey]}
+                          </S.TableCell>
+                        );
+                      }
+                    })}
+                  </S.TableRow>
+                ))}
+          </S.TableBody>
+        </S.Table>
+      </S.TableContainer>
+      {showCreateCard && (
+        <S.CreateCardContainer className={showCreateCard ? "active" : ""}>
+          <S.CloseButton onClick={handleShowCreateModal}>&times;</S.CloseButton>
+
+          <CreateCard
+            formFields={formFields}
+            formSelectOptions={formSelectOptions}
+            handleCreate={handleCreate}
+            isEditMode={isEditMode}
+          />
+        </S.CreateCardContainer>
+      )}
 
       {totalCount > 0 ? (
         <>
