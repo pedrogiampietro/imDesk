@@ -22,6 +22,7 @@ import { CreateCategory } from "../screens/Settings/CreateCategory";
 import { ServicesByLocation } from "../screens/Integrations/MV/ServicesByLocation";
 import { MedicamentsConsumedHmmr } from "../screens/Integrations/MV/MedicamentsConsumedHmmr";
 import { ShiftChange } from "../screens/ShiftChange";
+import { SuggestionComplaint } from "../screens/SuggestionComplaint";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -182,6 +183,14 @@ export function AppRoutes() {
       element: (
         <RouteProtector requiresTech>
           <MedicamentsConsumedHmmr />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/suggestion-complaint",
+      element: (
+        <RouteProtector requiresTech>
+          <SuggestionComplaint />
         </RouteProtector>
       ),
     },

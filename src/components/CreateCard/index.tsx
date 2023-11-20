@@ -9,6 +9,7 @@ export function CreateCard({
   formSelectOptions,
   handleCreate,
   isEditMode,
+  isMultiCompany,
 }: any) {
   const {
     register,
@@ -83,7 +84,7 @@ export function CreateCard({
                 options={formSelectOptions}
                 getOptionValue={(option) => option.id}
                 getOptionLabel={(option) => option.name}
-                isMulti
+                isMulti={isMultiCompany}
                 classNamePrefix="select"
                 placeholder="Selecione..."
                 onChange={(value) => field.onChange(value)}

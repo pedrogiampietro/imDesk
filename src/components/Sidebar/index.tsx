@@ -13,6 +13,7 @@ import {
 import { BsHouse } from "react-icons/bs";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
+import { ImNotification } from "react-icons/im";
 
 import {
   MdOutlineInventory,
@@ -126,7 +127,7 @@ export function Sidebar({ notifyList }: any) {
     {
       label: "Configurações",
       icon: <AiOutlineSetting />,
-      to: "/settings",
+      to: "#",
       notification: 0,
       requiresTech: true,
       subLinks: [
@@ -159,7 +160,7 @@ export function Sidebar({ notifyList }: any) {
     {
       label: "Integração - MV",
       icon: <MdOutlineIntegrationInstructions />,
-      to: "/mv",
+      to: "#",
       notification: 0,
       requiresTech: true,
       subLinks: [
@@ -172,6 +173,13 @@ export function Sidebar({ notifyList }: any) {
           to: "/mv/consumed-medicaments-hmmr",
         },
       ],
+    },
+    {
+      label: "Notificar",
+      icon: <ImNotification />,
+      to: "/suggestion-complaint",
+      notification: 0,
+      requiresTech: true,
     },
   ];
 
