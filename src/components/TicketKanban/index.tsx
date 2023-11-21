@@ -119,7 +119,7 @@ export function TicketKanban({
   const [viewMode, setViewMode] = useState("board");
   const [technicians, setTechnicians] = useState([]);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(15);
 
   const { user } = useAuth();
 

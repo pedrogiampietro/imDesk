@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   width: 50%;
   display: flex;
   margin: 0 auto;
-  background-color: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
 `;
 

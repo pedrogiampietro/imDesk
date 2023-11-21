@@ -18,7 +18,7 @@ const PaginationButton = styled.button`
 
 export function Pagination({
   totalCountOfRegisters,
-  registersPerPage = 20,
+  registersPerPage = 15,
   currentPage = 1,
   onPageChange,
 }: {

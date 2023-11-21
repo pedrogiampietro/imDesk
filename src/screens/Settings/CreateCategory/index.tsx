@@ -18,6 +18,7 @@ export function CreateCategory() {
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
+  const isMultiCompany = true;
 
   useEffect(() => {
     if (
@@ -252,6 +253,7 @@ export function CreateCategory() {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         isEditMode={isEditMode}
+        isMultiCompany={isMultiCompany}
       />
     </Layout>
   );

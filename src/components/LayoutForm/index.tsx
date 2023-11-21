@@ -30,12 +30,17 @@ export function LayoutForm({
   endDate,
   setEndDate,
   isMultiCompany,
+  searchTerm,
+  setSearchTerm,
 }: any) {
   const perPageOptions = [
-    { value: 10, label: "15 itens por página" },
+    { value: 15, label: "15 itens por página" },
     { value: 25, label: "25 itens por página" },
     { value: 50, label: "50 itens por página" },
   ];
+
+  const startItem = (page - 1) * perPage + 1;
+  const endItem = Math.min(startItem + perPage - 1, totalCount);
 
   const isCategoryResponse = (data: any) => {
     return data.some((item: any) => item.hasOwnProperty("options"));
@@ -67,36 +72,59 @@ export function LayoutForm({
     <S.Container>
       <S.HeaderActions>
         <S.PageHeader>{pageTitle}</S.PageHeader>
-        {formFields.button ? (
-          <S.CreateButton onClick={handleShowCreateModal}>
-            {showCreateCard ? "Fechar" : `Criar ${pageTitle}`}
-          </S.CreateButton>
-        ) : null}
 
-        <Select
-          options={perPageOptions}
-          onChange={handlePerPageChange}
-          defaultValue={perPageOptions[0]}
-        />
-        <div>
-          <label htmlFor="start-date">Data Inicial:</label>
-          <input
+        <S.ActionGroup>
+          {formFields.button && (
+            <S.CreateButton
+              onClick={handleShowCreateModal}
+              aria-label={`Criar ${pageTitle}`}
+            >
+              {showCreateCard ? "Fechar" : `Criar ${pageTitle}`}
+            </S.CreateButton>
+          )}
+
+          <S.SelectLabel>
+            <Select
+              options={perPageOptions}
+              onChange={handlePerPageChange}
+              defaultValue={perPageOptions[0]}
+              aria-label="Selecionar quantidade de itens por página"
+            />
+          </S.SelectLabel>
+        </S.ActionGroup>
+
+        <S.DateFilterGroup>
+          <S.DateInputLabel htmlFor="start-date">
+            Data Inicial:
+          </S.DateInputLabel>
+          <S.DateInput
             type="date"
             id="start-date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
+            aria-label="Selecionar data inicial"
           />
 
-          <label htmlFor="end-date">Data Final:</label>
-          <input
+          <S.DateInputLabel htmlFor="end-date">Data Final:</S.DateInputLabel>
+          <S.DateInput
             type="date"
             id="end-date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
+            aria-label="Selecionar data final"
           />
 
-          <button onClick={handleDateFilterChange}>Filtrar</button>
-        </div>
+          <S.FilterButton onClick={handleDateFilterChange}>
+            Filtrar
+          </S.FilterButton>
+        </S.DateFilterGroup>
+
+        <S.Input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Buscar por nome"
+        />
       </S.HeaderActions>
 
       <S.TableContainer>
@@ -159,14 +187,14 @@ export function LayoutForm({
         </S.CreateCardContainer>
       )}
 
-      {totalCount > 0 ? (
+      {totalCount > 0 && (
         <>
           <S.PaginationWrapper>
             <span>
-              {page * perPage - perPage + 1} de {totalCount} registros
+              Mostrando {startItem} a {endItem} de {totalCount} registros
             </span>
           </S.PaginationWrapper>
-          {perPage >= totalCount ? null : (
+          {perPage < totalCount && (
             <S.PaginationWrapper>
               <Pagination
                 totalCountOfRegisters={totalCount}
@@ -177,7 +205,7 @@ export function LayoutForm({
             </S.PaginationWrapper>
           )}
         </>
-      ) : null}
+      )}
     </S.Container>
   );
 }

@@ -4,6 +4,7 @@ import { LayoutForm } from "../../../components/LayoutForm";
 import { apiClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 type Location = {
   id: string;
@@ -16,8 +17,31 @@ export function CreateLocation() {
   const [showCreateCard, setShowCreateCard] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(15);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { user } = useAuth();
+  const isMultiCompany = true;
+
+  const fetchLocations = async () => {
+    try {
+      const { data, headers } = await apiClient().get("/location", {
+        params: {
+          companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
+          page,
+          limit: perPage,
+          searchTerm,
+        },
+      });
+
+      setTotalCount(headers["x-total-count"]);
+      setLocations(data.body);
+    } catch (error) {
+      console.error("Error fetching locations", error);
+    }
+  };
 
   useEffect(() => {
     if (
@@ -28,22 +52,8 @@ export function CreateLocation() {
       return;
     }
 
-    const fetchLocations = async () => {
-      try {
-        const { data } = await apiClient().get("/location", {
-          params: {
-            companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
-          },
-        });
-
-        setLocations(data.body);
-      } catch (error) {
-        console.error("Error fetching locations", error);
-      }
-    };
-
     fetchLocations();
-  }, []);
+  }, [user, perPage, page]);
 
   useEffect(() => {
     (async () => {
@@ -56,6 +66,8 @@ export function CreateLocation() {
       }
     })();
   }, []);
+
+  useDebounce(searchTerm, 500, fetchLocations);
 
   const pageTitle = "Criação de Localização";
 
@@ -214,6 +226,14 @@ export function CreateLocation() {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         isEditMode={isEditMode}
+        isMultiCompany={isMultiCompany}
+        totalCount={totalCount}
+        page={page}
+        setPage={setPage}
+        perPage={perPage}
+        setPerPage={setPerPage}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
     </Layout>
   );

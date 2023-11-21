@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
   margin: 0 auto;
   padding: 0.65rem 1rem;
@@ -36,7 +36,7 @@ export const Input = styled.input`
   min-height: 44px;
   border: unset;
   border-radius: 4px;
-  outline-color: rgb(84 105 212 / 0.5);
+  outline: none;
   background-color: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,

@@ -33,6 +33,7 @@ export function CreateUser() {
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
+  const isMultiCompany = true;
 
   useEffect(() => {
     if (
@@ -274,6 +275,7 @@ export function CreateUser() {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         isEditMode={isEditMode}
+        isMultiCompany={isMultiCompany}
       />
     </Layout>
   );

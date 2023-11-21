@@ -337,6 +337,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                       flex: "1 1",
                       color:
                         theme === "dark" ? darkTheme.text : lightTheme.text,
+                      // backgroundColor: "red", // later to configure a set cor theme.
                       margin: 0,
                       fontWeight: "bold",
                     }),
@@ -355,9 +356,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
                     placeholder: (base) => ({
                       ...base,
                       color:
-                        theme === "dark"
-                          ? darkTheme.textSecondary
-                          : lightTheme.textSecondary,
+                        theme === "dark" ? darkTheme.text : lightTheme.text,
                     }),
                     singleValue: (base) => ({
                       ...base,

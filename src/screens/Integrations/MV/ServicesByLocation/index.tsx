@@ -16,7 +16,7 @@ export function ServicesByLocation() {
   const [showCreateCard, setShowCreateCard] = useState(false);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(15);
   const [totalCount, setTotalCount] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");

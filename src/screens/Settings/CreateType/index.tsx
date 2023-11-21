@@ -18,6 +18,7 @@ export function CreateType() {
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
+  const isMultiCompany = true;
 
   useEffect(() => {
     if (
@@ -214,6 +215,7 @@ export function CreateType() {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         isEditMode={isEditMode}
+        isMultiCompany={isMultiCompany}
       />
     </Layout>
   );

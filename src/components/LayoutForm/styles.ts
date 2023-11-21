@@ -65,13 +65,13 @@ export const CreateCardContainer = styled.div`
   top: 0;
   width: 35vw;
   height: 100vh;
-  background-color: #fff;
+  background: ${({ theme }) => theme.bg2};
   box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.2);
   transition: right 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 2rem;
 
   &.active {
@@ -116,8 +116,10 @@ export const ActionButton = styled.button<ActionButtonProps>`
 
 export const HeaderActions = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 
 export const CreateButton = styled.button`
@@ -148,7 +150,7 @@ export const PaginationWrapper = styled.div`
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: 1rem;
+  top: 0;
   right: 1rem;
   background: transparent;
   border: none;
@@ -158,5 +160,69 @@ export const CloseButton = styled.button`
 
   &:hover {
     color: ${({ theme }) => theme.primary};
+  }
+`;
+
+export const ActionGroup = styled.div`
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const DateFilterGroup = styled.div`
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const SelectLabel = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+export const DateInputLabel = styled.label`
+  color: ${({ theme }) => theme.text};
+`;
+
+export const Input = styled.input`
+  width: 20%;
+  font-size: 16px;
+  line-height: 28px;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  min-height: 44px;
+  border: unset;
+  border-radius: 4px;
+  outline: none;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px;
+  flex-grow: 1;
+
+  &:disabled {
+    background: #f3f4f6;
+  }
+`;
+
+export const DateInput = styled.input`
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 10px;
+`;
+
+export const FilterButton = styled.button`
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #7f56d8;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #6654a3;
   }
 `;
