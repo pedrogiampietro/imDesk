@@ -101,14 +101,14 @@ export const NotificationIcon = styled.div`
 
 export const NotificationBadge = styled.span`
   position: absolute;
-  top: -5px;
+  top: -8px;
   right: -5px;
   background-color: ${({ theme }) => theme.primary};
   color: white;
   border-radius: 50%;
   padding: 4px;
-  min-width: 15px;
-  height: 15px;
+  min-width: 18px;
+  height: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,7 +124,9 @@ export const NotificationDropdown = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   width: 300px;
+  max-height: 170px;
   z-index: 20;
+  overflow: auto;
 `;
 
 export const NotificationItem = styled.div`
@@ -151,6 +153,7 @@ export const NotificationContent = styled.div`
 
 export const NotificationDescription = styled.div`
   font-size: 0.9rem;
+  max-width: 150px;
 `;
 
 export const NotificationDate = styled.div`

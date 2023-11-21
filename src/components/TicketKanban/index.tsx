@@ -191,6 +191,10 @@ export function TicketKanban({
 
   useEffect(() => {
     getTechnicians();
+
+    if (!user?.isTechnician) {
+      setViewMode("card");
+    }
   }, [user]);
 
   const startIndexTickets = (page - 1) * perPage;
@@ -238,26 +242,28 @@ export function TicketKanban({
         </S.ControlsGroup>
       </S.FiltersWrapper>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row-reverse",
-          marginBottom: "1rem",
-        }}
-      >
-        <S.IconButton
-          onClick={() => setViewMode("card")}
-          active={viewMode === "card"}
+      {user?.isTechnician && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row-reverse",
+            marginBottom: "1rem",
+          }}
         >
-          <BsList />
-        </S.IconButton>
-        <S.IconButton
-          onClick={() => setViewMode("board")}
-          active={viewMode === "board"}
-        >
-          <FiGrid />
-        </S.IconButton>
-      </div>
+          <S.IconButton
+            onClick={() => setViewMode("card")}
+            active={viewMode === "card"}
+          >
+            <BsList />
+          </S.IconButton>
+          <S.IconButton
+            onClick={() => setViewMode("board")}
+            active={viewMode === "board"}
+          >
+            <FiGrid />
+          </S.IconButton>
+        </div>
+      )}
 
       {viewMode === "card" && (
         <S.TabsContainer>

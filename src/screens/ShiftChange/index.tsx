@@ -6,6 +6,7 @@ import * as S from "./styles";
 import { apiClient } from "../../services/api";
 import { formatarData } from "../../utils/dateTime";
 import { toast } from "react-toastify";
+import { truncateText } from "../../utils";
 
 interface Ticket {
   id: string;
@@ -174,7 +175,7 @@ export const ShiftChange: React.FC = () => {
       </option>
       {tickets.map((ticket: any) => (
         <option key={ticket.id} value={ticket.id}>
-          {ticket.description}
+          {truncateText(ticket.description, 50)}
         </option>
       ))}
     </select>

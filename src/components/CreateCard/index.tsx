@@ -26,10 +26,27 @@ export function CreateCard({
   useEffect(() => {
     if (isEditMode) {
       Object.keys(isEditMode).forEach((key) => {
-        setValue(key, isEditMode[key]);
+        let value = isEditMode[key];
+
+        // Transforma valores para campos 'select'
+        if ((key === "category" || key === "status") && value) {
+          // Encontre a opção correspondente no array de opções
+          const option = formFields.fields
+            .find((field: any) => field.name === key)
+            .options.find((option: any) => option === value);
+          value = { label: option, value: option };
+        }
+
+        if (key === "resolvedAt" && value) {
+          const date = new Date(value);
+          const formattedDate = date.toISOString().split("T")[0];
+          value = formattedDate;
+        }
+
+        setValue(key, value);
       });
     }
-  }, [isEditMode, setValue]);
+  }, [isEditMode, setValue, formFields.fields]);
 
   const onSubmit = async (formData: any) => {
     handleCreate(formData);
@@ -42,13 +59,52 @@ export function CreateCard({
   return (
     <S.Wrapper>
       <S.Form onSubmit={handleSubmit(onSubmit)}>
-        {formFields.fields.map((field: any) => (
-          <S.FormGroup key={field.name}>
-            <S.Label htmlFor={field.name}>{field.label}</S.Label>
-            <S.Input type={field.type} {...register(field.name)} />
-            <ErrorMessage error={errors[field.name]} />
-          </S.FormGroup>
-        ))}
+        {formFields?.fields?.map((formField: any) => {
+          if (!isEditMode && formField.visible === false) {
+            return null;
+          }
+
+          if (formField.type === "select") {
+            return (
+              <S.FormGroup key={formField.name}>
+                <S.Label htmlFor={formField.name}>{formField.label}</S.Label>
+                <Controller
+                  name={formField.name}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={formField?.options?.map((option: any) => ({
+                        value: option,
+                        label: option,
+                      }))}
+                      classNamePrefix="select"
+                      placeholder="Selecione..."
+                      onChange={(value) => field.onChange(value)}
+                    />
+                  )}
+                />
+                <ErrorMessage error={errors[formField.name]} />
+              </S.FormGroup>
+            );
+          } else if (formField.type === "textarea") {
+            return (
+              <S.FormGroup key={formField.name}>
+                <S.Label htmlFor={formField.name}>{formField.label}</S.Label>
+                <S.TextArea {...register(formField.name)} />
+                <ErrorMessage error={errors[formField.name]} />
+              </S.FormGroup>
+            );
+          } else {
+            return (
+              <S.FormGroup key={formField.name}>
+                <S.Label htmlFor={formField.name}>{formField.label}</S.Label>
+                <S.Input type={formField.type} {...register(formField.name)} />
+                <ErrorMessage error={errors[formField.name]} />
+              </S.FormGroup>
+            );
+          }
+        })}
 
         {formFields.checkboxes.map((checkbox: any) => (
           <S.CheckboxContainer key={checkbox.name}>

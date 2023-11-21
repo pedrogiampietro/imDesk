@@ -5,6 +5,7 @@ import { DropdownMenuComponent } from "../DropdownMenu";
 import { Pagination } from "../Pagination";
 import Select from "react-select";
 import * as S from "./styles";
+import { truncateText } from "../../utils";
 
 export function LayoutForm({
   data = [],
@@ -164,7 +165,9 @@ export function LayoutForm({
                     );
                   } else {
                     return (
-                      <S.TableCell key={header.id}>{item[dataKey]}</S.TableCell>
+                      <S.TableCell key={header.id}>
+                        {truncateText(item[dataKey], 240)}
+                      </S.TableCell>
                     );
                   }
                 })}

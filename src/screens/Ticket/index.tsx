@@ -46,6 +46,18 @@ export function Ticket() {
     fetchPriority();
   }, [user]);
 
+  useEffect(() => {
+    if (showQuickCreateTicket) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showQuickCreateTicket]);
+
   const fetchTickets = async () => {
     if (
       !user ||
@@ -97,7 +109,12 @@ export function Ticket() {
             />
 
             {showQuickCreateTicket && (
-              <CreateTicket tickets={tickets} setTickets={setTickets} />
+              <S.Wrapper className={showQuickCreateTicket ? "active" : ""}>
+                <S.CloseButton onClick={() => setShowQuickCreateTicket(false)}>
+                  &times;
+                </S.CloseButton>
+                <CreateTicket tickets={tickets} setTickets={setTickets} />
+              </S.Wrapper>
             )}
           </S.TicketsWrapper>
         )}

@@ -67,6 +67,7 @@ export function Sidebar({ notifyList }: any) {
       icon: <AiOutlineHome />,
       to: "/dashboard",
       notification: 0,
+      requiresTech: false,
     },
     // {
     //   label: "Manutenção",
@@ -85,6 +86,7 @@ export function Sidebar({ notifyList }: any) {
       icon: <MdOutlineAnalytics />,
       to: "/statistics",
       notification: 0,
+      requiresTech: true,
       subLinks: [
         {
           label: "Reports",
@@ -154,23 +156,6 @@ export function Sidebar({ notifyList }: any) {
         {
           label: "Outros",
           to: "/settings",
-        },
-      ],
-    },
-    {
-      label: "Integração - MV",
-      icon: <MdOutlineIntegrationInstructions />,
-      to: "#",
-      notification: 0,
-      requiresTech: true,
-      subLinks: [
-        {
-          label: "Atendimentos por Localidade",
-          to: "/mv/services-by-locations",
-        },
-        {
-          label: "Consumo de Medicamentos (HMMR)",
-          to: "/mv/consumed-medicaments-hmmr",
         },
       ],
     },

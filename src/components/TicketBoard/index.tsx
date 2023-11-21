@@ -148,10 +148,6 @@ export function TicketBoard({
     }
   };
 
-  const containerStyle = showQuickCreateTicket
-    ? { width: `280px` }
-    : { width: "320px" };
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <S.Container>
@@ -164,7 +160,7 @@ export function TicketBoard({
                   <Droppable droppableId={columnId}>
                     {(provided) => (
                       <S.TaskList
-                        style={containerStyle}
+                        style={{ width: "280px" }}
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >

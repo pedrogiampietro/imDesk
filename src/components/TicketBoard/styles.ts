@@ -9,7 +9,7 @@ export const TaskList = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.bg};
   border-radius: 5px;
-  padding: 15px 15px;
+  padding: 9px 9px;
   margin-right: 45px;
 `;
 
@@ -35,7 +35,6 @@ export const TaskInformation = styled.div<{ priority: string }>`
   border-radius: 5px;
   max-width: 311px;
   background-color: ${({ theme }) => theme.bg2};
-  margin-top: 15px;
   font-size: 14px;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s ease-in-out;

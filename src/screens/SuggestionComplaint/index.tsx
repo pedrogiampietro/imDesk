@@ -45,6 +45,7 @@ export function SuggestionComplaint() {
             companyId: user?.currentLoggedCompany.currentLoggedCompanyId,
           },
         });
+
         setSuggestionsComplaints(response.data.body);
       } catch (error) {
         console.error(
@@ -116,7 +117,7 @@ export function SuggestionComplaint() {
     fields: [
       {
         label: "Descrição",
-        type: "text",
+        type: "textarea",
         name: "description",
       },
       {
@@ -129,7 +130,8 @@ export function SuggestionComplaint() {
         label: "Status",
         type: "select",
         name: "status",
-        options: ["new", "pending", "planned", "closed"],
+        options: ["Novo", "Pendente", "Planejado", "Fechado"],
+        visible: isEditMode,
       },
       {
         label: "Data de Resolução",
@@ -139,7 +141,7 @@ export function SuggestionComplaint() {
       },
       {
         label: "Feedback",
-        type: "text",
+        type: "textarea",
         name: "feedback",
         visible: isEditMode,
       },
@@ -160,6 +162,8 @@ export function SuggestionComplaint() {
       const response = await apiClient().get(
         `/suggestion-complaint/${suggestionComplaintId}`
       );
+
+      console.log("Dados recebidos para edição:", response.data.body);
 
       setIsEditMode(response.data.body);
     } catch (error) {
@@ -205,10 +209,19 @@ export function SuggestionComplaint() {
     };
 
     try {
-      const response = await apiClient()[method](url, dataToSend);
+      const response = (await apiClient()[method](url, dataToSend)) as any;
       toast.success(successMessage);
-      // Atualize o estado conforme necessário
+
+      if (isEditMode) {
+        setSuggestionsComplaints((prev) =>
+          prev.map((item) => (item.id === formData.id ? response.data : item))
+        );
+      } else {
+        setSuggestionsComplaints((prev) => [...prev, response.data]);
+      }
+
       setLoading(false);
+      setShowCreateCard(false);
     } catch (err: any) {
       setLoading(false);
       toast.error(err.response.data);

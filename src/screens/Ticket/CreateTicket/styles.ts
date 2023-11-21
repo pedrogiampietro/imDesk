@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  width: 50%;
+  width: 100%;
   display: flex;
   margin: 0 auto;
-  background: ${({ theme }) => theme.bgLinear};
-  padding: 2rem;
+  padding: 0.65rem 1rem;
+  border: 1px dashed ${({ theme }) => theme.primary};
+  background-color: ${({ theme }) => theme.bg2};
 `;
 
 export const Form = styled.form`
@@ -123,6 +124,11 @@ export const CreateTicketButton = styled.button<{ isActive: boolean }>`
 
   &:focus {
     box-shadow: 0 0 0 3px rgba(58, 123, 255, 0.6);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
   }
 
   & svg {

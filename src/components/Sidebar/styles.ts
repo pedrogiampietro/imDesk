@@ -92,10 +92,12 @@ export const LinkContainer = styled.div<{
   isOpen: boolean;
 }>`
   width: ${({ isOpen }) => (!isOpen ? "3.125rem" : "auto")};
-  background: ${({ theme, isActive }) =>
-    !isActive ? `transparent` : theme.bg};
+  /* background: ${({ theme, isActive }) =>
+    !isActive ? `transparent` : theme.bg}; */
   border-radius: ${v.borderRadius};
   margin: 8px;
+  border-left: ${({ isActive, theme }) =>
+    isActive ? `4px solid ${theme.primary}` : "none"};
 `;
 
 export const LinkStyle = styled(Link)`
@@ -150,7 +152,7 @@ export const DropdownLinkStyle = styled(Link)<{
 
 export const LinkLabel = styled.span<{ isActive: boolean; isOpen?: boolean }>`
   display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
-  color: ${({ isActive }) => (!isActive ? "#000" : "#fff")};
+  color: ${({ theme, isActive }) => (isActive ? theme.primary : theme.text)};
   flex: 1;
 `;
 
@@ -160,7 +162,7 @@ export const LinkIcon = styled.div<{ isActive: boolean }>`
 
   svg {
     font-size: 20px;
-    fill: ${({ isActive }) => (!isActive ? "#000" : "#fff")};
+    fill: ${({ theme, isActive }) => (isActive ? theme.primary : theme.text)};
   }
 `;
 

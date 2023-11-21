@@ -5,6 +5,10 @@ import { ServiceCard } from "../../components/ServiceCard";
 import { UnansweredTicketsCard } from "../../components/UnansweredTicketsCard";
 import { apiClient } from "../../services/api";
 import { LottieLoad } from "../../components/LottieLoading";
+import Lottie from "lottie-react";
+
+import lottieRobo from "../../assets/lottie_robozin.json";
+
 import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
@@ -27,6 +31,12 @@ export function Dashboard() {
       tomorrow: 0,
     },
   });
+
+  const lottieOptions = {
+    animationData: lottieRobo,
+    loop: true,
+    autoplay: true,
+  };
 
   useEffect(() => {
     async function fetchReportDashboard() {
@@ -73,28 +83,45 @@ export function Dashboard() {
     my: dashboardData.priorityCounts.MY || 0,
   };
 
+  // Função para lidar com o clique no robozinho
+  const handleRobotClick = () => {
+    window.location.href = "https://seu-link-aqui.com";
+  };
+
   return (
     <Layout>
       {loading ? (
         <LottieLoad />
       ) : (
         <S.Container>
-          <Card label="Chamados Novos" value={chamadosNovos} color="#34A853" />
-          <Card
-            label="Chamados Atrasados"
-            value={chamadosAtrasados}
-            color="#FF5733"
-          />
-          <Card
-            label="Chamados Atribuídos"
-            value={chamadosAtribuidos}
-            color="#4285F4"
-          />
-          <ServiceCard {...dashboardData.dueDateService} />
-          <UnansweredTicketsCard
-            all={ticketsSemResposta.all}
-            my={ticketsSemResposta.my}
-          />
+          {user?.isTechnician ? (
+            <>
+              <Card
+                label="Chamados Novos"
+                value={chamadosNovos}
+                color="#34A853"
+              />
+              <Card
+                label="Chamados Atrasados"
+                value={chamadosAtrasados}
+                color="#FF5733"
+              />
+              <Card
+                label="Chamados Atribuídos"
+                value={chamadosAtribuidos}
+                color="#4285F4"
+              />
+              <ServiceCard {...dashboardData.dueDateService} />
+              <UnansweredTicketsCard
+                all={ticketsSemResposta.all}
+                my={ticketsSemResposta.my}
+              />
+            </>
+          ) : (
+            <S.RobotContainer onClick={handleRobotClick}>
+              <Lottie style={{ width: 200, height: 200 }} {...lottieOptions} />
+            </S.RobotContainer>
+          )}
         </S.Container>
       )}
     </Layout>

@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 98%;
-  height: 100vh;
   background-color: #fff;
   margin: 0 auto;
   border-radius: 10px;
@@ -171,5 +170,21 @@ export const IconButton = styled.button`
 
   &:hover {
     color: #218838;
+  }
+`;
+
+export const CustomSelect = styled.select`
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+
+  option {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
   }
 `;

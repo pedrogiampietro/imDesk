@@ -63,7 +63,7 @@ export function Login() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:3333/companies");
+        const response = await axios.get("http://10.0.101.70:3333/companies");
 
         setCompanies(response.data.companies);
       } catch (error) {

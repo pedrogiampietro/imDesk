@@ -19,8 +19,6 @@ import { CreateLocation } from "../screens/Settings/CreateLocation";
 import { CreatePriority } from "../screens/Settings/CreatePriority";
 import { CreateType } from "../screens/Settings/CreateType";
 import { CreateCategory } from "../screens/Settings/CreateCategory";
-import { ServicesByLocation } from "../screens/Integrations/MV/ServicesByLocation";
-import { MedicamentsConsumedHmmr } from "../screens/Integrations/MV/MedicamentsConsumedHmmr";
 import { ShiftChange } from "../screens/ShiftChange";
 import { SuggestionComplaint } from "../screens/SuggestionComplaint";
 
@@ -167,22 +165,6 @@ export function AppRoutes() {
       element: (
         <RouteProtector requiresTech>
           <DepositView />
-        </RouteProtector>
-      ),
-    },
-    {
-      path: "/mv/services-by-locations",
-      element: (
-        <RouteProtector requiresTech>
-          <ServicesByLocation />
-        </RouteProtector>
-      ),
-    },
-    {
-      path: "/mv/consumed-medicaments-hmmr",
-      element: (
-        <RouteProtector requiresTech>
-          <MedicamentsConsumedHmmr />
         </RouteProtector>
       ),
     },

@@ -22,7 +22,6 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const {
     handleSubmit,
     control,
-    setValue,
     register,
     formState: { isSubmitting, errors },
   } = useForm({
@@ -56,9 +55,9 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [patrimonies, setPatrimonies] = useState([]);
   const [isCustomPatrimony, setIsCustomPatrimony] = useState(false);
   const [customPatrimonyValue, setCustomPatrimonyValue] = useState("");
-
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getTicketType = async () => {
     if (
@@ -176,6 +175,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
 
   const handleSubmitTicket = async (values: any) => {
     try {
+      setLoading(true);
       const formData = new FormData();
 
       selectedImages.forEach((image) => {
@@ -223,7 +223,10 @@ export function CreateTicket({ tickets, setTickets }: any) {
       setImagesPreview([]);
       setSelectedImages([]);
     } catch (err) {
+      setLoading(false);
       console.warn("err", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -562,7 +565,11 @@ export function CreateTicket({ tickets, setTickets }: any) {
           </S.PreviewContainer>
         </S.FormGroup>
 
-        <S.CreateTicketButton type="submit" isActive={theme === "dark"}>
+        <S.CreateTicketButton
+          type="submit"
+          isActive={theme === "dark"}
+          disabled={isSubmitting || loading}
+        >
           Enviar
         </S.CreateTicketButton>
       </S.Form>
