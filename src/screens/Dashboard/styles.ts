@@ -19,27 +19,4 @@ export const RobotContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* Tooltip styles */
-  &::before {
-    content: "Clique para abrir um chamado!";
-    position: absolute;
-    bottom: 110%; /* Adjust this value as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    padding: 8px 12px;
-    color: #fff;
-    background: #333;
-    border-radius: 4px;
-    font-size: 14px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-  }
-
-  &:hover::before {
-    opacity: 1;
-    visibility: visible;
-  }
 `;

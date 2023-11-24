@@ -8,14 +8,18 @@ import { LottieLoad } from "../../components/LottieLoading";
 import Lottie from "lottie-react";
 
 import lottieRobo from "../../assets/lottie_robozin.json";
+import lottieRoboGamer from "../../assets/lottie_robozin_computer.json";
 
 import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
+import { ChatComponent } from "../../components/ChatComponent";
 
 export function Dashboard() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [showGamerRobot, setShowGamerRobot] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [dashboardData, setDashboardData] = useState<any | null>({
     categoryCounts: [],
     priorityCounts: [],
@@ -34,6 +38,12 @@ export function Dashboard() {
 
   const lottieOptions = {
     animationData: lottieRobo,
+    loop: true,
+    autoplay: true,
+  };
+
+  const lottieGamerOptions = {
+    animationData: lottieRoboGamer,
     loop: true,
     autoplay: true,
   };
@@ -83,9 +93,16 @@ export function Dashboard() {
     my: dashboardData.priorityCounts.MY || 0,
   };
 
-  // Função para lidar com o clique no robozinho
-  const handleRobotClick = () => {
-    window.location.href = "https://seu-link-aqui.com";
+  const handleMouseEnter = () => {
+    setShowGamerRobot(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowGamerRobot(false);
+  };
+
+  const handleClick = () => {
+    setShowChat(!showChat);
   };
 
   return (
@@ -118,9 +135,21 @@ export function Dashboard() {
               />
             </>
           ) : (
-            <S.RobotContainer onClick={handleRobotClick}>
-              <Lottie style={{ width: 200, height: 200 }} {...lottieOptions} />
-            </S.RobotContainer>
+            <>
+              <S.RobotContainer
+                onClick={handleClick}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {showGamerRobot && (
+                  <Lottie
+                    style={{ width: 150, height: 150 }}
+                    {...lottieGamerOptions}
+                  />
+                )}
+              </S.RobotContainer>
+              <ChatComponent isVisible={showChat} />
+            </>
           )}
         </S.Container>
       )}
