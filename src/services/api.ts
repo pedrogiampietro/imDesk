@@ -13,7 +13,7 @@ export function apiClient() {
   const user = JSON.parse(restoreUser);
 
   const api = axios.create({
-    baseURL: "http://localhost:3333",
+    baseURL: "https://imdesk-api-production.up.railway.app",
     headers: {
       Authorization: `Bearer ${token}`,
       userId: user.userId,
