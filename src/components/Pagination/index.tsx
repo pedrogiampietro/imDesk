@@ -1,15 +1,4 @@
 import styled from "styled-components";
-import { PaginationItem } from "./PaginationItem";
-
-const siblingsCount = 1;
-
-function generatePagesArray(from: number, to: number): number[] {
-  return [...new Array(to - from)]
-    .map((_, index) => {
-      return from + index + 1;
-    })
-    .filter((page) => page > 0);
-}
 
 const PaginationContainer = styled.nav``;
 
@@ -24,11 +13,12 @@ const PaginationButton = styled.button`
   padding: 0.5rem 1rem;
   background-color: transparent;
   border: 1px solid #ccc;
+  color: ${({ theme }) => theme.text};
 `;
 
 export function Pagination({
   totalCountOfRegisters,
-  registersPerPage = 10,
+  registersPerPage = 15,
   currentPage = 1,
   onPageChange,
 }: {
@@ -39,74 +29,44 @@ export function Pagination({
 }) {
   const lastPage = Math.ceil(totalCountOfRegisters / registersPerPage);
 
-  const previousPages =
-    currentPage > 1
-      ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
-      : [];
-
-  const nextPages =
-    currentPage < lastPage
-      ? generatePagesArray(
-          currentPage,
-          Math.min(currentPage + siblingsCount, lastPage)
-        )
-      : [];
-
   return (
     <PaginationContainer aria-label="pagination-nav">
       <PaginationList className="pagination">
-        {currentPage > 1 + siblingsCount && (
-          <>
-            <PaginationButton onClick={() => onPageChange(1)}>
-              1
-            </PaginationButton>
-            {currentPage > 2 + siblingsCount && (
-              <li>
-                <PaginationItem
-                  number={currentPage - 1}
-                  onPageChange={onPageChange}
-                />
-              </li>
-            )}
-          </>
+        {currentPage > 1 && (
+          <PaginationButton onClick={() => onPageChange(currentPage - 1)}>
+            Anterior
+          </PaginationButton>
         )}
 
-        {previousPages.length > 0 &&
-          previousPages.map((page) => (
-            <PaginationButton key={page} onClick={() => onPageChange(page)}>
-              {page}
-            </PaginationButton>
-          ))}
+        <PaginationButton
+          onClick={() => onPageChange(1)}
+          disabled={currentPage === 1}
+        >
+          1
+        </PaginationButton>
 
-        <li>
-          <PaginationItem
-            number={currentPage}
-            isCurrent
-            onPageChange={onPageChange}
-          />
-        </li>
+        {currentPage > 1 && currentPage < lastPage && (
+          <PaginationButton
+            onClick={() => onPageChange(currentPage)}
+            disabled={true}
+          >
+            {currentPage}
+          </PaginationButton>
+        )}
 
-        {nextPages.length > 0 &&
-          nextPages.map((page) => (
-            <PaginationButton key={page} onClick={() => onPageChange(page)}>
-              {page}
-            </PaginationButton>
-          ))}
+        {lastPage > 1 && (
+          <PaginationButton
+            onClick={() => onPageChange(lastPage)}
+            disabled={currentPage === lastPage}
+          >
+            {lastPage}
+          </PaginationButton>
+        )}
 
-        {currentPage + siblingsCount < lastPage && (
-          <>
-            {currentPage + 1 + siblingsCount < lastPage && (
-              <li>
-                <PaginationItem
-                  number={currentPage + 1}
-                  onPageChange={onPageChange}
-                />
-              </li>
-            )}
-            <PaginationButton onClick={() => onPageChange(lastPage)}>
-              {lastPage}
-            </PaginationButton>
-          </>
+        {currentPage < lastPage && (
+          <PaginationButton onClick={() => onPageChange(currentPage + 1)}>
+            Próxima
+          </PaginationButton>
         )}
       </PaginationList>
     </PaginationContainer>

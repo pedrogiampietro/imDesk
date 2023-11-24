@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { AiOutlineArrowDown } from "react-icons/ai";
 
 import { btnReset, v } from "../../assets/styles/variables";
 
 export const Sidebar = styled.div<{ isOpen: boolean }>`
   width: ${({ isOpen }) => (!isOpen ? `auto` : v.sidebarWidth)};
-  background-color: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bgLinear};
   padding: ${v.lgSpacing};
   position: relative;
   border-end-end-radius: 0.65rem;
+  flex-shrink: 0;
 `;
 
 export const SidebarButton = styled.button<{
@@ -90,10 +92,12 @@ export const LinkContainer = styled.div<{
   isOpen: boolean;
 }>`
   width: ${({ isOpen }) => (!isOpen ? "3.125rem" : "auto")};
-  background: ${({ theme, isActive }) =>
-    !isActive ? `transparent` : theme.bg};
+  /* background: ${({ theme, isActive }) =>
+    !isActive ? `transparent` : theme.bg}; */
   border-radius: ${v.borderRadius};
-  margin: 8px -5px;
+  margin: 8px;
+  border-left: ${({ isActive, theme }) =>
+    isActive ? `4px solid ${theme.primary}` : "none"};
 `;
 
 export const LinkStyle = styled(Link)`
@@ -110,6 +114,21 @@ export const LinkStyle = styled(Link)`
   }
 `;
 
+export const DropdownContent = styled.div<{ isOpen: boolean }>`
+  max-height: ${({ isOpen }) => (isOpen ? "auto" : "0")};
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
+  opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
+  margin: 5px;
+`;
+
+export const ArrowIcon = styled(AiOutlineArrowDown)<{ isOpen: boolean }>`
+  fill: ${({ theme }) => theme.primary};
+  transition: transform 0.5s ease-in-out;
+  transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+  font-size: 16px;
+`;
+
 export const DropdownLinkStyle = styled(Link)<{
   isActive?: boolean;
 }>`
@@ -122,7 +141,7 @@ export const DropdownLinkStyle = styled(Link)<{
     !isActive ? theme.text : theme.textSecondary};
   font-size: 16px;
   padding: calc(${v.smSpacing} - 2px) 10px;
-  margin: 0 10px;
+  margin: 5px 10px;
   border-radius: ${v.borderRadius};
 
   &:hover {
@@ -131,20 +150,19 @@ export const DropdownLinkStyle = styled(Link)<{
   }
 `;
 
-export const LinkLabel = styled.span<{ isActive: boolean }>`
-  color: ${({ theme, isActive }) => (!isActive ? "#000" : "#fff")};
-  display: block;
+export const LinkLabel = styled.span<{ isActive: boolean; isOpen?: boolean }>`
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  color: ${({ theme, isActive }) => (isActive ? theme.primary : theme.text)};
   flex: 1;
-  /* margin-left: ${v.smSpacing}; */
 `;
 
 export const LinkIcon = styled.div<{ isActive: boolean }>`
-  padding: ${v.smSpacing} ${v.mdSpacing};
+  padding: ${v.smSpacing} ${v.smSpacing};
   display: flex;
 
   svg {
     font-size: 20px;
-    fill: ${({ isActive }) => (!isActive ? "#000" : "#fff")};
+    fill: ${({ theme, isActive }) => (isActive ? theme.primary : theme.text)};
   }
 `;
 

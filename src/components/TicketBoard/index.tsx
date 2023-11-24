@@ -48,6 +48,8 @@ export function TicketBoard({
 
   const TODO_COLUMN_ID = "todo-column-id";
   const IN_PROGRESS_COLUMN_ID = "in-progress-column-id";
+  const IN_PLANNED_ID = "planned-column-id";
+  const IN_PENDING_ID = "pending-column-id";
   const DONE_COLUMN_ID = "done-column-id";
 
   if (!data) {
@@ -66,6 +68,14 @@ export function TicketBoard({
       [IN_PROGRESS_COLUMN_ID]: {
         title: "Atribuído",
         items: transformedData.filter((item) => item.status === "assigned"),
+      },
+      [IN_PLANNED_ID]: {
+        title: "Planejado",
+        items: transformedData.filter((item) => item.status === "planned"),
+      },
+      [IN_PENDING_ID]: {
+        title: "Pendente",
+        items: transformedData.filter((item) => item.status === "pending"),
       },
       [DONE_COLUMN_ID]: {
         title: "Fechado",
@@ -110,6 +120,8 @@ export function TicketBoard({
       else if (destination.droppableId === IN_PROGRESS_COLUMN_ID)
         newStatus = "assigned";
       else if (destination.droppableId === DONE_COLUMN_ID) newStatus = "closed";
+      else if (destination.droppableId === IN_PLANNED_ID) newStatus = "planned";
+      else if (destination.droppableId === IN_PENDING_ID) newStatus = "pending";
 
       try {
         await apiClient().put(`/ticket/${ticketId}?userId=${user?.userId}`, {
@@ -136,10 +148,6 @@ export function TicketBoard({
     }
   };
 
-  const containerStyle = showQuickCreateTicket
-    ? { width: `280px` }
-    : { width: "350px" };
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <S.Container>
@@ -152,7 +160,7 @@ export function TicketBoard({
                   <Droppable droppableId={columnId}>
                     {(provided) => (
                       <S.TaskList
-                        style={containerStyle}
+                        style={{ width: "280px" }}
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >

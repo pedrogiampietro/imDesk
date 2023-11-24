@@ -68,7 +68,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   async function signIn(login: User) {
     try {
       const response = await axios.post(
-        "https://imdesk-api-production.up.railway.app/authenticate/sign-in",
+        "http://localhost:3333/authenticate/sign-in",
         login
       );
 
@@ -111,7 +111,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
       const timeOutRedirect = setTimeout(() => {
         window.location.href = "/dashboard";
-      }, 1000);
+      }, 1);
 
       return () => clearTimeout(timeOutRedirect);
     } catch (err: any) {

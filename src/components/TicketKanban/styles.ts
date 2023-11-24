@@ -10,7 +10,7 @@ export const KanbanContainer = styled.div`
   width: 100%;
   flex-direction: column;
   margin: 0 1rem;
-  background-color: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
   border-radius: 10px;
 `;
@@ -32,6 +32,7 @@ export const Tab = styled.div<TabProps>`
   padding: 8px 16px;
   margin-right: 8px;
   margin-right: 9.375rem;
+  text-wrap: nowrap;
   cursor: pointer;
   font-weight: ${(props) => (props.active ? "bold" : "normal")};
   color: ${(props) => (props.active ? "#7F56D8" : "#000")};

@@ -121,9 +121,9 @@ span {
   line-height: 28px;
   color: #1a1f36;
 }
-label {
+/* label {
   margin-bottom: 10px;
-}
+} */
 .reset-pass a,
 label {
   font-size: 14px;

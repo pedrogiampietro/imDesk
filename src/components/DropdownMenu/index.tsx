@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   AiOutlineMenu,
@@ -15,7 +15,8 @@ const DropdownMenu = styled.div`
 const DropdownButton = styled.button<{ rotate: boolean }>`
   color: ${(props) => (props.rotate ? "#7F56D8;" : "white")};
   background-color: ${(props) => (props.rotate ? "white" : "#7F56D8;")};
-  padding: 16px;
+  padding: 10px;
+  margin: 5px 0;
   font-size: 16px;
   border: none;
   cursor: pointer;
@@ -65,9 +66,23 @@ export const DropdownMenuComponent: React.FC<Props> = ({
   onDelete,
 }) => {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
+  const dropdownRef = useRef(null) as any;
+
+  const handleClickOutside = (event: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu ref={dropdownRef}>
       <DropdownButton
         onClick={() => setOpenDropdown(!openDropdown)}
         rotate={openDropdown}
@@ -91,7 +106,10 @@ export const DropdownMenuComponent: React.FC<Props> = ({
           )}
           {onEdit && (
             <div
-              onClick={onEdit}
+              onClick={() => {
+                onEdit();
+                setOpenDropdown(false);
+              }}
               style={{
                 cursor: "pointer",
                 display: "flex",
@@ -104,7 +122,10 @@ export const DropdownMenuComponent: React.FC<Props> = ({
           )}
           {onDelete && (
             <div
-              onClick={onDelete}
+              onClick={() => {
+                onDelete();
+                setOpenDropdown(false);
+              }}
               style={{
                 cursor: "pointer",
                 display: "flex",

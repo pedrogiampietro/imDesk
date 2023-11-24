@@ -116,7 +116,7 @@ export function DepositView() {
 
   return (
     <Layout>
-      <>
+      <S.Container>
         <S.WelcomeButtonWrapper>
           <h2>Visualizar Depósito</h2>
           <S.SaveButton onClick={() => setShowModal(true)}>
@@ -214,7 +214,7 @@ export function DepositView() {
             </tbody>
           </S.Table>
         )}
-      </>
+      </S.Container>
 
       {showModal && (
         <S.ModalWrapper>

@@ -14,6 +14,13 @@ import { DepositView } from "../screens/DepositView";
 import RouteProtector from "./RouteProtector";
 import { Inventory } from "../screens/Inventory";
 import { StatisticOS } from "../screens/Statistic/StatisticOS";
+import { CreateUser } from "../screens/Settings/CreateUser";
+import { CreateLocation } from "../screens/Settings/CreateLocation";
+import { CreatePriority } from "../screens/Settings/CreatePriority";
+import { CreateType } from "../screens/Settings/CreateType";
+import { CreateCategory } from "../screens/Settings/CreateCategory";
+import { ShiftChange } from "../screens/ShiftChange";
+import { SuggestionComplaint } from "../screens/SuggestionComplaint";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -68,8 +75,48 @@ export function AppRoutes() {
     {
       path: "/settings",
       element: (
-        <RouteProtector requiresTech>
+        <RouteProtector>
           <Settings />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-user",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateUser />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-location",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateLocation />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-priority",
+      element: (
+        <RouteProtector requiresTech>
+          <CreatePriority />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-type",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateType />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/settings/create-category",
+      element: (
+        <RouteProtector requiresTech>
+          <CreateCategory />
         </RouteProtector>
       ),
     },
@@ -106,10 +153,26 @@ export function AppRoutes() {
       ),
     },
     {
+      path: "/shift-change",
+      element: (
+        <RouteProtector requiresTech>
+          <ShiftChange />
+        </RouteProtector>
+      ),
+    },
+    {
       path: "/deposit/:id",
       element: (
         <RouteProtector requiresTech>
           <DepositView />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/suggestion-complaint",
+      element: (
+        <RouteProtector requiresTech>
+          <SuggestionComplaint />
         </RouteProtector>
       ),
     },

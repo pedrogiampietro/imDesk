@@ -3,6 +3,8 @@ import { Layout } from "../../../components/Layout";
 import { apiClient } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { ExportDropdown } from "../../../components/ExportDropdown";
+
 import Select from "react-select";
 import * as S from "./styles";
 
@@ -62,12 +64,10 @@ export function StatisticOS() {
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await apiClient().get("/report/os", {
-        data: {
-          userId: selectedTech,
-          startDate,
-          endDate,
-        },
+      const { data } = await apiClient().post("/report/os", {
+        userId: selectedTech,
+        startDate,
+        endDate,
       });
 
       setReportData(data);
@@ -87,11 +87,48 @@ export function StatisticOS() {
       }))
     : [];
 
+  const exportReport = async (format: any) => {
+    try {
+      setIsLoading(true);
+
+      const response = await apiClient().get(`/report/os/export`, {
+        params: {
+          userId: selectedTech,
+          startDate,
+          endDate,
+          format,
+        },
+        responseType: "blob", // Importante para arquivos
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a") as any;
+      link.href = url;
+      link.setAttribute("download", `report.${format}`); // Nome do arquivo com extensão
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao exportar relatório");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleExport = (format: any) => {
+    exportReport(format);
+  };
+
   return (
     <Layout>
       <S.Container>
         {isLoading && <S.Loading>Carregando...</S.Loading>}
         {error && <S.Error>{error}</S.Error>}
+
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <ExportDropdown onExport={handleExport} />
+        </div>
         <S.FormGroup>
           <S.Label>Usuário</S.Label>
           <Select

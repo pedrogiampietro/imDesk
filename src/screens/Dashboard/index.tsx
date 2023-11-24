@@ -5,11 +5,21 @@ import { ServiceCard } from "../../components/ServiceCard";
 import { UnansweredTicketsCard } from "../../components/UnansweredTicketsCard";
 import { apiClient } from "../../services/api";
 import { LottieLoad } from "../../components/LottieLoading";
+import Lottie from "lottie-react";
+
+import lottieRobo from "../../assets/lottie_robozin.json";
+import lottieRoboGamer from "../../assets/lottie_robozin_computer.json";
+
+import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
+import { ChatComponent } from "../../components/ChatComponent";
 
 export function Dashboard() {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [showGamerRobot, setShowGamerRobot] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [dashboardData, setDashboardData] = useState<any | null>({
     categoryCounts: [],
     priorityCounts: [],
@@ -25,6 +35,18 @@ export function Dashboard() {
       tomorrow: 0,
     },
   });
+
+  const lottieOptions = {
+    animationData: lottieRobo,
+    loop: true,
+    autoplay: true,
+  };
+
+  const lottieGamerOptions = {
+    animationData: lottieRoboGamer,
+    loop: true,
+    autoplay: true,
+  };
 
   useEffect(() => {
     async function fetchReportDashboard() {
@@ -71,28 +93,64 @@ export function Dashboard() {
     my: dashboardData.priorityCounts.MY || 0,
   };
 
+  const handleMouseEnter = () => {
+    setShowGamerRobot(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowGamerRobot(false);
+  };
+
+  const handleClick = () => {
+    setShowChat(!showChat);
+  };
+
   return (
     <Layout>
       {loading ? (
         <LottieLoad />
       ) : (
         <S.Container>
-          <Card label="Chamados Novos" value={chamadosNovos} color="#34A853" />
-          <Card
-            label="Chamados Atrasados"
-            value={chamadosAtrasados}
-            color="#FF5733"
-          />
-          <Card
-            label="Chamados Atribuídos"
-            value={chamadosAtribuidos}
-            color="#4285F4"
-          />
-          <ServiceCard {...dashboardData.dueDateService} />
-          <UnansweredTicketsCard
-            all={ticketsSemResposta.all}
-            my={ticketsSemResposta.my}
-          />
+          {user?.isTechnician ? (
+            <>
+              <Card
+                label="Chamados Novos"
+                value={chamadosNovos}
+                color="#34A853"
+              />
+              <Card
+                label="Chamados Atrasados"
+                value={chamadosAtrasados}
+                color="#FF5733"
+              />
+              <Card
+                label="Chamados Atribuídos"
+                value={chamadosAtribuidos}
+                color="#4285F4"
+              />
+              <ServiceCard {...dashboardData.dueDateService} />
+              <UnansweredTicketsCard
+                all={ticketsSemResposta.all}
+                my={ticketsSemResposta.my}
+              />
+            </>
+          ) : (
+            <>
+              <S.RobotContainer
+                onClick={handleClick}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {showGamerRobot && (
+                  <Lottie
+                    style={{ width: 150, height: 150 }}
+                    {...lottieGamerOptions}
+                  />
+                )}
+              </S.RobotContainer>
+              <ChatComponent isVisible={showChat} />
+            </>
+          )}
         </S.Container>
       )}
     </Layout>

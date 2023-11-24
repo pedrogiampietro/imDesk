@@ -5,7 +5,7 @@ export const Layout = styled.div`
 `;
 
 export const Main = styled.main`
-  width: 100%;
+  flex: 1;
 
   h1 {
     font-size: 14px;
@@ -17,22 +17,24 @@ export const TopBar = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0.7rem 20px;
-  background-color: ${({ theme }) => theme.bg2};
-  border-bottom: 1px solid #ddd;
+  background: ${({ theme }) => theme.bgLinear};
   margin-bottom: 1rem;
 `;
 
 export const CompanyInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 20px;
   cursor: pointer;
 
   span {
     font-size: 18px;
     font-weight: bold;
-    color: #7f56d8;
+    color: ${({ theme }) => theme.text};
     margin-left: 10px;
+  }
+  svg {
+    font-size: 20px;
+    fill: ${({ theme }) => theme.primary};
   }
 `;
 
@@ -60,7 +62,7 @@ export const DropdownMenu = styled.div`
   a {
     display: block;
     padding: 10px 20px;
-    color: #333;
+    color: ${({ theme }) => theme.text};
     text-decoration: none;
 
     &:hover {
@@ -79,10 +81,109 @@ export const Initials = styled.div`
   align-items: center;
   color: #7f56d8;
   font-weight: bold;
+  margin-right: 1rem;
 `;
 
 export const CompanyProfileContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
+`;
+export const NotificationIcon = styled.div`
+  position: relative;
+  cursor: pointer;
+  margin: 0 1.5rem;
+
+  & svg {
+    fill: ${({ theme }) => theme.primary};
+  }
+`;
+
+export const NotificationBadge = styled.span`
+  position: absolute;
+  top: -8px;
+  right: -5px;
+  background-color: ${({ theme }) => theme.primary};
+  color: white;
+  border-radius: 50%;
+  padding: 4px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: bold;
+`;
+
+export const NotificationDropdown = styled.div`
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  max-height: 170px;
+  z-index: 20;
+  overflow: auto;
+`;
+
+export const NotificationItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const NotificationAvatar = styled.img`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+
+export const NotificationContent = styled.div`
+  flex: 1;
+`;
+
+export const NotificationDescription = styled.div`
+  font-size: 0.9rem;
+  max-width: 150px;
+`;
+
+export const NotificationDate = styled.div`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.text};
+`;
+
+export const MarkAsReadButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 10px;
+`;
+
+export const MarkAllAsReadButton = styled.button`
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  border-top: 1px solid ${({ theme }) => theme.primary};
+  cursor: pointer;
+  color: ${({ theme }) => theme.text};
+`;
+
+export const NoNotificationsMessage = styled.div`
+  padding: 10px;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
 `;

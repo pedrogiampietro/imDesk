@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  margin: 1rem;
-  background-color: #fff;
+  margin: 0 1rem;
+  background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -57,13 +58,16 @@ export const Button = styled.button<{ isActive?: boolean }>`
 `;
 
 export const TableContainer = styled.div`
-  margin-top: 2rem;
+  flex: 1;
+  min-width: 0;
   overflow-x: auto;
+  max-height: 800px;
 `;
 
 export const ReportTitle = styled.h2`
   text-align: center;
   margin-top: 2rem;
+  color: ${({ theme }) => theme.text};
 `;
 
 export const Table = styled.table`
@@ -71,25 +75,34 @@ export const Table = styled.table`
   border-collapse: collapse;
 `;
 
+export const TableHead = styled.thead`
+  background-color: #f8f9fa;
+`;
+
+export const TableBody = styled.tbody``;
+
 export const TableHeader = styled.th`
   padding: 10px;
-  text-align: left;
+  text-align: center;
   background-color: ${(props) => props.theme.primary};
-  color: white;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
   border: 1px solid ${(props) => props.theme.border};
 `;
 
 export const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: ${(props) => props.theme.bg2};
+    background-color: ${(props) => props.theme.bgAlpha};
   }
+  height: 50px;
 `;
 
 export const TableCell = styled.td`
-  padding: 10px;
-  border: 1px solid #c3aff0;
+  padding: 1rem 15px;
+  border: 1px solid #ddd;
   text-align: center;
-  vertical-align: middle;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
 `;
 
 export const Loading = styled.div`

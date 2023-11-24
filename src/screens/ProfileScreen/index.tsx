@@ -14,7 +14,6 @@ export function ProfileScreen() {
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState<any>(null);
   const [avatarPreview, setAvatarPreview] = useState<string>("");
-  const [signature, setSignature] = useState<string>("");
   const [signatureUrl, setSignatureUrl] = useState("");
 
   const sigCanvas = useRef<SignatureCanvas | null>(null);

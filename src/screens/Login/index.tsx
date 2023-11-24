@@ -27,6 +27,20 @@ export function Login() {
     name: "",
   });
 
+  useEffect(() => {
+    const getTenant = async () => {
+      try {
+        await axios.get("http://localhost:3333/tenant/get-tenant");
+      } catch (err: any) {
+        if (err.response.status === 400) {
+          window.location.href = "https://www.google.com";
+        }
+      }
+    };
+
+    getTenant();
+  }, []);
+
   const handleSignIn = async () => {
     if (!selectedCompany.id || !selectedCompany.name) {
       toast.warn("Você precisa selecionar uma empresa para fazer login! 🙋", {
@@ -58,14 +72,12 @@ export function Login() {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
-  });
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get(
-          "https://imdesk-api-production.up.railway.app/companies"
-        );
+        const response = await axios.get("http://localhost:3333/companies");
 
         setCompanies(response.data.companies);
       } catch (error) {

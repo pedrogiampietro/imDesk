@@ -1,22 +1,31 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import imDeskLogo from "../../assets/img/imdesk-logo.png";
 
 import { AiOutlineHome, AiOutlineLeft, AiOutlineSetting } from "react-icons/ai";
-import { MdLogout, MdOutlineAnalytics } from "react-icons/md";
+import {
+  MdLogout,
+  MdOutlineAnalytics,
+  MdOutlineFilterTiltShift,
+} from "react-icons/md";
 import { BsHouse } from "react-icons/bs";
 import { HiOutlineNewspaper } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
-import { MdOutlineInventory } from "react-icons/md";
+import { ImNotification } from "react-icons/im";
+
+import {
+  MdOutlineInventory,
+  MdOutlineIntegrationInstructions,
+} from "react-icons/md";
 
 import { ThemeContext } from "./../../App";
 
 import * as S from "./styles";
 import { Tooltip } from "../Tooltip";
 
-export function Sidebar() {
+export function Sidebar({ notifyList }: any) {
   const { signOut, user } = useAuth();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const { setTheme, theme } = useContext(ThemeContext);
@@ -38,23 +47,128 @@ export function Sidebar() {
     setActiveDropdown((prev) => (prev === label ? null : label));
   };
 
+  const unreadNotificationsCount = notifyList.filter(
+    (notification: any) => !notification.isRead
+  ).length;
+
   const secondaryLinksArray = [
-    {
-      label: "Settings",
-      icon: <AiOutlineSetting />,
-      to: "/settings",
-      requiresTech: true,
-    },
     {
       label: "Logout",
       icon: <MdLogout />,
       to: "/login",
       func: signOut,
+      requiresTech: false,
+    },
+  ];
+
+  const linksArray = [
+    {
+      label: "Inicio",
+      icon: <AiOutlineHome />,
+      to: "/dashboard",
+      notification: 0,
+      requiresTech: false,
+    },
+    // {
+    //   label: "Manutenção",
+    //   icon: <MdOutlineComputer />,
+    //   to: "/maintenance",
+    //   notification: 0,
+    // },
+    {
+      label: "Tickets",
+      icon: <BsPeople />,
+      to: "/tickets",
+      notification: unreadNotificationsCount,
+    },
+    {
+      label: "Estatisticas",
+      icon: <MdOutlineAnalytics />,
+      to: "/statistics",
+      notification: 0,
+      requiresTech: true,
+      subLinks: [
+        {
+          label: "Reports",
+          to: "/statistics",
+        },
+        {
+          label: "Relátorio OS",
+          to: "/statistics/os",
+        },
+      ],
+    },
+    {
+      label: "Fornecedores",
+      icon: <HiOutlineNewspaper />,
+      to: "/providers",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Estoque",
+      icon: <BsHouse />,
+      to: "/deposit",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Inventário",
+      icon: <MdOutlineInventory />,
+      to: "/inventory",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Passagem de Plantão",
+      icon: <MdOutlineFilterTiltShift />,
+      to: "/shift-change",
+      notification: 0,
+      requiresTech: true,
+    },
+    {
+      label: "Configurações",
+      icon: <AiOutlineSetting />,
+      to: "#",
+      notification: 0,
+      requiresTech: true,
+      subLinks: [
+        {
+          label: "Criação de Usuário",
+          to: "/settings/create-user",
+        },
+        {
+          label: "Criação de Localização",
+          to: "/settings/create-location",
+        },
+        {
+          label: "Criação de Prioridade",
+          to: "/settings/create-priority",
+        },
+        {
+          label: "Criação de Tipo",
+          to: "/settings/create-type",
+        },
+        {
+          label: "Criação de Categoria",
+          to: "/settings/create-category",
+        },
+        {
+          label: "Outros",
+          to: "/settings",
+        },
+      ],
+    },
+    {
+      label: "Notificar",
+      icon: <ImNotification />,
+      to: "/suggestion-complaint",
+      notification: 0,
       requiresTech: true,
     },
   ];
 
-  function DropdownMenu({ icon, label, to, subLinks }: any) {
+  function DropdownMenu({ icon, label, to, subLinks, sidebarOpen }: any) {
     const isActiveDropdownItem = (subLinkTo: any) => pathname === subLinkTo;
     const isDropdownActive = activeDropdown === label;
 
@@ -67,33 +181,31 @@ export function Sidebar() {
       <S.LinkContainer isOpen={sidebarOpen}>
         {!sidebarOpen ? (
           <Tooltip text={label}>
-            <S.LinkStyle
-              to="#"
-              onClick={handleDropdownClick}
-              style={{ width: `fit-content` }}
-            >
+            <S.LinkStyle to={to} style={{ width: `fit-content` }}>
               <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
             </S.LinkStyle>
           </Tooltip>
         ) : (
-          <>
-            <S.LinkStyle to="#" onClick={handleDropdownClick}>
-              <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-              <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
-            </S.LinkStyle>
-            {isDropdownActive &&
-              subLinks.map((subLink: any) => (
-                <S.DropdownLinkStyle
-                  key={subLink.label}
-                  to={subLink.to}
-                  onClick={(e) => e.stopPropagation()}
-                  isActive={isActiveDropdownItem(subLink.to)}
-                >
-                  {subLink.label}
-                </S.DropdownLinkStyle>
-              ))}
-          </>
+          <S.LinkStyle to="#" onClick={handleDropdownClick}>
+            <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+            <S.LinkLabel isActive={theme === "dark"} isOpen={sidebarOpen}>
+              {label}
+            </S.LinkLabel>
+            <S.ArrowIcon isOpen={isDropdownActive} />
+          </S.LinkStyle>
         )}
+        <S.DropdownContent isOpen={isDropdownActive}>
+          {subLinks.map((subLink: any) => (
+            <S.DropdownLinkStyle
+              key={subLink.label}
+              to={subLink.to}
+              onClick={(e) => e.stopPropagation()}
+              isActive={isActiveDropdownItem(subLink.to)}
+            >
+              {subLink.label}
+            </S.DropdownLinkStyle>
+          ))}
+        </S.DropdownContent>
       </S.LinkContainer>
     );
   }
@@ -124,6 +236,7 @@ export function Sidebar() {
               subLinks={subLinks}
               to={to}
               icon={icon}
+              sidebarOpen={sidebarOpen}
             />
           ) : (
             <S.LinkContainer
@@ -140,7 +253,9 @@ export function Sidebar() {
               ) : (
                 <S.LinkStyle to={to}>
                   <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-                  <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+                  <S.LinkLabel isActive={theme === "dark"} isOpen={sidebarOpen}>
+                    {label}
+                  </S.LinkLabel>
                   {!!notification && (
                     <S.LinkNotification>{notification}</S.LinkNotification>
                   )}
@@ -161,7 +276,9 @@ export function Sidebar() {
               >
                 <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
                 {sidebarOpen && (
-                  <S.LinkLabel isActive={theme === "dark"}>{label}</S.LinkLabel>
+                  <S.LinkLabel isActive={theme === "dark"} isOpen={sidebarOpen}>
+                    {label}
+                  </S.LinkLabel>
                 )}
               </S.LinkStyle>
             </S.LinkContainer>
@@ -178,61 +295,3 @@ export function Sidebar() {
     </S.Sidebar>
   );
 }
-
-const linksArray = [
-  {
-    label: "Inicio",
-    icon: <AiOutlineHome />,
-    to: "/dashboard",
-    notification: 0,
-  },
-  // {
-  //   label: "Manutenção",
-  //   icon: <MdOutlineComputer />,
-  //   to: "/maintenance",
-  //   notification: 0,
-  // },
-  {
-    label: "Tickets",
-    icon: <BsPeople />,
-    to: "/tickets",
-    notification: 0,
-  },
-  {
-    label: "Estatisticas",
-    icon: <MdOutlineAnalytics />,
-    to: "/statistics",
-    notification: 0,
-    subLinks: [
-      {
-        label: "Reports",
-        to: "/statistics",
-      },
-      {
-        label: "Relátorio OS",
-        to: "/statistics/os",
-      },
-    ],
-  },
-  {
-    label: "Fornecedores",
-    icon: <HiOutlineNewspaper />,
-    to: "/providers",
-    notification: 0,
-    requiresTech: true,
-  },
-  {
-    label: "Estoque",
-    icon: <BsHouse />,
-    to: "/deposit",
-    notification: 0,
-    requiresTech: true,
-  },
-  {
-    label: "Inventário",
-    icon: <MdOutlineInventory />,
-    to: "/inventory",
-    notification: 0,
-    requiresTech: true,
-  },
-];
