@@ -201,7 +201,7 @@ export function CreateCategory() {
             if (isUpdateNeeded) {
               return {
                 ...category,
-                options: category.options.map((option) => {
+                options: category.options.map((option: any) => {
                   if (option.id === updatedData.id) {
                     return {
                       ...option,

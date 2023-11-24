@@ -66,7 +66,7 @@ export const DropdownMenuComponent: React.FC<Props> = ({
   onDelete,
 }) => {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef(null) as any;
 
   const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

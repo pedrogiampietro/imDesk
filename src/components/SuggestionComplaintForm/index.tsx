@@ -24,11 +24,11 @@ export function SuggestionComplaintForm() {
     status: "Aberto",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/suggestion-complaint", formData);

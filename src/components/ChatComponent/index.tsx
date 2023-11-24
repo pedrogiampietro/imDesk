@@ -4,7 +4,7 @@ import { apiClient } from "../../services/api";
 
 export const ChatComponent = ({ isVisible }: any) => {
   const [message, setMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState<any>([]);
 
   const sendMessage = async () => {
     if (message.trim() === "") return;
@@ -31,7 +31,7 @@ export const ChatComponent = ({ isVisible }: any) => {
   return (
     <S.ChatContainer isVisible={isVisible}>
       <S.ChatHistory>
-        {chatHistory.map((msg, index) => (
+        {chatHistory.map((msg: any, index: number) => (
           <S.ChatMessage key={index} sender={msg.sender}>
             {msg.text}
           </S.ChatMessage>
