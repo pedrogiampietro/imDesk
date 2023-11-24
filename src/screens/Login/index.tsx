@@ -30,7 +30,7 @@ export function Login() {
   useEffect(() => {
     const getTenant = async () => {
       try {
-        await axios.get("http://localhost:3333/tenant/get-tenant");
+        await axios.get("https://imdesk-api-production.up.railway.app/tenant/get-tenant");
       } catch (err: any) {
         if (err.response.status === 400) {
           window.location.href = "https://www.google.com";
@@ -77,7 +77,7 @@ export function Login() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:3333/companies");
+        const response = await axios.get("https://imdesk-api-production.up.railway.app/companies");
 
         setCompanies(response.data.companies);
       } catch (error) {
