@@ -193,11 +193,18 @@ export function SuggestionComplaint() {
   };
 
   const handleCreate = async (formData: any) => {
-    let method: "post" | "patch" = isEditMode ? "patch" : "post";
-    let url = isEditMode
+    if (!formData.description || !formData.category || !formData.company) {
+      toast.error("Todos os campos são obrigatórios");
+      setLoading(false);
+      return;
+    }
+
+    const isUpdate = isEditMode;
+    const method = isUpdate ? "patch" : "post";
+    const url = isUpdate
       ? `/suggestion-complaint/${formData.id}`
       : "/suggestion-complaint";
-    let successMessage = isEditMode
+    const successMessage = isUpdate
       ? "Sugestão/Reclamação atualizada com sucesso!"
       : "Sugestão/Reclamação criada com sucesso!";
 
@@ -209,23 +216,24 @@ export function SuggestionComplaint() {
     };
 
     try {
-      const response = (await apiClient()[method](url, dataToSend)) as any;
-      toast.success(successMessage);
+      const response = await apiClient()[method](url, dataToSend);
 
-      if (isEditMode) {
+      if (isUpdate) {
         setSuggestionsComplaints((prev) =>
-          prev.map((item) => (item.id === formData.id ? response.data : item))
+          prev.map((item) =>
+            item.id === formData.id ? { ...item, ...response.data.body } : item
+          )
         );
       } else {
-        setSuggestionsComplaints((prev) => [...prev, response.data]);
+        setSuggestionsComplaints((prev) => [...prev, response.data.body]);
       }
 
       setLoading(false);
       setShowCreateCard(false);
+      toast.success(successMessage);
     } catch (err: any) {
       setLoading(false);
-      toast.error(err.response.data);
-      console.warn("Erro:", err);
+      toast.error(err.response.data.message || "Ocorreu um erro");
     }
   };
 

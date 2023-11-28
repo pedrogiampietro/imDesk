@@ -18,7 +18,7 @@ export function CreateCard({
     watch,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const { theme } = useContext(ThemeContext);
@@ -149,7 +149,11 @@ export function CreateCard({
           />
         </S.FormGroup>
 
-        <S.CreateButton type="submit" isActive={theme === "dark"}>
+        <S.CreateButton
+          type="submit"
+          disabled={isSubmitting}
+          isActive={theme === "dark"}
+        >
           {isEditMode ? formFields.button.saveText : formFields.button.text}
         </S.CreateButton>
       </S.Form>

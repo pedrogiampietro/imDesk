@@ -28,6 +28,7 @@ export function Provider() {
   const [contracts, setContracts] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
   const [currentTab, setCurrentTab] = useState("Dados Cadastrais");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     async function fetchProviders() {
@@ -88,34 +89,44 @@ export function Provider() {
 
   const handleSave = async () => {
     if (!selectedProvider) return;
+
     try {
-      const updatedProvider = {
-        name: selectedProvider.name,
-        email: selectedProvider.email,
-        address: selectedProvider.address,
-        category: selectedProvider.category,
-        logoURL: "",
-        price: selectedProvider.price,
-        description: selectedProvider.description,
-      };
+      const formData = new FormData();
+      formData.append("name", selectedProvider.name);
+      formData.append("email", selectedProvider.email);
+      formData.append("address", selectedProvider.address);
+      formData.append("category", selectedProvider.category);
+      formData.append("price", selectedProvider.price);
+      formData.append("description", selectedProvider.description);
+
+      if (selectedFile) {
+        formData.append("logo", selectedFile);
+      }
+
       const response = await apiClient().put(
         `/providers/provider/${selectedProvider.id}`,
-        updatedProvider
+        formData, // Envia o FormData
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
-      // Atualizar a lista de providers localmente
+
+      const updatedProviderData = response.data.body;
       setProviders((prevProviders) =>
         prevProviders.map((provider) =>
           provider.id === selectedProvider.id
-            ? { ...provider, ...updatedProvider }
+            ? { ...provider, ...updatedProviderData }
             : provider
         )
       );
-      setShowModal(false); // Fecha o modal após salvar
+      setShowModal(false);
       alert("Fornecedor atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar o fornecedor:", error);
       alert("Erro ao atualizar o fornecedor. Por favor, tente novamente.");
     }
+  };
+
+  const handleFileChange = (event: any) => {
+    setSelectedFile(event.target.files[0]);
   };
 
   return (
@@ -198,7 +209,10 @@ export function Provider() {
                           src={selectedProvider.logoURL}
                           alt="Logo do Fornecedor"
                         />
-                        <S.UploadButton>Alterar Logo</S.UploadButton>
+                        <S.UploadButton>
+                          <input type="file" onChange={handleFileChange} />
+                          Alterar Logo
+                        </S.UploadButton>
                       </S.ImageContainer>
 
                       <S.FieldsContainer>

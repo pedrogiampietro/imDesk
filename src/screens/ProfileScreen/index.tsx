@@ -18,7 +18,7 @@ export function ProfileScreen() {
 
   const sigCanvas = useRef<SignatureCanvas | null>(null);
 
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
 
   useEffect(() => {
     if (
@@ -85,7 +85,7 @@ export function ProfileScreen() {
           avatarUrl: response.data.updatedUser.avatarUrl,
         };
 
-        setStorageModel(auth.USER, JSON.stringify(updatedUser));
+        updateUser(updatedUser);
       }
 
       toast.success("Sucesso! Sua categoria foi adicionada com sucesso!", {

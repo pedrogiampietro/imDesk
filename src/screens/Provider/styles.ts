@@ -10,15 +10,57 @@ interface ModalBackdropProps {
 
 export const Container = styled.div`
   width: 98%;
-  min-height: 100vh;
+  height: 100vh;
+
   background-color: #fff;
   margin: 0 auto;
   border-radius: 10px;
-  overflow: hidden;
 
   background: ${({ theme }) => theme.bgLinear};
   padding: 2rem;
   border-radius: 10px;
+`;
+
+export const TableContainer = styled.div`
+  flex: 1;
+  height: 100vh;
+  max-height: 800px;
+  overflow-x: auto;
+`;
+
+export const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+export const TableHead = styled.thead`
+  background-color: #f8f9fa;
+`;
+
+export const TableBody = styled.tbody``;
+
+export const TableHeader = styled.th`
+  padding: 10px;
+  text-align: center;
+  background-color: ${(props) => props.theme.primary};
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
+  border: 1px solid ${(props) => props.theme.border};
+`;
+
+export const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: ${(props) => props.theme.bgAlpha};
+  }
+  height: 50px;
+`;
+
+export const TableCell = styled.td`
+  padding: 1rem 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
 `;
 
 export const AdminContainer = styled.div`
@@ -64,12 +106,12 @@ export const Button = styled.button`
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: #7f56d8;
+  background-color: ${(props) => props.theme.primary};
   color: #fff;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: ${(props) => props.theme.primaryDark};
   }
 
   &[danger] {
@@ -79,40 +121,6 @@ export const Button = styled.button`
       background-color: #c82333;
     }
   }
-`;
-
-export const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
-
-export const TableHead = styled.thead`
-  background-color: #f8f9fa;
-`;
-
-export const TableBody = styled.tbody``;
-
-export const TableHeader = styled.th`
-  padding: 10px;
-  text-align: center;
-  background-color: ${(props) => props.theme.primary};
-  color: ${({ theme }) => theme.text};
-  font-size: 14px;
-  border: 1px solid ${(props) => props.theme.border};
-`;
-
-export const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: ${(props) => props.theme.bg2};
-  }
-`;
-
-export const TableCell = styled.td`
-  padding: 0 15px;
-  border: 1px solid #ddd;
-  text-align: center;
-  color: ${({ theme }) => theme.text};
-  font-size: 14px;
 `;
 
 export const ActionButton = styled.button<ActionButtonProps>`
@@ -126,7 +134,8 @@ export const ActionButton = styled.button<ActionButtonProps>`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${(props) => (props.danger ? "#c82333" : "#0056b3")};
+    background-color: ${(props) =>
+      props.danger ? "#c82333" : props.theme.primaryDark};
   }
 
   &:last-child {

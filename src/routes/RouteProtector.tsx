@@ -12,17 +12,14 @@ export default function RouteProtector({ children, requiresTech }: PropsI) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(
-      "Inside useEffect: isAuthenticated:",
-      isAuthenticated,
-      "loading:",
-      loading
-    );
+    if (!loading) {
+      console.log("Inside useEffect: isAuthenticated:", isAuthenticated);
 
-    if (!loading && !isAuthenticated) {
-      navigate("/login");
-    } else if (requiresTech && !user?.isTechnician) {
-      navigate("/dashboard");
+      if (!isAuthenticated) {
+        navigate("/login");
+      } else if (requiresTech && !user?.isTechnician) {
+        navigate("/dashboard");
+      }
     }
   }, [isAuthenticated, loading, navigate, requiresTech, user?.isTechnician]);
 

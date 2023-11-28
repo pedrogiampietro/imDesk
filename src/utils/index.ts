@@ -9,7 +9,7 @@ export const base64ToBlob = (base64: any, mimeType = "") => {
 };
 
 export function truncateText(text: string, maxLength: number) {
-  if (text.length > maxLength) {
+  if (text?.length > maxLength) {
     return text.substring(0, maxLength) + "...";
   }
   return text;

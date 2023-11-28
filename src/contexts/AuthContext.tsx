@@ -41,6 +41,7 @@ interface AuthContextData {
   signIn: any;
   signOut: () => void;
   user: UserAuth | undefined;
+  updateUser: any;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -150,6 +151,11 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     // return () => clearTimeout(timeOutRedirect);
   }
 
+  const updateUser = (updatedUser: any) => {
+    setUser(updatedUser);
+    setStorageModel(auth.USER, JSON.stringify(updatedUser));
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -158,6 +164,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         signIn,
         signOut,
         user,
+        updateUser,
       }}
     >
       {children}
