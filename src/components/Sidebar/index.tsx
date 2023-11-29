@@ -15,10 +15,7 @@ import { HiOutlineNewspaper } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
 import { ImNotification } from "react-icons/im";
 
-import {
-  MdOutlineInventory,
-  MdOutlineIntegrationInstructions,
-} from "react-icons/md";
+import { MdOutlineInventory } from "react-icons/md";
 
 import { ThemeContext } from "./../../App";
 
@@ -84,13 +81,17 @@ export function Sidebar({ notifyList }: any) {
     {
       label: "Estatisticas",
       icon: <MdOutlineAnalytics />,
-      to: "/statistics",
+      to: "#",
       notification: 0,
       requiresTech: true,
       subLinks: [
         {
-          label: "Reports",
-          to: "/statistics",
+          label: "OS Violadas por Tech",
+          to: "/statistics/violated-by-techs",
+        },
+        {
+          label: "OS Abertas por Localização",
+          to: "/statistics/opened-by-locations",
         },
         {
           label: "Relátorio OS",

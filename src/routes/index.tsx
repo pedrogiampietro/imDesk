@@ -3,7 +3,10 @@ import { useRoutes } from "react-router-dom";
 import { Login } from "../screens/Login";
 import { Dashboard } from "../screens/Dashboard";
 import { Ticket } from "../screens/Ticket";
-import { Statistic } from "../screens/Statistic";
+import {
+  Statistic,
+  StatisticTicketsViolatedByTech,
+} from "../screens/Statistic/StatisticTicketsViolatedByTech";
 import { Maintenance } from "../screens/Maintenance";
 import { Settings } from "../screens/Settings";
 import { Provider } from "../screens/Provider";
@@ -21,6 +24,7 @@ import { CreateType } from "../screens/Settings/CreateType";
 import { CreateCategory } from "../screens/Settings/CreateCategory";
 import { ShiftChange } from "../screens/ShiftChange";
 import { SuggestionComplaint } from "../screens/SuggestionComplaint";
+import { StatisticTicketsOpenedByLocation } from "../screens/Statistic/StatisticTicketsOpenedByLocation";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -57,10 +61,18 @@ export function AppRoutes() {
       ),
     },
     {
-      path: "/statistics",
+      path: "/statistics/violated-by-techs",
       element: (
         <RouteProtector requiresTech>
-          <Statistic />
+          <StatisticTicketsViolatedByTech />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/statistics/opened-by-locations",
+      element: (
+        <RouteProtector requiresTech>
+          <StatisticTicketsOpenedByLocation />
         </RouteProtector>
       ),
     },

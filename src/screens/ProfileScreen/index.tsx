@@ -3,8 +3,6 @@ import * as S from "./styles";
 import { Layout } from "../../components/Layout";
 import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
-import { auth } from "../../constants/auth";
-import { setStorageModel } from "../../utils/storage";
 import { toast } from "react-toastify";
 import { base64ToBlob } from "../../utils";
 import SignatureCanvas from "react-signature-canvas";
