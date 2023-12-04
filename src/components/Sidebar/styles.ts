@@ -140,8 +140,8 @@ export const DropdownLinkStyle = styled(Link)<{
   color: ${({ theme, isActive }) =>
     !isActive ? theme.text : theme.textSecondary};
   font-size: 16px;
-  padding: calc(${v.smSpacing} - 2px) 10px;
-  margin: 5px 10px;
+  padding: calc(${v.smSpacing} - 2px) 0;
+  margin: 5px 0;
   border-radius: ${v.borderRadius};
 
   &:hover {
@@ -181,11 +181,13 @@ export const Theme = styled.div`
   align-items: center;
   font-size: 16px;
 `;
+
 export const ThemeLabel = styled.span`
   display: block;
   flex: 1;
   color: ${({ theme }) => theme.primary};
 `;
+
 export const ThemeToggler = styled.button<{ isActive?: boolean }>`
   ${btnReset};
   margin: 0 auto;
@@ -209,4 +211,14 @@ export const ToggleThumb = styled.div`
   right: calc(100% - 18px - 1px);
   border-radius: 50%;
   background: ${({ theme }) => theme.bg};
+`;
+
+export const SiglaLabel = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  font-size: 12px;
+  color: ${({ theme }) => theme.textSecondary};
+  white-space: nowrap;
 `;

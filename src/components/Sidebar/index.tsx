@@ -4,7 +4,12 @@ import { useAuth } from "../../hooks/useAuth";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import imDeskLogo from "../../assets/img/imdesk-logo.png";
 
-import { AiOutlineHome, AiOutlineLeft, AiOutlineSetting } from "react-icons/ai";
+import {
+  AiOutlineHome,
+  AiOutlineLeft,
+  AiOutlineSetting,
+  AiOutlineMinus,
+} from "react-icons/ai";
 import {
   MdLogout,
   MdOutlineAnalytics,
@@ -88,14 +93,17 @@ export function Sidebar({ notifyList }: any) {
         {
           label: "OS Violadas por Tech",
           to: "/statistics/violated-by-techs",
+          icon: <AiOutlineMinus />,
         },
         {
           label: "OS Abertas por Localização",
           to: "/statistics/opened-by-locations",
+          icon: <AiOutlineMinus />,
         },
         {
           label: "Relátorio OS",
           to: "/statistics/os",
+          icon: <AiOutlineMinus />,
         },
       ],
     },
@@ -175,38 +183,52 @@ export function Sidebar({ notifyList }: any) {
 
     const handleDropdownClick = (e: any) => {
       e.stopPropagation();
-      handleDropdown(label);
+      handleDropdown(label); // Sempre alterar o estado ao clicar
     };
 
     return (
       <S.LinkContainer isOpen={sidebarOpen}>
-        {!sidebarOpen ? (
-          <Tooltip text={label}>
-            <S.LinkStyle to={to} style={{ width: `fit-content` }}>
-              <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
-            </S.LinkStyle>
-          </Tooltip>
-        ) : (
-          <S.LinkStyle to="#" onClick={handleDropdownClick}>
-            <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+        <S.LinkStyle to="#" onClick={handleDropdownClick}>
+          <S.LinkIcon isActive={theme === "dark"}>{icon}</S.LinkIcon>
+          {sidebarOpen && (
             <S.LinkLabel isActive={theme === "dark"} isOpen={sidebarOpen}>
               {label}
             </S.LinkLabel>
-            <S.ArrowIcon isOpen={isDropdownActive} />
-          </S.LinkStyle>
+          )}
+          <S.ArrowIcon isOpen={isDropdownActive && sidebarOpen} />
+        </S.LinkStyle>
+
+        {sidebarOpen ? (
+          <S.DropdownContent isOpen={isDropdownActive}>
+            {subLinks.map((subLink: any) => (
+              <S.DropdownLinkStyle
+                key={subLink.label}
+                to={subLink.to}
+                onClick={(e) => e.stopPropagation()}
+                isActive={isActiveDropdownItem(subLink.to)}
+              >
+                {subLink.label}
+              </S.DropdownLinkStyle>
+            ))}
+          </S.DropdownContent>
+        ) : (
+          isDropdownActive && (
+            <div>
+              {subLinks.map((subLink: any) => (
+                <Tooltip key={subLink.label} text={subLink.label}>
+                  <S.LinkStyle
+                    to={subLink.to}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <S.LinkIcon isActive={theme === "dark"}>
+                      {subLink.icon}
+                    </S.LinkIcon>
+                  </S.LinkStyle>
+                </Tooltip>
+              ))}
+            </div>
+          )
         )}
-        <S.DropdownContent isOpen={isDropdownActive}>
-          {subLinks.map((subLink: any) => (
-            <S.DropdownLinkStyle
-              key={subLink.label}
-              to={subLink.to}
-              onClick={(e) => e.stopPropagation()}
-              isActive={isActiveDropdownItem(subLink.to)}
-            >
-              {subLink.label}
-            </S.DropdownLinkStyle>
-          ))}
-        </S.DropdownContent>
       </S.LinkContainer>
     );
   }
