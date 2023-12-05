@@ -4,7 +4,6 @@ import { Login } from "../screens/Login";
 import { Dashboard } from "../screens/Dashboard";
 import { Ticket } from "../screens/Ticket";
 import {
-  Statistic,
   StatisticTicketsViolatedByTech,
 } from "../screens/Statistic/StatisticTicketsViolatedByTech";
 import { Maintenance } from "../screens/Maintenance";
