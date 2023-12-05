@@ -12,6 +12,7 @@ export const BreadcrumbItem = styled.div`
 
   & a {
     color: ${({ theme }) => theme.primary};
+    font-family: "Poppins", sans-serif;
 
     &:hover {
       filter: brightness(1.8);

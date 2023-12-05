@@ -27,13 +27,14 @@ export const CompanyInfo = styled.div`
   cursor: pointer;
 
   span {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     color: ${({ theme }) => theme.text};
     margin-left: 10px;
+
+    font-family: "Poppins", sans-serif;
   }
   svg {
-    font-size: 20px;
     fill: ${({ theme }) => theme.primary};
   }
 `;

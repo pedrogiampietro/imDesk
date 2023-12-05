@@ -308,7 +308,6 @@ export function Sidebar({ notifyList }: any) {
           )
       )}
 
-      <S.Divider />
       <S.Theme>
         {sidebarOpen && <S.ThemeLabel>Dark Mode</S.ThemeLabel>}
         <S.ThemeToggler isActive={theme === "dark"} onClick={toggleTheme}>

@@ -157,7 +157,7 @@ export function Layout({ children }: LayoutProps) {
 
           <S.CompanyProfileContainer>
             <S.CompanyInfo onClick={openChangeCompanyModal}>
-              <RiSettings2Line size={30} />
+              <RiSettings2Line size={20} />
               <span>{user?.currentLoggedCompany.currentLoggedCompanyName}</span>
             </S.CompanyInfo>
 

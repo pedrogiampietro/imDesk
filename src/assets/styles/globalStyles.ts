@@ -4,11 +4,11 @@ export const GlobalStyle = createGlobalStyle`
     *, *::before, *::after {
         margin: 0;
         box-sizing: border-box;
+        font-family: 'Roboto', sans-serif;
     }
     body {
         background: ${({ theme }) => theme.bg};
         color: ${({ theme }) => theme.text};
-        font-family: 'Roboto', sans-serif;
         letter-spacing: .6px;
     }
 

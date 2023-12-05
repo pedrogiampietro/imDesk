@@ -92,8 +92,6 @@ export const LinkContainer = styled.div<{
   isOpen: boolean;
 }>`
   width: ${({ isOpen }) => (!isOpen ? "3.125rem" : "auto")};
-  /* background: ${({ theme, isActive }) =>
-    !isActive ? `transparent` : theme.bg}; */
   border-radius: ${v.borderRadius};
   margin: 8px;
   border-left: ${({ isActive, theme }) =>
@@ -140,13 +138,13 @@ export const DropdownLinkStyle = styled(Link)<{
   color: ${({ theme, isActive }) =>
     !isActive ? theme.text : theme.textSecondary};
   font-size: 16px;
-  padding: calc(${v.smSpacing} - 2px) 0;
   margin: 5px 0;
   border-radius: ${v.borderRadius};
+  font-family: "Gantari", sans-serif;
+  padding: calc(14px - 2px);
 
   &:hover {
-    background-color: ${({ theme }) => theme.primary};
-    color: #fff;
+    background-color: ${({ theme }) => theme.bg};
   }
 `;
 
@@ -154,6 +152,7 @@ export const LinkLabel = styled.span<{ isActive: boolean; isOpen?: boolean }>`
   display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
   color: ${({ theme, isActive }) => (isActive ? theme.primary : theme.text)};
   flex: 1;
+  font-family: "Gantari", sans-serif;
 `;
 
 export const LinkIcon = styled.div<{ isActive: boolean }>`
@@ -179,13 +178,19 @@ export const LinkNotification = styled.div`
 export const Theme = styled.div`
   display: flex;
   align-items: center;
-  font-size: 16px;
+
+  width: auto;
+  border-radius: 6px;
+  margin: 8px;
+  border-left: none;
 `;
 
 export const ThemeLabel = styled.span`
   display: block;
   flex: 1;
   color: ${({ theme }) => theme.primary};
+
+  padding: calc(8px - 2px);
 `;
 
 export const ThemeToggler = styled.button<{ isActive?: boolean }>`
@@ -211,14 +216,4 @@ export const ToggleThumb = styled.div`
   right: calc(100% - 18px - 1px);
   border-radius: 50%;
   background: ${({ theme }) => theme.bg};
-`;
-
-export const SiglaLabel = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 8px;
-  font-size: 12px;
-  color: ${({ theme }) => theme.textSecondary};
-  white-space: nowrap;
 `;
