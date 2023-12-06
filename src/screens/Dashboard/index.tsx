@@ -14,6 +14,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
 import { ChatComponent } from "../../components/ChatComponent";
+import { OnlineUsersWidget } from "../../components/OnlineUsersWidget";
 
 export function Dashboard() {
   const { user } = useAuth();
@@ -111,46 +112,31 @@ export function Dashboard() {
         <LottieLoad />
       ) : (
         <S.Container>
-          {user?.isTechnician ? (
+          {user?.isTechnician && (
             <>
               <Card
                 label="Chamados Novos"
-                value={chamadosNovos}
+                value={dashboardData.newTicketsCount}
                 color="#34A853"
               />
               <Card
                 label="Chamados Atrasados"
-                value={chamadosAtrasados}
+                value={dashboardData.lateTicketsCount}
                 color="#FF5733"
               />
               <Card
                 label="Chamados Atribuídos"
-                value={chamadosAtribuidos}
+                value={dashboardData.assignedTicketsCount}
                 color="#4285F4"
               />
               <ServiceCard {...dashboardData.dueDateService} />
               <UnansweredTicketsCard
-                all={ticketsSemResposta.all}
-                my={ticketsSemResposta.my}
+                all={dashboardData.recentTickets.length}
+                my={dashboardData.priorityCounts.MY || 0}
               />
             </>
-          ) : (
-            <>
-              <S.RobotContainer
-                onClick={handleClick}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                {showGamerRobot && (
-                  <Lottie
-                    style={{ width: 150, height: 150 }}
-                    {...lottieGamerOptions}
-                  />
-                )}
-              </S.RobotContainer>
-              <ChatComponent isVisible={showChat} />
-            </>
           )}
+          <OnlineUsersWidget />
         </S.Container>
       )}
     </Layout>
