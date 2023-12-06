@@ -145,26 +145,32 @@ export function Sidebar({ notifyList }: any) {
         {
           label: "Criação de Usuário",
           to: "/settings/create-user",
+          icon: <AiOutlineMinus />,
         },
         {
           label: "Criação de Localização",
           to: "/settings/create-location",
+          icon: <AiOutlineMinus />,
         },
         {
           label: "Criação de Prioridade",
           to: "/settings/create-priority",
+          icon: <AiOutlineMinus />,
         },
         {
           label: "Criação de Tipo",
           to: "/settings/create-type",
+          icon: <AiOutlineMinus />,
         },
         {
           label: "Criação de Categoria",
           to: "/settings/create-category",
+          icon: <AiOutlineMinus />,
         },
         {
           label: "Outros",
           to: "/settings",
+          icon: <AiOutlineMinus />,
         },
       ],
     },

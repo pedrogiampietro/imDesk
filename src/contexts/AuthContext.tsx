@@ -129,6 +129,10 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   }
 
   async function signOut() {
+    await apiClient().post("/authenticate/sign-out", {
+      userId: user?.userId,
+    });
+
     setIsAuthenticated(false);
     removeStorage(auth.TOKEN);
     removeStorage(auth.REFRESH_TOKEN);
@@ -136,7 +140,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
     toast.success("Ahhh, você já está indo? Isso será um até logo! 😁", {
       position: "top-right",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -144,11 +148,11 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       progress: undefined,
     });
 
-    // const timeOutRedirect = setTimeout(() => {
-    //   window.location.href = "/login";
-    // }, 1000);
+    const timeOutRedirect = setTimeout(() => {
+      window.location.href = "/";
+    }, 2000);
 
-    // return () => clearTimeout(timeOutRedirect);
+    return () => clearTimeout(timeOutRedirect);
   }
 
   const updateUser = (updatedUser: any) => {
