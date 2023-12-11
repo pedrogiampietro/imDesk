@@ -69,7 +69,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   async function signIn(login: User) {
     try {
       const response = await axios.post(
-        "http://localhost:3333/authenticate/sign-in",
+        "http://imdesk.cloud:3333/authenticate/sign-in",
         login
       );
 
