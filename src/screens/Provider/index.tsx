@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-
+import { useRef, useState, useEffect } from "react";
+import Select from "react-select";
 import { Layout } from "../../components/Layout";
-
+import { FaFileUpload } from "react-icons/fa";
 import * as S from "./styles";
 import { apiClient } from "../../services/api";
 
@@ -16,6 +16,12 @@ interface IProviders {
   description: string;
   contracts: any[];
   services: any[];
+  serviceProvided: string;
+  monthlyValue: string;
+  dueDate: string;
+  operationDate: string;
+  contractNumber: string;
+  adendum: string;
 }
 
 export function Provider() {
@@ -34,6 +40,9 @@ export function Provider() {
     async function fetchProviders() {
       try {
         const response = await apiClient().get("/providers/provider");
+
+        console.log("response", response);
+
         setProviders(response.data.providers);
       } catch (error) {
         console.error("Erro ao buscar fornecedores:", error);
@@ -99,13 +108,20 @@ export function Provider() {
       formData.append("price", selectedProvider.price);
       formData.append("description", selectedProvider.description);
 
+      formData.append("serviceProvided", selectedProvider.serviceProvided);
+      formData.append("monthlyValue", selectedProvider.monthlyValue);
+      formData.append("dueDate", selectedProvider.dueDate);
+      formData.append("operationDate", selectedProvider.operationDate);
+      formData.append("contractNumber", selectedProvider.contractNumber);
+      formData.append("adendum", selectedProvider.adendum);
+
       if (selectedFile) {
         formData.append("logo", selectedFile);
       }
 
       const response = await apiClient().put(
         `/providers/provider/${selectedProvider.id}`,
-        formData, // Envia o FormData
+        formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
@@ -125,9 +141,72 @@ export function Provider() {
     }
   };
 
-  const handleFileChange = (event: any) => {
-    setSelectedFile(event.target.files[0]);
+  const handlePDFContractChange = (event: any) => {
+    // setSelectedFile(event.target.files[0]);
   };
+
+  const optionsSelect = [
+    {
+      id: 1,
+      label: "Fornecedor de Produtos",
+      value: "providers_products",
+    },
+    {
+      id: 2,
+      label: "Prestador de Serviço",
+      value: "providers_services",
+    },
+  ];
+
+  const handleEditContract = (contract: any) => {
+    // Aqui você pode definir a lógica para abrir um modal de edição
+    // e passar os dados do contrato selecionado para o formulário
+  };
+
+  const handleContractSubmit = (event: any) => {
+    event.preventDefault();
+    // Aqui você pode coletar os dados do formulário
+    // e fazer o que precisa ser feito, como enviar para uma API ou atualizar o estado
+  };
+
+  function calcularTempoRestante(dataTermino: string) {
+    const hoje = new Date();
+    const dataFim = new Date(dataTermino);
+
+    const diferencaTempo = dataFim.getTime() - hoje.getTime();
+    const diasRestantes = Math.ceil(diferencaTempo / (1000 * 3600 * 24));
+
+    return diasRestantes;
+  }
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Aqui você pode adicionar a lógica para lidar com o arquivo
+      console.log("Arquivo selecionado:", file.name);
+    }
+  };
+
+  const tempoRestante = calcularTempoRestante("2023-12-07T17:50:53.371Z");
+
+  const mockUploads = [
+    { nome: "Contrato_01.pdf", data: "2021-01-01" },
+    { nome: "Contrato_02.pdf", data: "2021-02-01" },
+  ];
+
+  const fileInputRef = useRef<any>(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const formattedDueDate = selectedProvider?.dueDate
+    ? selectedProvider.dueDate.toString().split("T")[0]
+    : "";
+
+  const formattedOperationDate = selectedProvider?.operationDate
+    ? selectedProvider.operationDate.toString().split("T")[0]
+    : "";
 
   return (
     <Layout>
@@ -307,43 +386,187 @@ export function Provider() {
 
                         <S.Label>
                           Categoria:
-                          <S.Input
-                            type="text"
-                            value={selectedProvider.category}
-                            onChange={(e) =>
+                          <Select
+                            options={optionsSelect}
+                            onChange={(e: any) => {
                               setSelectedProvider((prevProvider) => {
                                 if (prevProvider) {
                                   return {
                                     ...prevProvider,
-                                    category: e.target.value,
+                                    category: e?.value,
                                   };
                                 }
                                 return prevProvider;
-                              })
-                            }
-                          />
-                        </S.Label>
-
-                        <S.Label>
-                          Preço:
-                          <S.Input
-                            type="number"
-                            value={selectedProvider.price}
-                            onChange={(e) =>
-                              setSelectedProvider((prevProvider: any) => {
-                                if (prevProvider) {
-                                  return {
-                                    ...prevProvider,
-                                    price: parseFloat(e.target.value),
-                                  };
-                                }
-                                return prevProvider;
-                              })
-                            }
+                              });
+                            }}
                           />
                         </S.Label>
                       </S.ProductDetailsContainer>
                     </S.CadastroContainer>
+                  )}
+
+                  {currentTab === "Contratos" && (
+                    <>
+                      <S.CadastroContainer>
+                        <S.InputsContainer>
+                          <S.FormRow>
+                            <S.Label>
+                              Serviço Fornecido:
+                              <S.Input
+                                type="text"
+                                value={
+                                  selectedProvider.serviceProvided || " - "
+                                }
+                                onChange={(e) =>
+                                  setSelectedProvider((prevProvider) => {
+                                    if (prevProvider) {
+                                      return {
+                                        ...prevProvider,
+                                        serviceProvided: e.target.value,
+                                      };
+                                    }
+                                    return prevProvider;
+                                  })
+                                }
+                              />
+                            </S.Label>
+                            <S.Label>
+                              Valor Mensal:
+                              <S.Input
+                                type="text"
+                                value={selectedProvider.monthlyValue}
+                                onChange={(e) =>
+                                  setSelectedProvider((prevProvider) => {
+                                    if (prevProvider) {
+                                      return {
+                                        ...prevProvider,
+                                        monthlyValue: e.target.value,
+                                      };
+                                    }
+                                    return prevProvider;
+                                  })
+                                }
+                              />
+                            </S.Label>
+                            <S.Label>
+                              Data de Vencimento:
+                              <S.Input
+                                type="date"
+                                value={formattedDueDate}
+                                onChange={(e) =>
+                                  setSelectedProvider((prevProvider: any) => {
+                                    if (prevProvider) {
+                                      return {
+                                        ...prevProvider,
+                                        dueDate: new Date(e.target.value),
+                                      };
+                                    }
+                                    return prevProvider;
+                                  })
+                                }
+                              />
+                            </S.Label>
+                          </S.FormRow>
+
+                          <S.FormRow>
+                            <S.Label>
+                              Data de Fazer OP:
+                              <S.Input
+                                type="date"
+                                value={formattedOperationDate}
+                                onChange={(e) =>
+                                  setSelectedProvider((prevProvider: any) => {
+                                    if (prevProvider) {
+                                      return {
+                                        ...prevProvider,
+                                        operationDate: e.target.value,
+                                      };
+                                    }
+                                    return prevProvider;
+                                  })
+                                }
+                              />
+                            </S.Label>
+                            <S.Label>
+                              Nº Contrato:
+                              <S.Input
+                                type="text"
+                                value={selectedProvider.contractNumber}
+                                onChange={(e) =>
+                                  setSelectedProvider((prevProvider) => {
+                                    if (prevProvider) {
+                                      return {
+                                        ...prevProvider,
+                                        contractNumber: e.target.value,
+                                      };
+                                    }
+                                    return prevProvider;
+                                  })
+                                }
+                              />
+                            </S.Label>
+                            <S.Label>
+                              Termo Aditivo:
+                              <S.Input
+                                type="text"
+                                value={selectedProvider.adendum || " - "}
+                                onChange={(e) =>
+                                  setSelectedProvider((prevProvider) => {
+                                    if (prevProvider) {
+                                      return {
+                                        ...prevProvider,
+                                        adendum: e.target.value,
+                                      };
+                                    }
+                                    return prevProvider;
+                                  })
+                                }
+                              />
+                            </S.Label>
+                          </S.FormRow>
+
+                          <S.FormRow>
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <h1>Restam para o contrato vencer:</h1>
+                              <S.DiasRestantesIndicator dias={tempoRestante}>
+                                {tempoRestante}
+                              </S.DiasRestantesIndicator>
+                            </div>
+                          </S.FormRow>
+                        </S.InputsContainer>
+                      </S.CadastroContainer>
+
+                      <S.UploadPDFButton onClick={handleButtonClick}>
+                        <FaFileUpload />
+                        <span>Anexar PDF</span>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="application/pdf"
+                          onChange={handlePDFContractChange}
+                          style={{ display: "none" }}
+                        />
+                      </S.UploadPDFButton>
+
+                      <S.UploadTable>
+                        <thead>
+                          <tr>
+                            <th>Nome do Arquivo</th>
+                            <th>Data</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {mockUploads.map((upload, index) => (
+                            <tr key={index}>
+                              <td>{upload.nome}</td>
+                              <td>{upload.data}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </S.UploadTable>
+                    </>
                   )}
 
                   {/* Semelhante aos contratos, adicione um componente ou lista para editar serviços */}

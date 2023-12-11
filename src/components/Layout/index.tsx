@@ -9,6 +9,9 @@ import { ChangeCompanyModal } from "../ChangeCompanyModal";
 import * as S from "./styles";
 import { apiClient } from "../../services/api";
 
+import io from "socket.io-client";
+import MusicNotifyFile from "../../assets/notification.aac";
+
 interface LayoutProps {
   children: ReactNode;
 }
@@ -32,6 +35,20 @@ export function Layout({ children }: LayoutProps) {
       url: "/" + pathnames.slice(0, index + 1).join("/"),
     })),
   ];
+
+  const NotificationSound = new Audio(MusicNotifyFile);
+
+  useEffect(() => {
+    const socket = io("http://localhost:3333");
+
+    socket.on("new-ticket", () => {
+      NotificationSound.play();
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

@@ -39,6 +39,7 @@ export const TaskInformation = styled.div<{ priority: string }>`
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s ease-in-out;
   position: relative;
+  margin-bottom: 0.95rem;
 
   &:before {
     content: "";
