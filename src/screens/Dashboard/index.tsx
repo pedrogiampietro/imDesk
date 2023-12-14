@@ -5,22 +5,15 @@ import { ServiceCard } from "../../components/ServiceCard";
 import { UnansweredTicketsCard } from "../../components/UnansweredTicketsCard";
 import { apiClient } from "../../services/api";
 import { LottieLoad } from "../../components/LottieLoading";
-import Lottie from "lottie-react";
-
-import lottieRobo from "../../assets/lottie_robozin.json";
-import lottieRoboGamer from "../../assets/lottie_robozin_computer.json";
-
 import { useAuth } from "../../hooks/useAuth";
 
 import * as S from "./styles";
-import { ChatComponent } from "../../components/ChatComponent";
+
 import { OnlineUsersWidget } from "../../components/OnlineUsersWidget";
 
 export function Dashboard() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [showGamerRobot, setShowGamerRobot] = useState(false);
-  const [showChat, setShowChat] = useState(false);
   const [dashboardData, setDashboardData] = useState<any | null>({
     categoryCounts: [],
     priorityCounts: [],
@@ -35,19 +28,23 @@ export function Dashboard() {
       today: 0,
       tomorrow: 0,
     },
+    slaCounts: {
+      high: 0,
+      medium: 0,
+      low: 0,
+    },
+    totalTickets: 0,
+    deadlines: [],
+    ticketClassification: [],
+    ticketCategory: [],
+    ticketLevel: {
+      high: 0,
+      medium: 0,
+      low: 0,
+    },
+    ticketDuration: [],
+    ticketLocation: [],
   });
-
-  const lottieOptions = {
-    animationData: lottieRobo,
-    loop: true,
-    autoplay: true,
-  };
-
-  const lottieGamerOptions = {
-    animationData: lottieRoboGamer,
-    loop: true,
-    autoplay: true,
-  };
 
   useEffect(() => {
     async function fetchReportDashboard() {
@@ -69,6 +66,14 @@ export function Dashboard() {
             today: data.dueDateService.today,
             tomorrow: data.dueDateService.tomorrow,
           },
+          slaCounts: data.slaCounts,
+          totalTickets: data.totalTickets,
+          deadlines: data.deadlines,
+          ticketClassification: data.ticketClassification,
+          ticketCategory: data.ticketCategory,
+          ticketLevel: data.ticketLevel,
+          ticketDuration: data.ticketDuration,
+          ticketLocation: data.ticketLocation,
         });
       } catch (err) {
         setLoading(false);
@@ -80,31 +85,6 @@ export function Dashboard() {
 
     fetchReportDashboard();
   }, []);
-
-  const chamadosNovos =
-    dashboardData.statusCounts.find((item: any) => item.status === "new")
-      ?._count || 0;
-  const chamadosAtrasados = dashboardData.lateTicketsCount;
-  const chamadosAtribuidos =
-    dashboardData.statusCounts.find((item: any) => item.status === "assigned")
-      ?._count || 0;
-
-  const ticketsSemResposta = {
-    all: dashboardData.recentTickets.length,
-    my: dashboardData.priorityCounts.MY || 0,
-  };
-
-  const handleMouseEnter = () => {
-    setShowGamerRobot(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowGamerRobot(false);
-  };
-
-  const handleClick = () => {
-    setShowChat(!showChat);
-  };
 
   return (
     <Layout>

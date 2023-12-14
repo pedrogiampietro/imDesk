@@ -58,7 +58,7 @@ export function CreateUser() {
     };
 
     fetchUsers();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     (async () => {
@@ -137,6 +137,11 @@ export function CreateUser() {
         type: "text",
         name: "sector",
       },
+      {
+        label: "Salário",
+        type: "text",
+        name: "hourlyRate",
+      },
     ],
     checkboxes: [
       {
@@ -213,6 +218,7 @@ export function CreateUser() {
       phone: formData.phone,
       ramal: formData.ramal,
       sector: formData.sector,
+      hourlyRate: Number(formData.hourlyRate),
       isTechnician: formData.isTechnician,
       companyIds: formData?.company?.map((c: any) => c.id),
     };

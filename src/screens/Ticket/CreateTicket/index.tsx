@@ -534,7 +534,7 @@ export function CreateTicket({ tickets, setTickets }: any) {
         <S.FormGroup>
           <S.Label htmlFor="ticket_description">Descrição:</S.Label>
           <S.TextArea
-            value={selectedDescription}
+            value={selectedDescription || selectedCategory?.defaultText}
             className="basic-single"
             {...register("ticket_description")}
             onChange={(e) => setSelectedDescription(e.target.value)}

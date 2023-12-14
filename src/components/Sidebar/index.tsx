@@ -105,6 +105,11 @@ export function Sidebar({ notifyList }: any) {
           to: "/statistics/os",
           icon: <AiOutlineMinus />,
         },
+        {
+          label: "Calcular Homem Hora",
+          to: "/statistics/calculate-man-hour",
+          icon: <AiOutlineMinus />,
+        },
       ],
     },
     {

@@ -11,9 +11,10 @@ export const Wrapper = styled.div`
 
 export const Form = styled.form`
   width: 100%;
-  height: auto;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-y: auto; /* Add this line to enable vertical scrolling */
 `;
 
 export const FormGroup = styled.div`
@@ -109,6 +110,7 @@ export const CreateButton = styled.button<{ isActive: boolean }>`
   align-items: center;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Add this line to prevent shrinking */
 
   &:hover {
     background-color: ${({ theme }) => theme.primaryDark};

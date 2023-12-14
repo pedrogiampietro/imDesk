@@ -3,9 +3,7 @@ import { useRoutes } from "react-router-dom";
 import { Login } from "../screens/Login";
 import { Dashboard } from "../screens/Dashboard";
 import { Ticket } from "../screens/Ticket";
-import {
-  StatisticTicketsViolatedByTech,
-} from "../screens/Statistic/StatisticTicketsViolatedByTech";
+import { StatisticTicketsViolatedByTech } from "../screens/Statistic/StatisticTicketsViolatedByTech";
 import { Maintenance } from "../screens/Maintenance";
 import { Settings } from "../screens/Settings";
 import { Provider } from "../screens/Provider";
@@ -24,6 +22,7 @@ import { CreateCategory } from "../screens/Settings/CreateCategory";
 import { ShiftChange } from "../screens/ShiftChange";
 import { SuggestionComplaint } from "../screens/SuggestionComplaint";
 import { StatisticTicketsOpenedByLocation } from "../screens/Statistic/StatisticTicketsOpenedByLocation";
+import { CalculateManHour } from "../screens/Statistic/CalculateManHour";
 
 export function AppRoutes() {
   const routes = useRoutes([
@@ -72,6 +71,14 @@ export function AppRoutes() {
       element: (
         <RouteProtector requiresTech>
           <StatisticTicketsOpenedByLocation />
+        </RouteProtector>
+      ),
+    },
+    {
+      path: "/statistics/calculate-man-hour",
+      element: (
+        <RouteProtector requiresTech>
+          <CalculateManHour />
         </RouteProtector>
       ),
     },
