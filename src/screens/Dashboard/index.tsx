@@ -10,6 +10,8 @@ import { useAuth } from "../../hooks/useAuth";
 import * as S from "./styles";
 
 import { OnlineUsersWidget } from "../../components/OnlineUsersWidget";
+import { Analytics } from "../../components/Analytics";
+import { AnalyticsTicketsMonth } from "../../components/AnalyticsTicketsMonth";
 
 export function Dashboard() {
   const { user } = useAuth();
@@ -45,6 +47,7 @@ export function Dashboard() {
     ticketDuration: [],
     ticketLocation: [],
   });
+  const [ticketsMonth, setTicketsMonth] = useState();
 
   useEffect(() => {
     async function fetchReportDashboard() {
@@ -60,6 +63,7 @@ export function Dashboard() {
           newTicketsCount: data.newTicketsCount,
           lateTicketsCount: data.lateTicketsCount,
           assignedTicketsCount: data.assignedTicketsCount,
+          closedTicketsCount: data.closedTicketsCount,
           dueDateService: {
             after: data.dueDateService.after,
             all: data.dueDateService.all,
@@ -86,38 +90,45 @@ export function Dashboard() {
     fetchReportDashboard();
   }, []);
 
+  useEffect(() => {
+    async function fetchTicketsMonth() {
+      try {
+        setLoading(true);
+        const { data } = await apiClient().get("/report/tickets-month");
+
+        setTicketsMonth(data.body);
+      } catch (err) {
+        setLoading(false);
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTicketsMonth();
+  }, []);
+
   return (
     <Layout>
       {loading ? (
         <LottieLoad />
       ) : (
-        <S.Container>
-          {user?.isTechnician && (
-            <>
-              <Card
-                label="Chamados Novos"
-                value={dashboardData.newTicketsCount}
-                color="#34A853"
-              />
-              <Card
-                label="Chamados Atrasados"
-                value={dashboardData.lateTicketsCount}
-                color="#FF5733"
-              />
-              <Card
-                label="Chamados Atribuídos"
-                value={dashboardData.assignedTicketsCount}
-                color="#4285F4"
-              />
-              <ServiceCard {...dashboardData.dueDateService} />
-              <UnansweredTicketsCard
-                all={dashboardData.recentTickets.length}
-                my={dashboardData.priorityCounts.MY || 0}
-              />
-            </>
-          )}
-          <OnlineUsersWidget />
-        </S.Container>
+        <>
+          <S.Container>
+            <S.Grid>
+              <Analytics {...dashboardData} />
+
+              <AnalyticsTicketsMonth data={ticketsMonth} />
+            </S.Grid>
+
+            <ServiceCard {...dashboardData.dueDateService} />
+            <UnansweredTicketsCard
+              all={dashboardData.recentTickets.length}
+              my={dashboardData.priorityCounts.MY || 0}
+            />
+            <OnlineUsersWidget />
+          </S.Container>
+        </>
       )}
     </Layout>
   );

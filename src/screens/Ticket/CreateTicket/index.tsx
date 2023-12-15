@@ -340,9 +340,25 @@ export function CreateTicket({ tickets, setTickets }: any) {
                       flex: "1 1",
                       color:
                         theme === "dark" ? darkTheme.text : lightTheme.text,
-                      // backgroundColor: "red", // later to configure a set cor theme.
                       margin: 0,
                       fontWeight: "bold",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor:
+                        theme === "dark" ? darkTheme.bg : lightTheme.bg,
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isFocused
+                        ? theme === "dark"
+                          ? darkTheme.primary
+                          : lightTheme.primary
+                        : theme === "dark"
+                        ? darkTheme.bg
+                        : lightTheme.bg,
+                      color:
+                        theme === "dark" ? darkTheme.text : lightTheme.text,
                     }),
                     control: (base) => ({
                       ...base,
@@ -359,12 +375,16 @@ export function CreateTicket({ tickets, setTickets }: any) {
                     placeholder: (base) => ({
                       ...base,
                       color:
-                        theme === "dark" ? darkTheme.text : lightTheme.text,
+                        theme === "dark"
+                          ? darkTheme.textSecondary
+                          : lightTheme.text,
                     }),
                     singleValue: (base) => ({
                       ...base,
                       color:
-                        theme === "dark" ? darkTheme.text : lightTheme.text,
+                        theme === "dark"
+                          ? darkTheme.textSecondary
+                          : lightTheme.text,
                     }),
                   }}
                   required
