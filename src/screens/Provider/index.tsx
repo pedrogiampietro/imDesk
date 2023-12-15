@@ -5,6 +5,9 @@ import { FaFileUpload } from "react-icons/fa";
 import * as S from "./styles";
 import { apiClient } from "../../services/api";
 
+import InputMask from "react-input-mask";
+import { format, parseISO } from "date-fns";
+
 interface IProviders {
   id: string;
   name: string;
@@ -450,20 +453,31 @@ export function Provider() {
                             </S.Label>
                             <S.Label>
                               Data de Vencimento:
-                              <S.Input
-                                type="date"
-                                value={formattedDueDate}
+                              <InputMask
+                                mask="99/99/9999"
+                                value={format(
+                                  parseISO(selectedProvider.dueDate),
+                                  "dd/MM/yyyy"
+                                )}
                                 onChange={(e) =>
                                   setSelectedProvider((prevProvider: any) => {
                                     if (prevProvider) {
                                       return {
                                         ...prevProvider,
-                                        dueDate: new Date(e.target.value),
+                                        dueDate: e.target.value,
                                       };
                                     }
                                     return prevProvider;
                                   })
                                 }
+                                style={{
+                                  width: "100%",
+                                  padding: "10px",
+                                  border: "1px solid #ccc",
+                                  borderRadius: "4px",
+                                  fontSize: "16px",
+                                  marginBottom: "15px",
+                                }}
                               />
                             </S.Label>
                           </S.FormRow>

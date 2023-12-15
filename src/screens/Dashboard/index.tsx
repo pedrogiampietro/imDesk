@@ -44,8 +44,6 @@ export function Dashboard() {
       medium: 0,
       low: 0,
     },
-    ticketDuration: [],
-    ticketLocation: [],
   });
   const [ticketsMonth, setTicketsMonth] = useState();
 
@@ -70,14 +68,6 @@ export function Dashboard() {
             today: data.dueDateService.today,
             tomorrow: data.dueDateService.tomorrow,
           },
-          slaCounts: data.slaCounts,
-          totalTickets: data.totalTickets,
-          deadlines: data.deadlines,
-          ticketClassification: data.ticketClassification,
-          ticketCategory: data.ticketCategory,
-          ticketLevel: data.ticketLevel,
-          ticketDuration: data.ticketDuration,
-          ticketLocation: data.ticketLocation,
         });
       } catch (err) {
         setLoading(false);
