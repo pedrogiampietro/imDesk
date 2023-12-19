@@ -116,6 +116,11 @@ export const ReportTitle = styled.h3`
   color: #212529;
 `;
 
+export const StyledReportTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
 export const ReportTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -132,6 +137,18 @@ export const ReportTableData = styled.td`
   padding: 10px;
   border: 1px solid #dee2e6;
   text-align: center;
+`;
+
+const ReportTableDataStyled = styled.td`
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  text-align: center;
+`;
+
+export const CurrencyFormattedData = styled(ReportTableDataStyled)`
+  :before {
+    content: "R$ ";
+  }
 `;
 
 export const TooltipContainer = styled.div`

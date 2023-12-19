@@ -5,22 +5,28 @@ import { RiAlertFill } from "react-icons/ri";
 const CardContainer = styled.div`
   width: 25%;
   height: fit-content;
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme }) => theme.bg};
   border-radius: 15px;
   padding: 20px;
   margin: 0 20px 0 15px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
   margin-bottom: 20px;
   text-align: center;
   transition: all 0.3s ease;
+
   &:hover {
     transform: scale(1.05);
+    background-color: ${({ theme }) => theme.primaryDark};
+    color: ${({ theme }) => theme.text};
+
+    svg {
+      color: ${({ theme }) => theme.text};
+    }
   }
 `;
 
 const CardHeader = styled.div`
   font-size: 14px;
-  color: #555;
+  color: ${({ theme }) => theme.primary};
   margin-bottom: 10px;
   font-weight: bold;
 `;
@@ -28,7 +34,7 @@ const CardHeader = styled.div`
 export const BorderBottom = styled.div`
   width: 100%;
   height: 2px;
-  background: #aaa;
+  background: ${({ theme }) => theme.primary};
   margin: 10px 0;
 `;
 
@@ -39,7 +45,7 @@ const CardItem = styled.div`
   margin-bottom: 5px;
 
   & span {
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.primary};
     font-weight: bold;
   }
 

@@ -26,8 +26,10 @@ export const Analytic = styled.div`
   transition: all 0.3s ease-in-out;
 
   &:hover {
+    transform: scale(1.05);
     background-color: ${({ theme }) => theme.primaryDark};
     color: ${({ theme }) => theme.text};
+
     svg {
       color: ${({ theme }) => theme.text};
     }

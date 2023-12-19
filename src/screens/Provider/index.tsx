@@ -2,11 +2,19 @@ import { useRef, useState, useEffect } from "react";
 import Select from "react-select";
 import { Layout } from "../../components/Layout";
 import { FaFileUpload } from "react-icons/fa";
-import * as S from "./styles";
 import { apiClient } from "../../services/api";
+import { FaEye, FaTrash } from "react-icons/fa";
 
 import InputMask from "react-input-mask";
 import { format, parseISO } from "date-fns";
+import { useAuth } from "../../hooks/useAuth";
+import { Document, Page } from "react-pdf";
+import { pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
+import * as S from "./styles";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface IProviders {
   id: string;
@@ -38,6 +46,12 @@ export function Provider() {
   const [services, setServices] = useState<any[]>([]);
   const [currentTab, setCurrentTab] = useState("Dados Cadastrais");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFilePreview, setSelectedFilePreview] = useState<any>(null);
+  const [pdfFiles, setPdfFiles] = useState<any>([]);
+  const [selectedFilePdfContract, setSelectedFilePdfContract] = useState(null);
+  const [numPages, setNumPages] = useState<number | null>(null);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     async function fetchProviders() {
@@ -113,14 +127,34 @@ export function Provider() {
 
       formData.append("serviceProvided", selectedProvider.serviceProvided);
       formData.append("monthlyValue", selectedProvider.monthlyValue);
-      formData.append("dueDate", selectedProvider.dueDate);
+
+      const dueDateParts = selectedProvider.dueDate.split("/");
+      const dueDateISO =
+        dueDateParts.length === 3
+          ? `${dueDateParts[2]}-${dueDateParts[1]}-${dueDateParts[0]}`
+          : selectedProvider.dueDate;
+      formData.append("dueDate", dueDateISO);
+
       formData.append("operationDate", selectedProvider.operationDate);
       formData.append("contractNumber", selectedProvider.contractNumber);
       formData.append("adendum", selectedProvider.adendum);
 
-      if (selectedFile) {
-        formData.append("logo", selectedFile);
-      }
+      formData.append("logo", selectedFile || selectedProvider.logoURL);
+
+      pdfFiles.forEach((pdfFile: any, index: number) => {
+        formData.append(`pdf${index}`, pdfFile.file);
+      });
+
+      formData.append(
+        "companyId",
+        user?.currentLoggedCompany.currentLoggedCompanyId as any
+      );
+
+      const responseContracts = await apiClient().put(
+        `/providers/contract/${selectedProvider.id}`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
 
       const response = await apiClient().put(
         `/providers/provider/${selectedProvider.id}`,
@@ -144,10 +178,6 @@ export function Provider() {
     }
   };
 
-  const handlePDFContractChange = (event: any) => {
-    // setSelectedFile(event.target.files[0]);
-  };
-
   const optionsSelect = [
     {
       id: 1,
@@ -161,17 +191,6 @@ export function Provider() {
     },
   ];
 
-  const handleEditContract = (contract: any) => {
-    // Aqui você pode definir a lógica para abrir um modal de edição
-    // e passar os dados do contrato selecionado para o formulário
-  };
-
-  const handleContractSubmit = (event: any) => {
-    event.preventDefault();
-    // Aqui você pode coletar os dados do formulário
-    // e fazer o que precisa ser feito, como enviar para uma API ou atualizar o estado
-  };
-
   function calcularTempoRestante(dataTermino: string) {
     const hoje = new Date();
     const dataFim = new Date(dataTermino);
@@ -184,18 +203,15 @@ export function Provider() {
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
+
     if (file) {
-      // Aqui você pode adicionar a lógica para lidar com o arquivo
-      console.log("Arquivo selecionado:", file.name);
+      setSelectedFile(event.target.files[0]);
+      const objectURL = URL.createObjectURL(file) as any;
+      setSelectedFilePreview(objectURL);
     }
   };
 
-  const tempoRestante = calcularTempoRestante("2023-12-07T17:50:53.371Z");
-
-  const mockUploads = [
-    { nome: "Contrato_01.pdf", data: "2021-01-01" },
-    { nome: "Contrato_02.pdf", data: "2021-02-01" },
-  ];
+  const tempoRestante = calcularTempoRestante(selectedProvider?.dueDate as any);
 
   const fileInputRef = useRef<any>(null);
 
@@ -203,8 +219,32 @@ export function Provider() {
     fileInputRef.current.click();
   };
 
+  const handlePDFContractChange = (event: any) => {
+    const file = event.target.files[0];
+    const timestamp = Date.now();
+    setPdfFiles([...pdfFiles, { file, id: timestamp }]);
+  };
+
+  const handlePdfFileClick = (id: any) => {
+    const selectedFile = pdfFiles.find((file: any) => file.id === id);
+    setSelectedFilePdfContract(selectedFile.file);
+  };
+
+  const handleDeleteClick = (id: any) => {
+    setPdfFiles(pdfFiles.filter((file: any) => file.id !== id));
+    setSelectedFilePdfContract(null);
+  };
+
+  const handleCloseClick = () => {
+    setSelectedFilePdfContract(null);
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setNumPages(numPages);
+  };
+
   const formattedDueDate = selectedProvider?.dueDate
-    ? selectedProvider.dueDate.toString().split("T")[0]
+    ? format(parseISO(selectedProvider.dueDate), "dd/MM/yyyy")
     : "";
 
   const formattedOperationDate = selectedProvider?.operationDate
@@ -288,7 +328,7 @@ export function Provider() {
                     <S.CadastroContainer>
                       <S.ImageContainer>
                         <S.Logo
-                          src={selectedProvider.logoURL}
+                          src={selectedProvider.logoURL || selectedFilePreview}
                           alt="Logo do Fornecedor"
                         />
                         <S.UploadButton>
@@ -451,14 +491,12 @@ export function Provider() {
                                 }
                               />
                             </S.Label>
+
                             <S.Label>
                               Data de Vencimento:
                               <InputMask
                                 mask="99/99/9999"
-                                value={format(
-                                  parseISO(selectedProvider.dueDate),
-                                  "dd/MM/yyyy"
-                                )}
+                                value={formattedDueDate}
                                 onChange={(e) =>
                                   setSelectedProvider((prevProvider: any) => {
                                     if (prevProvider) {
@@ -564,18 +602,55 @@ export function Provider() {
                         />
                       </S.UploadPDFButton>
 
+                      {selectedFilePdfContract && (
+                        <S.ModalBackground>
+                          <S.PDFViewer>
+                            <Document
+                              file={URL.createObjectURL(
+                                selectedFilePdfContract
+                              )}
+                              onLoadSuccess={onDocumentLoadSuccess}
+                            >
+                              {Array.from(new Array(numPages), (el, index) => (
+                                <Page
+                                  key={`page_${index + 1}`}
+                                  pageNumber={index + 1}
+                                />
+                              ))}
+                            </Document>
+                            <S.CloseButton onClick={() => handleCloseClick()}>
+                              Fechar
+                            </S.CloseButton>
+                          </S.PDFViewer>
+                        </S.ModalBackground>
+                      )}
+
                       <S.UploadTable>
                         <thead>
                           <tr>
                             <th>Nome do Arquivo</th>
                             <th>Data</th>
+                            <th>Ações</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {mockUploads.map((upload, index) => (
-                            <tr key={index}>
-                              <td>{upload.nome}</td>
-                              <td>{upload.data}</td>
+                          {pdfFiles.map((file: any) => (
+                            <tr key={file.id}>
+                              <td>{file.file.name}</td>
+                              <td>{file.file.lastModified}</td>
+                              <td>
+                                <S.ViewButton
+                                  onClick={() => handlePdfFileClick(file.id)}
+                                >
+                                  <FaEye />
+                                </S.ViewButton>
+
+                                <S.ViewButton
+                                  onClick={() => handleDeleteClick(file.id)}
+                                >
+                                  <FaTrash />
+                                </S.ViewButton>
+                              </td>
                             </tr>
                           ))}
                         </tbody>

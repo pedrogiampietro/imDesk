@@ -10,7 +10,7 @@ interface ModalBackdropProps {
 
 export const Container = styled.div`
   width: 98%;
-  height: 100vh;
+  max-height: 100vh; // Altere 'height' para 'max-height'
 
   background-color: #fff;
   margin: 0 auto;
@@ -268,7 +268,7 @@ export const FormRow = styled.div`
   }
 `;
 
-export const DiasRestantesIndicator = styled.div`
+export const DiasRestantesIndicator = styled.div<{ dias: number }>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -277,9 +277,9 @@ export const DiasRestantesIndicator = styled.div`
   border-radius: 50%;
 
   background-color: ${(props) => {
-    if (props.dias <= 0) return "#ff0000"; // Vencido: vermelho
-    if (props.dias <= 30) return "#ff9900"; // Próximo: amarelo
-    return "#33cc33"; // Distante: verde
+    if (props.dias <= 0) return "#ff0000";
+    if (props.dias <= 30) return "#ff9900";
+    return "#33cc33";
   }};
 
   color: white;
@@ -336,4 +336,50 @@ export const UploadPDFButton = styled.button`
   svg {
     font-size: 20px;
   }
+`;
+
+export const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const PDFViewer = styled.div`
+  .react-pdf__Page__textContent {
+    position: absolute;
+    color: transparent;
+    pointer-events: none;
+  }
+
+  .react-pdf__Page__canvas {
+    position: absolute;
+  }
+
+  overflow-y: scroll;
+  height: 80vh;
+  max-height: 80vh;
+  width: 80%;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+`;
+
+export const ViewButton = styled.button`
+  // Estilize seu botão de visualização aqui
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: ${({ theme }) => theme.primary};
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
 `;

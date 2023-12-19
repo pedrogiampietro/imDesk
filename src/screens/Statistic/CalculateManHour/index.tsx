@@ -15,9 +15,14 @@ export function CalculateManHour() {
   const [selectedTech, setSelectedTech] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [manHourReport, setManHourReport] = useState([]);
-  const [salaryReport, setSalaryReport] = useState([]);
-  const [realEarningsReport, setRealEarningsReport] = useState([]);
+  const [manHourReport, setManHourReport] = useState<any>([]);
+  const [salaryReport, setSalaryReport] = useState<any>([]);
+  const [realEarningsReport, setRealEarningsReport] = useState<any>([]);
+
+  const currencyStyle = {
+    style: "currency",
+    currency: "BRL",
+  };
 
   const getTechnicians = async () => {
     if (
@@ -107,30 +112,6 @@ export function CalculateManHour() {
     }
   };
 
-  // const fetchReport = async () => {
-  //   if (!selectedTech) {
-  //     toast.warning(`Você precisa selecionar um usuário para continuar.`);
-  //     return;
-  //   }
-  //   setIsLoading(true);
-  //   setError("");
-  //   try {
-  //     const { data } = await apiClient().get("/report/calculate-man-hour", {
-  //       params: {
-  //         userId: selectedTech,
-  //       },
-  //     });
-
-  //     setReportData(data);
-  //     setTickets(data.tickets);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setError("Erro ao gerar relatório");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const techOptions = technicians
     ? technicians.map((user: any) => ({
         value: user.id,
@@ -147,13 +128,13 @@ export function CalculateManHour() {
           userId: selectedTech,
           format,
         },
-        responseType: "blob", // Importante para arquivos
+        responseType: "blob",
       });
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a") as any;
       link.href = url;
-      link.setAttribute("download", `report.${format}`); // Nome do arquivo com extensão
+      link.setAttribute("download", `report.${format}`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
@@ -230,18 +211,18 @@ export function CalculateManHour() {
                   <S.ReportTableData>
                     {manHourReport.totalManHours}
                   </S.ReportTableData>
-                  <S.ReportTableData>
-                    {manHourReport?.hourlyRate?.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </S.ReportTableData>
-                  <S.ReportTableData>
-                    {manHourReport?.totalCost?.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </S.ReportTableData>
+                  <S.CurrencyFormattedData>
+                    {manHourReport?.hourlyRate?.toLocaleString(
+                      "pt-BR",
+                      currencyStyle
+                    )}
+                  </S.CurrencyFormattedData>
+                  <S.CurrencyFormattedData>
+                    {manHourReport?.totalCost?.toLocaleString(
+                      "pt-BR",
+                      currencyStyle
+                    )}
+                  </S.CurrencyFormattedData>
                 </tr>
               </tbody>
             </S.ReportTable>
