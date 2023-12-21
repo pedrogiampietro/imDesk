@@ -141,21 +141,6 @@ export function Provider() {
 
       formData.append("logo", selectedFile || selectedProvider.logoURL);
 
-      pdfFiles.forEach((pdfFile: any, index: number) => {
-        formData.append(`pdf${index}`, pdfFile.file);
-      });
-
-      formData.append(
-        "companyId",
-        user?.currentLoggedCompany.currentLoggedCompanyId as any
-      );
-
-      const responseContracts = await apiClient().put(
-        `/providers/contract/${selectedProvider.id}`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
       const response = await apiClient().put(
         `/providers/provider/${selectedProvider.id}`,
         formData,
@@ -175,6 +160,41 @@ export function Provider() {
     } catch (error) {
       console.error("Erro ao atualizar o fornecedor:", error);
       alert("Erro ao atualizar o fornecedor. Por favor, tente novamente.");
+    }
+  };
+
+  const handleSaveUploads = async () => {
+    if (!selectedProvider) return;
+
+    const formData = new FormData();
+
+    pdfFiles.forEach((pdfFile: any, index: number) => {
+      formData.append(`pdf${index}`, pdfFile.file);
+    });
+
+    formData.append(
+      "companyId",
+      user?.currentLoggedCompany.currentLoggedCompanyId as any
+    );
+
+    const dueDateParts = selectedProvider.dueDate.split("/");
+    const dueDateISO =
+      dueDateParts.length === 3
+        ? `${dueDateParts[2]}-${dueDateParts[1]}-${dueDateParts[0]}`
+        : selectedProvider.dueDate;
+    formData.append("dueDate", dueDateISO);
+
+    try {
+      const responseContracts = await apiClient().put(
+        `/providers/contract/${selectedProvider.id}`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      alert("Arquivos PDF salvos com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar os arquivos PDF:", error);
+      alert("Erro ao salvar os arquivos PDF. Por favor, tente novamente.");
     }
   };
 
@@ -412,7 +432,7 @@ export function Provider() {
                         <S.Label>
                           Descrição:
                           <S.TextArea
-                            value={selectedProvider.description}
+                            value={selectedProvider.description || ""}
                             onChange={(e) =>
                               setSelectedProvider((prevProvider) => {
                                 if (prevProvider) {
@@ -589,7 +609,6 @@ export function Provider() {
                           </S.FormRow>
                         </S.InputsContainer>
                       </S.CadastroContainer>
-
                       <S.UploadPDFButton onClick={handleButtonClick}>
                         <FaFileUpload />
                         <span>Anexar PDF</span>
@@ -634,22 +653,24 @@ export function Provider() {
                           </tr>
                         </thead>
                         <tbody>
-                          {pdfFiles.map((file: any) => (
+                          {[...contracts, ...pdfFiles].map((file: any) => (
                             <tr key={file.id}>
-                              <td>{file.file.name}</td>
-                              <td>{file.file.lastModified}</td>
+                              <td>{file.file.split("/").pop()}</td>
                               <td>
-                                <S.ViewButton
+                                {new Date(file.createdAt).toLocaleDateString()}
+                              </td>
+                              <td>
+                                <S.ActionsButton
                                   onClick={() => handlePdfFileClick(file.id)}
                                 >
                                   <FaEye />
-                                </S.ViewButton>
+                                </S.ActionsButton>
 
-                                <S.ViewButton
+                                <S.ActionsButton
                                   onClick={() => handleDeleteClick(file.id)}
                                 >
                                   <FaTrash />
-                                </S.ViewButton>
+                                </S.ActionsButton>
                               </td>
                             </tr>
                           ))}
@@ -660,7 +681,10 @@ export function Provider() {
 
                   {/* Semelhante aos contratos, adicione um componente ou lista para editar serviços */}
                   <S.ButtonContainer>
-                    <S.Button onClick={handleSave}>Salvar</S.Button>
+                    <S.Button onClick={handleSave}>Salvar Formulário</S.Button>
+                    <S.Button onClick={handleSaveUploads}>
+                      Salvar Uploads
+                    </S.Button>
                     <S.Button onClick={handleModalClose}>Fechar</S.Button>
                   </S.ButtonContainer>
                 </>
