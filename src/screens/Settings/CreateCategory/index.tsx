@@ -55,7 +55,7 @@ export function CreateCategory() {
     };
 
     fetchCategory();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     (async () => {
@@ -91,7 +91,7 @@ export function CreateCategory() {
   ];
 
   const headerToDataKeyMap = {
-    Nome: "name",
+    Nome: "label",
     "Sub-Categoria": "childrenName",
     "Criado em": "createdAt",
   };
@@ -179,6 +179,8 @@ export function CreateCategory() {
 
     try {
       const response = await apiClient()[method](url, adjustedObject);
+
+      console.log("response", response);
 
       toast.success(successMessage, {
         position: "top-right",

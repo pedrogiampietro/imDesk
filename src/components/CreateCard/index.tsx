@@ -21,6 +21,10 @@ export function CreateCard({
     formState: { errors, isSubmitting },
   } = useForm();
 
+  console.log("formFields", formFields);
+  console.log("formSelectOptions", formSelectOptions);
+  console.log("isEditMode", isEditMode);
+
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {

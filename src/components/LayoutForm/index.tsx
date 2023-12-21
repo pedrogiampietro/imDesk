@@ -143,6 +143,7 @@ export function LayoutForm({
               <S.TableRow key={item.id}>
                 {tableHeader.map((header: any) => {
                   const dataKey = headerToDataKeyMap[header.name];
+
                   if (header.name === "Ações") {
                     return (
                       <S.TableCell key={header.id}>
@@ -161,6 +162,16 @@ export function LayoutForm({
                     return (
                       <S.TableCell key={header.id}>
                         {item[dataKey] ? formatarData(item[dataKey]) : "—"}
+                      </S.TableCell>
+                    );
+                  } else if (header.name === "Sub-Categoria") {
+                    return (
+                      <S.TableCell key={header.id}>
+                        {item.options.map((option: any) => (
+                          <div key={option.childrenName}>
+                            {option.childrenName}
+                          </div>
+                        ))}
                       </S.TableCell>
                     );
                   } else {
