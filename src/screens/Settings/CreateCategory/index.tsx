@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Layout } from "../../../components/Layout";
-import { LayoutForm } from "../../../components/LayoutForm";
+import { LayoutFormCategory } from "../../../components/LayoutFormCategory";
 import { apiClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
@@ -11,7 +11,7 @@ type Type = {
 };
 
 export function CreateCategory() {
-  const [categorys, setCategorys] = useState<Type[]>([]);
+  const [categorys, setCategorys] = useState<any>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [showCreateCard, setShowCreateCard] = useState(false);
   const [companies, setCompanies] = useState([]);
@@ -163,6 +163,8 @@ export function CreateCategory() {
     let url = "/ticket-category";
     let successMessage = "Sucesso! Sua Categoria foi criada com sucesso!";
 
+    console.log("Iniciando a criação...");
+
     if (isEditMode) {
       method = "patch";
       url = `/ticket-category/update-category/${formData.id}`;
@@ -176,6 +178,8 @@ export function CreateCategory() {
       childrenName: formData.childrenName,
       companyIds: formData?.company?.map((c: any) => c.id),
     };
+
+    console.log("Objeto ajustado para a requisição:", adjustedObject);
 
     try {
       const response = await apiClient()[method](url, adjustedObject);
@@ -194,7 +198,7 @@ export function CreateCategory() {
 
       if (isEditMode) {
         const updatedData = response.data.body;
-        setCategorys((prevCategory) => {
+        setCategorys((prevCategory: any) => {
           return prevCategory.map((category: any) => {
             const isUpdateNeeded = category.options.some(
               (option: any) => option.id === updatedData.id
@@ -219,7 +223,18 @@ export function CreateCategory() {
           });
         });
       } else {
-        setCategorys((prevCategory) => [...prevCategory, response.data.body]);
+        const newItem = {
+          label: response.data.body.name,
+          options: [
+            {
+              id: response.data.body.id,
+              name: response.data.body.name,
+              childrenName: response.data.body.childrenName,
+            },
+          ],
+        };
+
+        setCategorys((prevCategory: any) => [...prevCategory, newItem]);
       }
 
       setShowCreateCard(false);
@@ -241,7 +256,7 @@ export function CreateCategory() {
 
   return (
     <Layout>
-      <LayoutForm
+      <LayoutFormCategory
         data={categorys}
         formFields={formFields}
         headerToDataKeyMap={headerToDataKeyMap}

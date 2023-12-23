@@ -7,7 +7,7 @@ import Select from "react-select";
 import * as S from "./styles";
 import { truncateText } from "../../utils";
 
-export function LayoutForm({
+export function LayoutFormCategory({
   data = [],
   handleView,
   handleEdit,
@@ -139,51 +139,26 @@ export function LayoutForm({
           </S.TableHead>
 
           <S.TableBody>
-            {data.map((item: any) => (
-              <S.TableRow key={item.id}>
-                {tableHeader.map((header: any) => {
-                  const dataKey = headerToDataKeyMap[header.name];
-
-                  if (header.name === "Ações") {
-                    return (
-                      <S.TableCell key={header.id}>
-                        <DropdownMenuComponent
-                          onEdit={() => handleEdit(item.id)}
-                          onDelete={() => handleDelete(item.id)}
-                          onView={() => handleView(item.id)}
-                        />
-                      </S.TableCell>
-                    );
-                  } else if (
-                    header.name === "Criado em" ||
-                    header.name === "Atualizado em" ||
-                    header.name === "Resolvido em"
-                  ) {
-                    return (
-                      <S.TableCell key={header.id}>
-                        {item[dataKey] ? formatarData(item[dataKey]) : "—"}
-                      </S.TableCell>
-                    );
-                  } else if (header.name === "Sub-Categoria") {
-                    return (
-                      <S.TableCell key={header.id}>
-                        {item?.options?.map((option: any) => (
-                          <div key={option.childrenName}>
-                            {option.childrenName}
-                          </div>
-                        ))}
-                      </S.TableCell>
-                    );
-                  } else {
-                    return (
-                      <S.TableCell key={header.id}>
-                        {truncateText(item[dataKey], 240)}
-                      </S.TableCell>
-                    );
-                  }
-                })}
-              </S.TableRow>
-            ))}
+            {data.map(
+              (item: any) =>
+                item.options &&
+                item.options.map((option: any) => (
+                  <S.TableRow key={option.id}>
+                    <S.TableCell>{option.name}</S.TableCell> {/* Nome */}
+                    <S.TableCell>{option.childrenName}</S.TableCell>{" "}
+                    {/* Sub-Categoria */}
+                    <S.TableCell>-</S.TableCell> {/* Criado em */}
+                    <S.TableCell>
+                      <DropdownMenuComponent
+                        onEdit={() => handleEdit(option.id)}
+                        onDelete={() => handleDelete(option.id)}
+                        onView={() => handleView(option.id)}
+                      />
+                    </S.TableCell>{" "}
+                    {/* Ações */}
+                  </S.TableRow>
+                ))
+            )}
           </S.TableBody>
         </S.Table>
       </S.TableContainer>
