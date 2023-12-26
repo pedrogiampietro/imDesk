@@ -15,6 +15,7 @@ import * as S from "./styles";
 interface ISelect {
   id: string;
   name: string;
+  childrenName: string;
   value: string;
 }
 
@@ -45,9 +46,9 @@ export function CreateTicket({ tickets, setTickets }: any) {
   const [ticketCategory, setTicketCategory] = useState([]);
   const [ticketPriority, setTicketPriority] = useState([]);
   const [ticketLocation, setTicketLocation] = useState([]);
-
-  const [selectedType, setSelectedType] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [manualResolutionDueDate, setManualResolutionDueDate] = useState("");
+  const [selectedType, setSelectedType] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [selectedPriority, setSelectedPriority] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState("");
@@ -270,6 +271,10 @@ export function CreateTicket({ tickets, setTickets }: any) {
     setCustomPatrimonyValue(e.target.value);
   };
 
+  const handleManualResolutionDueDateChange = (e: any) => {
+    setManualResolutionDueDate(e.target.value);
+  };
+
   return (
     <S.Wrapper>
       <S.Form onSubmit={handleSubmit(handleSubmitTicket)}>
@@ -350,6 +355,8 @@ export function CreateTicket({ tickets, setTickets }: any) {
                     }),
                     option: (base, state) => ({
                       ...base,
+                      marginBottom: "7px",
+                      borderRadius: "5px",
                       backgroundColor: state.isFocused
                         ? theme === "dark"
                           ? darkTheme.primary
@@ -359,6 +366,9 @@ export function CreateTicket({ tickets, setTickets }: any) {
                         : lightTheme.bg,
                       color:
                         theme === "dark" ? darkTheme.text : lightTheme.text,
+                      "&:hover": {
+                        color: "white",
+                      },
                     }),
                     control: (base) => ({
                       ...base,
@@ -464,7 +474,9 @@ export function CreateTicket({ tickets, setTickets }: any) {
                   placeholder={"<Selecione>"}
                   options={ticketLocation}
                   value={selectedLocation}
-                  getOptionLabel={(option: ISelect) => option.name}
+                  getOptionLabel={(option: ISelect) =>
+                    `${option.name} → ${option.childrenName}`
+                  }
                   getOptionValue={(option: ISelect) => option.id}
                   onChange={(v: any) => {
                     onChange(v.id);
@@ -494,63 +506,86 @@ export function CreateTicket({ tickets, setTickets }: any) {
             </small>
           )}
         </S.FormGroup>
-        <S.FormGroup>
-          <S.Label htmlFor="ticket_patrimonyTag">Patrimônio:</S.Label>
-          <S.TagInputContainer>
-            {selectedPatrimonyTag && !isCustomPatrimony && (
-              <S.Tag>
-                #{selectedPatrimonyTag.patrimonyTag}
-                <S.RemoveTagButton onClick={handleRemoveTag}>
-                  ×
-                </S.RemoveTagButton>
-              </S.Tag>
-            )}
-            {!isCustomPatrimony ? (
-              <Select
-                placeholder={"<Selecione>"}
-                options={[
-                  ...patrimonies,
-                  { id: "custom", patrimonyTag: "Outro (inserir manualmente)" },
-                ]} // adicionar uma opção para customizar
-                value={selectedPatrimonyTag}
-                getOptionLabel={(option) => `#${option.patrimonyTag}`}
-                getOptionValue={(option) => option.id}
-                onChange={(v) => {
-                  if (v.id === "custom") {
-                    setIsCustomPatrimony(true);
-                    setSelectedPatrimonyTag(null);
-                  } else {
-                    setSelectedPatrimonyTag(v);
-                  }
+        <div>
+          <S.FormGroup>
+            <S.Label htmlFor="ticket_patrimonyTag">Patrimônio:</S.Label>
+            <S.TagInputContainer>
+              {selectedPatrimonyTag && !isCustomPatrimony && (
+                <S.Tag>
+                  #{selectedPatrimonyTag.patrimonyTag}
+                  <S.RemoveTagButton onClick={handleRemoveTag}>
+                    ×
+                  </S.RemoveTagButton>
+                </S.Tag>
+              )}
+              {!isCustomPatrimony ? (
+                <Select
+                  placeholder={"<Selecione>"}
+                  options={[
+                    ...patrimonies,
+                    {
+                      id: "custom",
+                      patrimonyTag: "Outro (inserir manualmente)",
+                    },
+                  ]} // adicionar uma opção para customizar
+                  value={selectedPatrimonyTag}
+                  getOptionLabel={(option) => `#${option.patrimonyTag}`}
+                  getOptionValue={(option) => option.id}
+                  onChange={(v) => {
+                    if (v.id === "custom") {
+                      setIsCustomPatrimony(true);
+                      setSelectedPatrimonyTag(null);
+                    } else {
+                      setSelectedPatrimonyTag(v);
+                    }
+                  }}
+                />
+              ) : (
+                <S.Input
+                  type="text"
+                  placeholder="Insira o patrimônio"
+                  value={customPatrimonyValue}
+                  onChange={handleCustomPatrimonyChange}
+                />
+              )}
+            </S.TagInputContainer>
+            {!!errors.ticket_patrimonyTag && (
+              <small
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "10px",
+                  color: "red",
                 }}
-              />
-            ) : (
-              <S.Input
-                type="text"
-                placeholder="Insira o patrimônio"
-                value={customPatrimonyValue}
-                onChange={handleCustomPatrimonyChange}
-              />
+              >
+                <MdOutlineErrorOutline
+                  fill="red"
+                  size={16}
+                  style={{ marginRight: "3px" }}
+                />
+                {errors.ticket_patrimonyTag.message}
+              </small>
             )}
-          </S.TagInputContainer>
-          {!!errors.ticket_patrimonyTag && (
-            <small
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "10px",
-                color: "red",
-              }}
-            >
-              <MdOutlineErrorOutline
-                fill="red"
-                size={16}
-                style={{ marginRight: "3px" }}
-              />
-              {errors.ticket_patrimonyTag.message}
-            </small>
+          </S.FormGroup>
+
+          {selectedType?.name === "Preditiva" && (
+            <S.InfoItem>
+              <S.IconContainer>
+                <S.Label htmlFor="ticket_patrimonyTag">
+                  Data da Preditiva:
+                </S.Label>
+              </S.IconContainer>
+              <S.InfoContent>
+                <S.StyledInput
+                  type="datetime-local"
+                  value={manualResolutionDueDate}
+                  onChange={handleManualResolutionDueDateChange}
+                />
+              </S.InfoContent>
+            </S.InfoItem>
           )}
-        </S.FormGroup>
+        </div>
+
         <S.FormGroup>
           <S.Label htmlFor="ticket_description">Descrição:</S.Label>
           <S.TextArea

@@ -140,7 +140,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
     toast.success("Ahhh, você já está indo? Isso será um até logo! 😁", {
       position: "top-right",
-      autoClose: 2000,
+      autoClose: 10,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,

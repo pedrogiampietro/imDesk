@@ -201,3 +201,67 @@ export const FileLabel = styled.label`
     background-color: rgba(84, 105, 212, 0.1);
   }
 `;
+
+export const InfoItem = styled.div`
+  flex: 1;
+  background-color: ${({ theme }) => theme.bg2};
+  padding: 15px 0;
+  border-radius: 15px;
+  margin-right: 1rem;
+
+  &:last-child {
+    margin-right: 0;
+  }
+`;
+
+export const IconContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  color: #ff6347;
+  margin-bottom: 5px;
+
+  & > svg {
+    font-size: 22px;
+    margin-right: 0.65rem;
+    fill: ${({ theme }) => theme.primary};
+  }
+`;
+
+export const InfoTitle = styled.p`
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: ${({ theme }) => theme.primary};
+`;
+
+export const InfoContent = styled.p`
+  color: ${({ theme }) => theme.text};
+
+  & strong {
+    color: ${({ theme }) => theme.text};
+  }
+`;
+
+export const StyledInput = styled.input`
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+  border-radius: 8px;
+
+  &:hover {
+    border-color: #a0aec0;
+  }
+
+  &:focus {
+    border-color: #c3aff0;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.text};
+  }
+`;

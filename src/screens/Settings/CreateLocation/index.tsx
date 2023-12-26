@@ -78,16 +78,21 @@ export function CreateLocation() {
     },
     {
       id: 2,
-      name: "Criado em",
+      name: "Sub-Localização",
     },
     {
       id: 3,
+      name: "Criado em",
+    },
+    {
+      id: 4,
       name: "Ações",
     },
   ];
 
   const headerToDataKeyMap = {
     Nome: "name",
+    "Sub-Localização": "childrenName",
     "E-mail": "email",
     "Criado em": "createdAt",
   };
@@ -99,6 +104,11 @@ export function CreateLocation() {
         label: "Nome da Localização",
         type: "text",
         name: "name",
+      },
+      {
+        label: "Sub-Localização",
+        type: "text",
+        name: "childrenName",
       },
     ],
     checkboxes: [],
@@ -164,6 +174,7 @@ export function CreateLocation() {
 
     const adjustedObject = {
       name: formData.name,
+      childrenName: formData.childrenName,
       companyIds: formData?.company?.map((c: any) => c.id),
     };
 

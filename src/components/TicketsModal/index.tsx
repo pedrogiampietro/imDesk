@@ -1012,7 +1012,7 @@ export function TicketsModal({
                 >
                   {ticketLocation.map((location: any) => (
                     <option key={location.id} value={location.id}>
-                      {location.name}
+                      {`${location.name} — ${location.childrenName}`}
                     </option>
                   ))}
                 </S.StyledSelect>
