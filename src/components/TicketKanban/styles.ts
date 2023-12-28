@@ -8,6 +8,7 @@ interface TabProps {
 export const KanbanContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 100vh;
   flex-direction: column;
   margin: 0 1rem;
   background: ${({ theme }) => theme.bgLinear};

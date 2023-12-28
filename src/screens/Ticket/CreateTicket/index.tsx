@@ -17,6 +17,7 @@ interface ISelect {
   name: string;
   childrenName: string;
   value: string;
+  label?: string;
 }
 
 export function CreateTicket({ tickets, setTickets }: any) {
@@ -332,7 +333,9 @@ export function CreateTicket({ tickets, setTickets }: any) {
                   placeholder={"<Selecione>"}
                   options={ticketCategory}
                   value={selectedCategory}
-                  getOptionLabel={(option: ISelect) => option.value}
+                  getOptionLabel={(option: ISelect) =>
+                    `${option.label} → ${option.value}`
+                  }
                   getOptionValue={(option: ISelect) => option.id}
                   components={{ Group }}
                   onChange={(v: any) => {
